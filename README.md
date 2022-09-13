@@ -1,5 +1,6 @@
 # Flyin-Pigs
 CS 407 Senior Design Project
+Members: charliehyun
 
 Planning to travel by plane can be a hassle. Travelers have to find airports near their departure as well as their destination. This takes up time since most flight searching includes defining which airport the traveler wants to leave from and arrive at. Locations can have many nearby airports that travelers would need to check prices for or they may not even be aware of. 
 
