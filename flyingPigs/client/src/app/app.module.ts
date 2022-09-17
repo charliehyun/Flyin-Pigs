@@ -8,6 +8,10 @@ import { SearchComponent } from './search/search.component';
 import { ResultsComponent } from './results/results.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ButtonModule } from 'primeng/button';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +22,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
       HttpClientModule,
-      ReactiveFormsModule
+      ReactiveFormsModule,
+      BrowserAnimationsModule,
+      ButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
