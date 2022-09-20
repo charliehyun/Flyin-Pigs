@@ -1,5 +1,16 @@
-<h2 class="text-center m-5">Search Page wooo</h2>
-<p-button routerLink="/results">go to results page</p-button>
+<div>
+    <div>
+        <h2 class="text-center m-5">Search Page woo</h2>    
+        <p-button routerLink="/results">go to results page</p-button>
+    </div>
+    &nbsp;
+    <div>
+        <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
+        <p-dropdown [options]="transportType" [(ngModel)]="selectedTransport" placeholder="Select a Mode of Transport" optionLabel="name"></p-dropdown>
+        <p-button (onClick)="handleClear()">Clear search</p-button>
+    </div>
+    <!-- <i class="fa-solid fa-bicycle"></i> -->
+</div>
 
 <br>
 <form>
@@ -35,3 +46,4 @@
         <option value="7">7</option>
   </select>
   </form>
+

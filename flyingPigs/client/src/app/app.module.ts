@@ -7,9 +7,10 @@ import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
 import { ResultsComponent } from './results/results.component';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 @NgModule({
@@ -25,6 +26,8 @@ import { ButtonModule } from 'primeng/button';
       ReactiveFormsModule,
       BrowserAnimationsModule,
       ButtonModule,
+      DropdownModule,
+      FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
