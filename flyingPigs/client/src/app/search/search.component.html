@@ -1,2 +1,30 @@
-<h2 class="text-center m-5">Search Page woo</h2>
-<p-button routerLink="/results">go to results page</p-button>
+<!-- <!doctype html>
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+<html>
+  <head>
+    <script src="https://kit.fontawesome.com/4e414f860e.js" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    hellp
+    <i class="fa-solid fa-thumbs-up fa-5x"></i>
+  </body>
+</html> -->
+
+<head>
+    <script src="https://kit.fontawesome.com/4e414f860e.js" crossorigin="anonymous"></script>
+</head>
+<div>
+    <div>
+        <h2 class="text-center m-5">Search Page woo</h2>    
+        <p-button routerLink="/results">go to results page</p-button>
+    </div>
+    &nbsp;
+    <div>
+        <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
+        <p-dropdown [options]="transportType" [(ngModel)]="selectedTransport" placeholder="Select a Mode of Transport" optionLabel="name"></p-dropdown>
+        <p-button (onClick)="handleClear()">Clear search</p-button>
+    </div>
+    <!-- <i class="fa-solid fa-bicycle"></i> -->
+</div>
