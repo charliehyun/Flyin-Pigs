@@ -1,2 +1,49 @@
-<h2 class="text-center m-5">Search Page woo</h2>
-<p-button routerLink="/results">go to results page</p-button>
+<div>
+    <div>
+        <h2 class="text-center m-5">Search Page woo</h2>    
+        <p-button routerLink="/results">go to results page</p-button>
+    </div>
+    &nbsp;
+    <div>
+        <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
+        <p-dropdown [options]="transportType" [(ngModel)]="selectedTransport" placeholder="Select a Mode of Transport" optionLabel="name"></p-dropdown>
+        <p-button (onClick)="handleClear()">Clear search</p-button>
+    </div>
+    <!-- <i class="fa-solid fa-bicycle"></i> -->
+</div>
+
+<br>
+<form>
+    <label for="ddate">Departure Date: </label><br>
+    <input type="date" id="ddate" name="ddate" required><br><br>
+    <label for="adate">Arrival Date: </label><br>
+    <input type="date" id="adate" name="adate" required><br><br>
+    <label for="daddress">Departure Address: </label><br>
+    <input type="text" id="daddress" name="daddress" required><br><br>
+    <label for="aaddress">Arrival Address: </label><br>
+    <input type="text" id="aaddress" name="aaddress" required><br><br>
+  
+    <label for="drivingStartHours">Maximum Driving Time (start):</label>
+    <select name="drivingStartHours" id="drivingStartHours">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+  </select> 
+  <br><br>
+
+  <label for="drivingEndHours">Maximum Driving Time (end):</label>
+    <select name="drivingEndHours" id="drivingEndHours">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+  </select>
+  </form>
+
