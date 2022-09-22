@@ -19,9 +19,11 @@
     <label for="adate">Arrival Date: </label><br>
     <input type="date" id="adate" name="adate" required><br><br>
     <label for="daddress">Departure Address: </label><br>
-    <input type="text" id="daddress" name="daddress" required><br><br>
+    <input type="text" id="daddress" name="daddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)">
+    {{ formattedaddress1 }}<br><br>
     <label for="aaddress">Arrival Address: </label><br>
-    <input type="text" id="aaddress" name="aaddress" required><br><br>
+    <input type="text" id="aaddress" name="aaddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange2($event)">
+    {{formattedaddress2}}<br><br>
   
     <label for="drivingStartHours">Maximum Driving Time (start):</label>
     <select name="drivingStartHours" id="drivingStartHours">
@@ -46,4 +48,5 @@
         <option value="7">7</option>
   </select>
   </form>
+
 

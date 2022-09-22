@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 
 
 interface DropdownOption {
@@ -36,6 +37,26 @@ export class SearchComponent implements OnInit {
     ];
     // this.listItems = [{name: 'fa fa-user', code: 'v1'}, {name: 'fa fa-user-cog', code: 'v2'}];
    }
+
+   //google autocomplete stuff.
+  formattedaddress1= " ";
+  formattedaddress2= " ";
+  options:Options = new Options({
+    componentRestrictions:{
+      country:"US"}
+  });
+  AddressChange1(address: any) {
+    this.formattedaddress1 = address.formatted_address;
+  }
+  AddressChange2(address: any) {
+    this.formattedaddress2 = address.formatted_address;
+  }
+  //backend calls
+  FilterAirports() {
+
+  }
+
+
 
    handleClear() {
     this.selectedClass = {name: 'Economy', code: 'E'};
