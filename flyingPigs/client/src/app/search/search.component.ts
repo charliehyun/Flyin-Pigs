@@ -9,7 +9,7 @@ interface DropdownOption {
 }
 
 @Component({
-  selector: 'app-employees-list',
+  selector: 'search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
@@ -20,9 +20,11 @@ export class SearchComponent implements OnInit {
   transportType: DropdownOption[];  // Transportation to airport options
   selectedTransport: DropdownOption = {name: 'Car', code: 'C'}; // Transportation option
 
-  adultPass: number = 1;
-  childPass: number = 0;
-  infantPass: number = 0;
+  isRoundTrip: boolean = false; // Round Trip toggle
+
+  adultPass: number = 1;  // number of adult passengers
+  childPass: number = 0;  // number of child passengers
+  infantPass: number = 0; // number of infant passengers
   totalPass: number = this.adultPass + this.childPass + this.infantPass;
   
   constructor() {
@@ -65,12 +67,14 @@ export class SearchComponent implements OnInit {
   handleClear() {
     this.selectedClass = {name: 'Economy', code: 'E'};
     this.selectedTransport = {name: 'Car', code: 'C'};
+    this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
     this.infantPass = 0;
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
     this.formattedaddress1= "";
     this.formattedaddress2= "";
+
   }
 
   ngOnInit(): void {

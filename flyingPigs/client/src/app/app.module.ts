@@ -14,7 +14,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import {GooglePlaceModule} from "ngx-google-places-autocomplete";
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {InputNumberModule} from 'primeng/inputnumber';
-
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {AccordionModule} from 'primeng/accordion';
 
 
 @NgModule({
@@ -34,7 +35,9 @@ import {InputNumberModule} from 'primeng/inputnumber';
       FormsModule,
       GooglePlaceModule,
       OverlayPanelModule,
-      InputNumberModule
+      InputNumberModule,
+      InputSwitchModule,
+      AccordionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
