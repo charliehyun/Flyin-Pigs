@@ -12,6 +12,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import {GooglePlaceModule} from "ngx-google-places-autocomplete";
+import {OverlayPanelModule} from 'primeng/overlaypanel';
+import {InputNumberModule} from 'primeng/inputnumber';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {AccordionModule} from 'primeng/accordion';
 
 
 @NgModule({
@@ -29,7 +33,11 @@ import {GooglePlaceModule} from "ngx-google-places-autocomplete";
       ButtonModule,
       DropdownModule,
       FormsModule,
-      GooglePlaceModule
+      GooglePlaceModule,
+      OverlayPanelModule,
+      InputNumberModule,
+      InputSwitchModule,
+      AccordionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

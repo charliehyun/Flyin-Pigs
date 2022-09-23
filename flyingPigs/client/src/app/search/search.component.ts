@@ -10,18 +10,23 @@ interface DropdownOption {
 }
 
 @Component({
-  selector: 'flyin-pigs-search',
-  templateUrl: './search.component.html'
+  selector: 'search',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss']
 })
 
 export class SearchComponent implements OnInit {
-  classes: DropdownOption[];
-  transportType: DropdownOption[];
-  selectedClass: DropdownOption = {name: 'Economy', code: 'E'};
-  selectedTransport: DropdownOption = {name: 'Car', code: 'C'};
+  classes: DropdownOption[];  // Flight class options
+  selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
+  transportType: DropdownOption[];  // Transportation to airport options
+  selectedTransport: DropdownOption = {name: 'Car', code: 'C'}; // Transportation option
   filteredAirports$: Observable<AirportSchema[]> = new Observable();
-  // listItems: DropdownOption[];
+  isRoundTrip: boolean = false; // Round Trip toggle
 
+  adultPass: number = 1;  // number of adult passengers
+  childPass: number = 0;  // number of child passengers
+  infantPass: number = 0; // number of infant passengers
+  totalPass: number = this.adultPass + this.childPass + this.infantPass;
   
   constructor(private searchService: SearchService) {
     this.classes = [
@@ -36,12 +41,11 @@ export class SearchComponent implements OnInit {
       {name: 'Bike', code: 'B'},
       {name: 'Walk', code: 'W'}
     ];
-    // this.listItems = [{name: 'fa fa-user', code: 'v1'}, {name: 'fa fa-user-cog', code: 'v2'}];
   }
 
-   //google autocomplete stuff.
-  formattedaddress1= " ";
-  formattedaddress2= " ";
+  //google autocomplete stuff.
+  formattedaddress1= "";
+  formattedaddress2= "";
   options:Options = new Options({
     componentRestrictions:{
       country:"US"}
@@ -58,10 +62,21 @@ export class SearchComponent implements OnInit {
     this.filteredAirports$ = this.searchService.filterAirports();
   }
 
-   handleClear() {
+  updatePassengers() {
+    this.totalPass = this.adultPass + this.childPass + this.infantPass;
+  }
+
+  handleClear() {
     this.selectedClass = {name: 'Economy', code: 'E'};
     this.selectedTransport = {name: 'Car', code: 'C'};
-   }
+    this.isRoundTrip = false;
+    this.adultPass = 1;
+    this.childPass = 0;
+    this.infantPass = 0;
+    this.totalPass = this.adultPass + this.childPass + this.infantPass;
+    this.formattedaddress1= "";
+    this.formattedaddress2= "";
+  }
 
   ngOnInit(): void {
   }
