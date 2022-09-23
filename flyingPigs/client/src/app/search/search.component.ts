@@ -10,17 +10,20 @@ interface DropdownOption {
 
 @Component({
   selector: 'app-employees-list',
-  templateUrl: './search.component.html'
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss']
 })
 
 export class SearchComponent implements OnInit {
-  classes: DropdownOption[];
-  transportType: DropdownOption[];
-  selectedClass: DropdownOption = {name: 'Economy', code: 'E'};
-  selectedTransport: DropdownOption = {name: 'Car', code: 'C'};
+  classes: DropdownOption[];  // Flight class options
+  selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
+  transportType: DropdownOption[];  // Transportation to airport options
+  selectedTransport: DropdownOption = {name: 'Car', code: 'C'}; // Transportation option
 
-  // listItems: DropdownOption[];
-
+  adultPass: number = 1;
+  childPass: number = 0;
+  infantPass: number = 0;
+  totalPass: number = this.adultPass + this.childPass + this.infantPass;
   
   constructor() {
     this.classes = [
@@ -35,10 +38,9 @@ export class SearchComponent implements OnInit {
       {name: 'Bike', code: 'B'},
       {name: 'Walk', code: 'W'}
     ];
-    // this.listItems = [{name: 'fa fa-user', code: 'v1'}, {name: 'fa fa-user-cog', code: 'v2'}];
-   }
+  }
 
-   //google autocomplete stuff.
+  //google autocomplete stuff.
   formattedaddress1= " ";
   formattedaddress2= " ";
   options:Options = new Options({
@@ -56,12 +58,18 @@ export class SearchComponent implements OnInit {
 
   }
 
+  updatePassengers() {
+    this.totalPass = this.adultPass + this.childPass + this.infantPass;
+  }
 
-
-   handleClear() {
+  handleClear() {
     this.selectedClass = {name: 'Economy', code: 'E'};
     this.selectedTransport = {name: 'Car', code: 'C'};
-   }
+    this.adultPass = 1;
+    this.childPass = 0;
+    this.infantPass = 0;
+    this.totalPass = this.adultPass + this.childPass + this.infantPass;
+  }
 
   ngOnInit(): void {
   }
