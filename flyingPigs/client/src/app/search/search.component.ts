@@ -69,6 +69,8 @@ export class SearchComponent implements OnInit {
     this.childPass = 0;
     this.infantPass = 0;
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
+    this.formattedaddress1= "";
+    this.formattedaddress2= "";
   }
 
   ngOnInit(): void {
