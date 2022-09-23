@@ -48,5 +48,13 @@
         <option value="7">7</option>
   </select>
   </form>
+<div>
+    <p-button type="button" label="FILTER MY AIRPORTS" (click)="FilterAirports()"> </p-button>
+    <tr *ngFor="let airport of filteredAirports$ | async">
+        <td>{{airport.City}}</td>
+        <td>{{airport.LAT}}</td>
+        <td>{{airport.LNG}}</td>
+    </tr>
+</div>
 
 

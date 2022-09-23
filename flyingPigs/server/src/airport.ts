@@ -1,4 +1,7 @@
-export class Airport {
+import { ObjectId } from "mongodb";
+import {AirportSchema} from "./airportSchema";
+
+export class Airport implements AirportSchema {
     private _City: string;
     private _FAA: string;
     private _IATA: string;
@@ -25,6 +28,12 @@ export class Airport {
         this._Longitude = Longitude;
         this._Latitude = Latitude;
     }
+
+    Address: string;
+    Enplanement: string;
+    LAT: number;
+    LNG: number;
+    _id?: ObjectId;
 
     get City(): string {
         return this._City;
