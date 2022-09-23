@@ -35,7 +35,10 @@
         <div class="pass2" align="right">
           <p-inputNumber [(ngModel)]="infantPass" inputId="infant" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
         </div>
-        <br>
+        <br><br>
+        <p-button (onClick)="updatePassengers(); op.hide()" class="pass1">
+          <i class="pi pi-check"></i>
+        </p-button>
       </div>
     </p-overlayPanel>
 
@@ -46,11 +49,11 @@
       <label for="adate">Arrival Date: </label><br>
       <input type="date" id="adate" name="adate" required><br><br>
       <label for="daddress">Departure Address: </label><br>
-      <input type="text" id="daddress" name="daddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)">
-      {{ formattedaddress1 }}<br><br>
+      <input type="text" id="daddress" name="daddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="formattedaddress1">
+      <br><br>
       <label for="aaddress">Arrival Address: </label><br>
-      <input type="text" id="aaddress" name="aaddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange2($event)">
-      {{formattedaddress2}}<br><br>
+      <input type="text" id="aaddress" name="aaddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange2($event)" [(ngModel)]="formattedaddress2">
+      <br><br>
     
       <label for="drivingStartHours">Maximum Driving Time (start):</label>
       <select name="drivingStartHours" id="drivingStartHours">

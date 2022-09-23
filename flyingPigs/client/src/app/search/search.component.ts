@@ -41,8 +41,8 @@ export class SearchComponent implements OnInit {
   }
 
   //google autocomplete stuff.
-  formattedaddress1= " ";
-  formattedaddress2= " ";
+  formattedaddress1= "";
+  formattedaddress2= "";
   options:Options = new Options({
     componentRestrictions:{
       country:"US"}
