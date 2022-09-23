@@ -2,4 +2,13 @@
     <img src="favicon.ico" alt="Flyin' Pigs" routerLink="/search" width="50px" [style]="{cursor:'pointer'}">
     <h2 class="text-center m-5">results Page</h2>
     <p-button routerLink="/search">go to search page</p-button>
+    <p-accordion [multiple]="true">
+        <p-accordionTab header="Search" [selected]="true">
+            <search></search>
+        </p-accordionTab>
+        <!-- <p-accordionTab header="Filter" [selected]="false">
+            Filter stuff
+        </p-accordionTab> -->
+    </p-accordion>
+
 </div>

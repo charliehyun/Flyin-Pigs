@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-employees-list',
-  templateUrl: './results.component.html'
+  selector: 'results',
+  templateUrl: './results.component.html',
+  styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit {
   constructor() { }
