@@ -25,6 +25,7 @@ export class SearchService {
 
     filterAirports(): Subject<AirportSchema[]> {
         this.getFiltered();
+        console.log("filtering Airports");
         return this.airports$;
     }
 }

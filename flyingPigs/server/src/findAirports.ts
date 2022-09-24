@@ -1,14 +1,17 @@
-import {Airport} from "./airport"
+import mongoose from "mongoose";
+
+const Airport = require('./airport');
 //this function will take in a starting address, a list of Airport objects with address field, airport code field,
 //and a driving range in hours. From there, the algorithm will find a list of all the airport objects that are within
 //the radius of the address for the inputted hours.
 
 //global variables so we can have the appropriate
+var AirportModel = mongoose.model('Airport');
 var inRadiusAirportsIndices:number[] = [];
 var maxDriveTime = 0;
 var current25 = 0; //0 for the first 25 (indices 0-24), 1 for next 25 (indices 25-49), 2 for the next 25 (indices 50-74).
-function findAirport(startLat: number, startLong: number, airportsToSort: Airport[],
-                     driveTime: number, travelMethod: string) : Airport[] {
+function findAirport(startLat: number, startLong: number, airportsToSort: any[],
+                     driveTime: number, travelMethod: string) : any[] {
     //initialize all my global vars.
     maxDriveTime = driveTime;
     current25 = 0;
