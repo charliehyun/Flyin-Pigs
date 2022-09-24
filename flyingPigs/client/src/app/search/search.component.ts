@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
-
+import { SearchService} from "./search.service";
+import {AirportSchema} from "../airportSchema";
 
 interface DropdownOption {
   name: string,
@@ -19,7 +20,7 @@ export class SearchComponent implements OnInit {
   selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
   selectedTransport: DropdownOption = {name: 'Car', code: 'C'}; // Transportation option
-
+  filteredAirports$: Observable<AirportSchema[]> = new Observable();
   isRoundTrip: boolean = false; // Round Trip toggle
 
   adultPass: number = 1;  // number of adult passengers
@@ -27,7 +28,7 @@ export class SearchComponent implements OnInit {
   infantPass: number = 0; // number of infant passengers
   totalPass: number = this.adultPass + this.childPass + this.infantPass;
   
-  constructor() {
+  constructor(private searchService: SearchService) {
     this.classes = [
       {name: 'Economy', code: 'E'},
       {name: 'Premium Economy', code: 'P'},
@@ -56,8 +57,9 @@ export class SearchComponent implements OnInit {
     this.formattedaddress2 = address.formatted_address;
   }
   //backend calls
-  FilterAirports() {
 
+  FilterAirports() {
+    this.filteredAirports$ = this.searchService.filterAirports();
   }
 
   updatePassengers() {
@@ -74,7 +76,6 @@ export class SearchComponent implements OnInit {
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
     this.formattedaddress1= "";
     this.formattedaddress2= "";
-
   }
 
   ngOnInit(): void {

@@ -2,18 +2,22 @@ import * as mongodb from "mongodb";
 import { AirportSchema } from "./airportSchema";
 
 export const collections: {
-    airports?: mongodb.Collection<AirportSchema>;
+    //airports?: mongodb.Collection<AirportSchema>;
 } = {};
 
 export async function connectToDatabase(uri: string) {
-    const client = new mongodb.MongoClient(uri);
-    await client.connect();
+    //const client = new mongodb.MongoClient(uri);
+    //await client.connect();
+    const mongoose = require('mongoose');
+    const res = await mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology:true});
+    const {db} = mongoose.connection;
 
-    const db = client.db("airports");
+
+    //const db = client.db("airports");
     //await applySchemaValidation(db); no schema validation so far because that would be a pain to write.
 
-    const airportCollection = db.collection<AirportSchema>("airportData");
-    collections.airports = airportCollection;
+    const airportCollection = await db.collection("airportData").find().toArray();
+    //collections.airports = airportCollection;
 }
 
 // Update our existing collection with JSON schema validation so we know our documents will always match the shape of our Employee model, even if added elsewhere.
