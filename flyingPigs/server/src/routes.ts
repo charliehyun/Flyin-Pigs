@@ -1,18 +1,16 @@
 import * as express from "express";
 import * as mongodb from "mongodb";
-import {collections} from "./database";
-
-import {AirportSchema} from "./airportSchema";
+import {airportFinder} from "./findAirports";
 import mongoose from "mongoose";
-const AirportModel = require('./airport');
 export const mongoRouter = express.Router();
 mongoRouter.use(express.json());
-
+var Airport = require("./airport");
 
 mongoRouter.get("/", async (_req, res) => {
     try {
-        //const airports = await collections.airports.find({}).toArray();
-        //res.status(200).send(airports);
+        //let airportsCollection = mongoose.model('Airport');
+        const airports = await Airport.find({});
+        res.status(200).send(airports);
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -21,33 +19,25 @@ mongoRouter.get("/", async (_req, res) => {
 mongoRouter.get("/filtered", async (_req, res) => {
     try {
         var airportArr:any = [];
-        //let testId = "632861ffd3147f9597bead9d";
-        const query = {_id: new mongodb.ObjectId("632861ffd3147f9597bead9d")};
+        const query = {_id: new mongodb.ObjectId("6331d616a1b5b7d69fe724e3")};
+        const query2 = {_id: new mongodb.ObjectId("6331d616a1b5b7d69fe724e5")};
         //const airport = await collections.airports.findOne(query);
-        var airports = mongoose.model('Airport');
-        airports.findOne(query, function(err:any, data:any) {
-            if (err) {console.log(err);}
-            else {console.log(data);
-                airportArr.push(data);}
-        });
-        const newAirport = new AirportModel({
-            Address:"3331 My Street",
-            Airport:"Suck Airport",
-            Country:"United States",
-            Enplanement:"40000000",
-            FAA:"ORD",
-            IATA:"ORD",
-            ICAO:"ORD",
-            LAT:-41.34,
-            LNG:40.52,
-            Role:"Private",
-            State:"Indiana",
-            City:"Lafayette"
-        })
-
-        airportArr.push(newAirport);
+        const airport = await Airport.findOne(query);
+        const airport2 = await Airport.findOne(query2);
+        let startLat = 40.43; //this be the start lat / lng for my apartment
+        let startLng = -86.91;
+        let drivetime = 4;
+        let travelMethod = 'DRIVE';
+        airportArr.push(airport);
+        airportArr.push(airport2);
+        //console.log(airportArr);
+        let myFinder = new airportFinder();
+        //console.log(myFinder);
+        let airportArray = myFinder.findAirport(startLat, startLng, airportArr, drivetime, travelMethod);
+        console.log(airportArray);
         res.status(200).send(airportArr);
     } catch (error) {
+        console.log(error);
         res.status(500).send(error.message);
     }
 })

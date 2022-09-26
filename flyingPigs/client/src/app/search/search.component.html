@@ -81,5 +81,10 @@
   </div>
 </div>
 
-
-
+<div>
+  <p-button (click)="FilterAirports()">Filter My Airports</p-button>
+  <tr *ngFor="let airport of filteredAirports$ | async" >
+    <td>{{airport.City}}</td>
+    <td>{{airport.State}}</td>
+  </tr>
+</div>
