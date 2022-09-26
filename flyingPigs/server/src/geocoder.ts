@@ -1,11 +1,10 @@
-const {Client} = require("@googlemaps/google-maps-services-js");
-
-const client = new Client({});
+// const {Client} = require("@googlemaps/google-maps-services-js");
+// const client = new Client({});
 
 client
   .geocode({
     params: {
-      address: "Indiana, US",
+      address: "3521 State Hwy Bethel , AK 99554",
       key: "AIzaSyDNunfk3fqSjOs1DerP1HkA_R5jA87N7ZY",
     },
     timeout: 1000, // milliseconds
