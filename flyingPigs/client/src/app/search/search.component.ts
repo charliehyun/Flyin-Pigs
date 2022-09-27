@@ -19,7 +19,7 @@ export class SearchComponent implements OnInit {
   classes: DropdownOption[];  // Flight class options
   selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
-  selectedTransport: DropdownOption = {name: 'Car', code: 'C'}; // Transportation option
+  selectedTransport: DropdownOption = {name: 'Car', code: 'Driving'}; // Transportation option
   filteredAirports$: Observable<AirportSchema[]> = new Observable();
   isRoundTrip: boolean = false; // Round Trip toggle
 
@@ -36,10 +36,10 @@ export class SearchComponent implements OnInit {
       {name: 'First', code: 'F'}
     ];
     this.transportType = [
-      {name: 'Car', code: 'C'},
-      {name: 'Public Transit', code: 'P'},
-      {name: 'Bike', code: 'B'},
-      {name: 'Walk', code: 'W'}
+      {name: 'Car', code: 'Driving'},
+      {name: 'Public Transit', code: 'Public Transit'},
+      {name: 'Bike', code: 'Biking'},
+      {name: 'Walk', code: 'Walking'}
     ];
   }
 
@@ -68,7 +68,7 @@ export class SearchComponent implements OnInit {
 
   handleClear() {
     this.selectedClass = {name: 'Economy', code: 'E'};
-    this.selectedTransport = {name: 'Car', code: 'C'};
+    this.selectedTransport = {name: 'Car', code: 'Driving'};
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
