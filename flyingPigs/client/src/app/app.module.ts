@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
 import { ResultsComponent } from './results/results.component';
-
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -17,6 +16,8 @@ import {InputNumberModule} from 'primeng/inputnumber';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import {AccordionModule} from 'primeng/accordion';
 import {InputTextModule} from 'primeng/inputtext';
+import { DataService } from './data.service';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
   declarations: [
@@ -38,9 +39,10 @@ import {InputTextModule} from 'primeng/inputtext';
       InputNumberModule,
       InputSwitchModule,
       AccordionModule,
-      InputTextModule
+      InputTextModule,
+      CardModule
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

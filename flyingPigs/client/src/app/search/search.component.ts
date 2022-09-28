@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { SearchService} from "./search.service";
 import {AirportSchema} from "../airportSchema";
+import { SearchSchema, DropdownOption } from '../searchSchema';
 
-interface DropdownOption {
-  name: string,
-  code: string
-}
+import { DataService } from "../data.service";
 
 @Component({
   selector: 'search',
@@ -15,7 +13,7 @@ interface DropdownOption {
   styleUrls: ['./search.component.scss']
 })
 
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   classes: DropdownOption[];  // Flight class options
   selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
@@ -26,9 +24,12 @@ export class SearchComponent implements OnInit {
   adultPass: number = 1;  // number of adult passengers
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
-  totalPass: number = this.adultPass + this.childPass + this.infantPass;
+  totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
+
+  message!: string;
+  subscription!: Subscription;
   
-  constructor(private searchService: SearchService) {
+  constructor(private searchService: SearchService, private data: DataService) {
     this.classes = [
       {name: 'Economy', code: 'E'},
       {name: 'Premium Economy', code: 'P'},
@@ -78,7 +79,16 @@ export class SearchComponent implements OnInit {
     this.formattedaddress2= "";
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.subscription = this.data.currentMessage.subscribe(message => this.message = message)
+  }
+  
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  newMessage() {
+    this.data.changeMessage(this.message)
   }
 
 }
