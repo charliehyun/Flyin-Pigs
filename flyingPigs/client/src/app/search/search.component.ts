@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { SearchService} from "./search.service";
 import {AirportSchema} from "../airportSchema";
+import { SearchSchema, DropdownOption } from '../searchSchema';
 
-interface DropdownOption {
-  name: string,
-  code: string
-}
+import { DataService } from "../data.service";
 
 @Component({
   selector: 'search',
@@ -15,20 +13,23 @@ interface DropdownOption {
   styleUrls: ['./search.component.scss']
 })
 
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   classes: DropdownOption[];  // Flight class options
   selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
-  selectedTransport: DropdownOption = {name: 'Car', code: 'C'}; // Transportation option
+  selectedTransport: DropdownOption = {name: 'Car', code: 'Driving'}; // Transportation option
   filteredAirports$: Observable<AirportSchema[]> = new Observable();
   isRoundTrip: boolean = false; // Round Trip toggle
 
   adultPass: number = 1;  // number of adult passengers
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
-  totalPass: number = this.adultPass + this.childPass + this.infantPass;
+  totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
+
+  message!: string;
+  subscription!: Subscription;
   
-  constructor(private searchService: SearchService) {
+  constructor(private searchService: SearchService, private data: DataService) {
     this.classes = [
       {name: 'Economy', code: 'E'},
       {name: 'Premium Economy', code: 'P'},
@@ -36,10 +37,10 @@ export class SearchComponent implements OnInit {
       {name: 'First', code: 'F'}
     ];
     this.transportType = [
-      {name: 'Car', code: 'C'},
-      {name: 'Public Transit', code: 'P'},
-      {name: 'Bike', code: 'B'},
-      {name: 'Walk', code: 'W'}
+      {name: 'Car', code: 'Driving'},
+      {name: 'Public Transit', code: 'Public Transit'},
+      {name: 'Bike', code: 'Biking'},
+      {name: 'Walk', code: 'Walking'}
     ];
   }
 
@@ -68,7 +69,7 @@ export class SearchComponent implements OnInit {
 
   handleClear() {
     this.selectedClass = {name: 'Economy', code: 'E'};
-    this.selectedTransport = {name: 'Car', code: 'C'};
+    this.selectedTransport = {name: 'Car', code: 'Driving'};
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
@@ -78,7 +79,16 @@ export class SearchComponent implements OnInit {
     this.formattedaddress2= "";
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.subscription = this.data.currentMessage.subscribe(message => this.message = message)
+  }
+  
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  newMessage() {
+    this.data.changeMessage(this.message)
   }
 
 }

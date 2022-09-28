@@ -1,14 +1,83 @@
-<div>
-    <img src="favicon.ico" alt="Flyin' Pigs" routerLink="/search" width="50px" [style]="{cursor:'pointer'}">
-    <h2 class="text-center m-5">results Page</h2>
-    <p-button routerLink="/search">go to search page</p-button>
-    <p-accordion [multiple]="true">
-        <p-accordionTab header="Search" [selected]="true">
-            <search></search>
-        </p-accordionTab>
-        <!-- <p-accordionTab header="Filter" [selected]="false">
-            Filter stuff
-        </p-accordionTab> -->
-    </p-accordion>
+<img src="favicon.ico" alt="Flyin' Pigs" routerLink="/search" width="100px" [style]="{cursor:'pointer'}">
+<h2>Flights</h2>
+<!-- {{message}} -->
+<p-accordion [multiple]="true">
+    <p-accordionTab header="Search" [selected]="false">
+        <div>
+            <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
+                      
+            <p-dropdown [options]="transportType" [(ngModel)]="selectedTransport" placeholder="Select a Mode of Transport" optionLabel="name"></p-dropdown>
+            
+            One Way 
+            <p-inputSwitch [(ngModel)]="isRoundTrip"></p-inputSwitch>
+            Round Trip
+        
+            <!-- Passenger # Overlay -->
+            <p-button (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></p-button>
+            <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
+            <div>
+              <label for="adult" class="pass1">Adults</label>
+              <div class="pass2" align="right">
+                <p-inputNumber [(ngModel)]="adultPass" inputId="adult" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
+              </div>
+              <br><br><br>
+              <label for="child" class="pass1">Children &nbsp;</label>
+              <div class="pass2" align="right">
+                <p-inputNumber [(ngModel)]="childPass" inputId="child" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
+              </div>
+              <br><br><br>
+              <label for="infant" class="pass1">Infants</label>
+              <div class="pass2" align="right">
+                <p-inputNumber [(ngModel)]="infantPass" inputId="infant" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
+              </div>
+              <br><br><br>
+                <p-button (onClick)="updatePassengers(); op.hide()" class="pass1">
+              <i class="pi pi-check"></i>
+              </p-button>
+            </div>
+            </p-overlayPanel>
+            
+            <form>
+                <label for="ddate">Departure Date: </label>
+                <input pInputText type="date" id="ddate" name="ddate" required>
+                <label for="adate" *ngIf="isRoundTrip">Return Date: </label>
+                <input pInputText type="date" id="adate" name="adate" required *ngIf="isRoundTrip"><br>
+                <label for="daddress">Departure Address: </label>
+                <input pInputText type="text" id="daddress" name="daddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="formattedaddress1">
+                <label for="aaddress">Arrival Address: </label>
+                <input pInputText type="text" id="aaddress" name="aaddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange2($event)" [(ngModel)]="formattedaddress2">
+                <br>
+            </form>
+            <form>    
+                <label for="drivingStartHours">Maximum {{selectedTransport.code}} Time (start):</label>
+                <select name="drivingStartHours" id="drivingStartHours">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                </select> 
+                <label for="drivingEndHours">Maximum {{selectedTransport.code}} Time (end):</label>
+                <select name="drivingEndHours" id="drivingEndHours">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                </select>
+            </form>
+        </div>
+        <div align="right">
+            <button pButton pRipple type="button" (click)="handleClear()" label="Clear Search" class="p-button-outlined"></button>
+            <button pButton pRipple type="button" routerLink="/results" label="Search"></button>
+        </div>
+    </p-accordionTab>
+    <!-- <p-accordionTab header="Filter" [selected]="false">
+        Filter stuff
+    </p-accordionTab> -->
+</p-accordion>
 
-</div>
