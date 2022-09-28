@@ -7,7 +7,7 @@ export interface SearchSchema {
     infantPass: number;
     totalPass: number;
     departAdd: string;
-    arrivAdd: string;
+    arriveAdd: string;
     selectedTransport: DropdownOption;
     maxTimeStart: number;
     maxTimeEnd: number;

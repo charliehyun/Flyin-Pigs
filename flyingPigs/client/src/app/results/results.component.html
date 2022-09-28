@@ -1,6 +1,5 @@
 <img src="favicon.ico" alt="Flyin' Pigs" routerLink="/search" width="100px" [style]="{cursor:'pointer'}">
 <h2>Flights</h2>
-<!-- {{message}} -->
 <p-accordion [multiple]="true">
     <p-accordionTab header="Search" [selected]="false">
         <div>
@@ -43,9 +42,9 @@
                 <label for="adate" *ngIf="isRoundTrip">Return Date: </label>
                 <input pInputText type="date" id="adate" name="adate" required *ngIf="isRoundTrip"><br>
                 <label for="daddress">Departure Address: </label>
-                <input pInputText type="text" id="daddress" name="daddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="formattedaddress1">
+                <input pInputText type="text" id="daddress" name="daddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="departAdd">
                 <label for="aaddress">Arrival Address: </label>
-                <input pInputText type="text" id="aaddress" name="aaddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange2($event)" [(ngModel)]="formattedaddress2">
+                <input pInputText type="text" id="aaddress" name="aaddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange2($event)" [(ngModel)]="arriveAdd">
                 <br>
             </form>
             <form>    
@@ -73,7 +72,7 @@
         </div>
         <div align="right">
             <button pButton pRipple type="button" (click)="handleClear()" label="Clear Search" class="p-button-outlined"></button>
-            <button pButton pRipple type="button" routerLink="/results" label="Search"></button>
+            <button pButton pRipple type="button" label="Search"></button>
         </div>
     </p-accordionTab>
     <!-- <p-accordionTab header="Filter" [selected]="false">

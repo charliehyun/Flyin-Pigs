@@ -4,6 +4,8 @@ import { Options } from 'ngx-google-places-autocomplete/objects/options/options'
 import { SearchService} from "./search.service";
 import {AirportSchema} from "../airportSchema";
 import { SearchSchema, DropdownOption } from '../searchSchema';
+import { Router } from '@angular/router';
+
 
 import { DataService } from "../data.service";
 
@@ -26,10 +28,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   infantPass: number = 0; // number of infant passengers
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
 
-  message!: string;
-  subscription!: Subscription;
+  message: string;
+  subscription: Subscription;
   
-  constructor(private searchService: SearchService, private data: DataService) {
+  constructor(private searchService: SearchService, private data: DataService, private router: Router) {
     this.classes = [
       {name: 'Economy', code: 'E'},
       {name: 'Premium Economy', code: 'P'},
@@ -45,17 +47,17 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   //google autocomplete stuff.
-  formattedaddress1= "";
-  formattedaddress2= "";
+  departAdd= "";
+  arriveAdd= "";
   options:Options = new Options({
     componentRestrictions:{
       country:"US"}
   });
   AddressChange1(address: any) {
-    this.formattedaddress1 = address.formatted_address;
+    this.departAdd = address.formatted_address;
   }
   AddressChange2(address: any) {
-    this.formattedaddress2 = address.formatted_address;
+    this.arriveAdd = address.formatted_address;
   }
   //backend calls
 
@@ -75,20 +77,47 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.childPass = 0;
     this.infantPass = 0;
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
-    this.formattedaddress1= "";
-    this.formattedaddress2= "";
+    this.departAdd= "";
+    this.arriveAdd= "";
+  }
+
+  search: SearchSchema = {
+    selectedClass: {name: 'Economy', code: 'E'},
+    isRoundTrip: false,
+    adultPass: 1,
+    childPass: 0,
+    infantPass: 0,
+    totalPass: 0,
+    departAdd: "",
+    arriveAdd: "",
+    selectedTransport: {name: 'Car', code: 'Driving'},
+    maxTimeStart: 1,
+    maxTimeEnd: 1
+  }
+  handleSearch() {
+    this.search = {
+      selectedClass: this.selectedClass,
+      isRoundTrip: this.isRoundTrip,
+      adultPass: this.adultPass,
+      childPass: this.childPass,
+      infantPass: this.infantPass,
+      totalPass: this.totalPass,
+      departAdd: this.departAdd,
+      arriveAdd: this.arriveAdd,
+      selectedTransport: this.selectedTransport,
+      maxTimeStart: 1,
+      maxTimeEnd: 1
+    }
+    this.data.changeMessage(this.search)
+    this.router.navigate(['results'])
   }
 
   ngOnInit() {
-    this.subscription = this.data.currentMessage.subscribe(message => this.message = message)
+    this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
   }
   
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  newMessage() {
-    this.data.changeMessage(this.message)
   }
 
 }
