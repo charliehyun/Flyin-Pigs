@@ -52,9 +52,9 @@
     
     <form>
         <label for="ddate">Departure Date: </label>
-        <input pInputText type="date" id="ddate" name="ddate" required>
+        <input pInputText type="date" id="ddate" name="ddate" min="2022-09-29" required>
         <label for="adate" *ngIf="isRoundTrip">Return Date: </label>
-        <input pInputText type="date" id="adate" name="adate" required *ngIf="isRoundTrip"><br>
+        <input pInputText type="date" id="adate" name="adate" max="2022-12-31" required *ngIf="isRoundTrip"><br>
         <label for="daddress">Departure Address: </label>
         <input pInputText type="text" id="daddress" name="daddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="formattedaddress1">
         <label for="aaddress">Arrival Address: </label>
@@ -63,7 +63,7 @@
     </form>
     <form>    
         <label for="drivingStartHours">Maximum {{selectedTransport.code}} Time (start):</label>
-        <select name="drivingStartHours" id="drivingStartHours">
+        <select [(ngModel)]='drivingStartHours' name="drivingStartHours" id="drivingStartHours">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -73,7 +73,7 @@
             <option value="7">7</option>
         </select> 
         <label for="drivingEndHours">Maximum {{selectedTransport.code}} Time (end):</label>
-        <select name="drivingEndHours" id="drivingEndHours">
+        <select [(ngModel)]='drivingEndHours' name="drivingEndHours" id="drivingEndHours">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>

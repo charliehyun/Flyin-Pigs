@@ -24,6 +24,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   adultPass: number = 1;  // number of adult passengers
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
+
+  drivingStartHours = 3; //default starting driving hours
+  drivingEndHours = 1; //default end driving hours
+
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
 
   message!: string;
