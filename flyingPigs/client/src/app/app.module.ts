@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
@@ -16,7 +15,9 @@ import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import {AccordionModule} from 'primeng/accordion';
-
+import {InputTextModule} from 'primeng/inputtext';
+import { DataService } from './data.service';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
   declarations: [
@@ -38,8 +39,10 @@ import {AccordionModule} from 'primeng/accordion';
       InputNumberModule,
       InputSwitchModule,
       AccordionModule,
+      InputTextModule,
+      CardModule
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
