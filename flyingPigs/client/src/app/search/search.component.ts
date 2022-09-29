@@ -27,6 +27,9 @@ export class SearchComponent implements OnInit {
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
   totalPass: number = this.adultPass + this.childPass + this.infantPass;
+
+  drivingStartHours = 3;
+  drivingEndHours = 1;
   
   constructor(private searchService: SearchService) {
     this.classes = [

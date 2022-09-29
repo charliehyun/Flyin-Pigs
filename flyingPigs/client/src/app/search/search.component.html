@@ -54,7 +54,7 @@
       <br>
     
       <label for="drivingStartHours">Maximum Driving Time (start):</label>
-      <select name="drivingStartHours" id="drivingStartHours">
+      <select [(ngModel)]='drivingStartHours' name="drivingStartHours" id="drivingStartHours">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -65,7 +65,7 @@
       </select> 
       <br>
       <label for="drivingEndHours">Maximum Driving Time (end):</label>
-      <select name="drivingEndHours" id="drivingEndHours">
+      <select [(ngModel)]='drivingEndHours' name="drivingEndHours" id="drivingEndHours">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
