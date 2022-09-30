@@ -1,9 +1,5 @@
 const { MongoClient } = require("mongodb");
 
- 
-
-// Replace the following with your Atlas connection string                                                                                                                                        
-
 const url = "mongodb+srv://chyun:jLzG6yktlSoAvqDD@flyinpigs.9d1ukvz.mongodb.net/?retryWrites=true&w=majority";
 
 const client = new MongoClient(url);
@@ -12,35 +8,35 @@ const client = new MongoClient(url);
 
  const dbName = "airports";      
 
- async function run() {
+ async function loadCoordinates() {
     try {
-         await client.connect();
-         console.log("Connected correctly to server");
-         const db = client.db(dbName);
-         const colA = db.collection("airportDataTest");
-         const colB = db.collection("coordinates");
-        //  let personDocument = {
-        //      "airports": [ "Turing machine", "Turing test", "Turingery" ]
-        //  }
-         
-         // Insert a single document, wait for promise so we can read it back
-        //  const p = await col.insertOne(personDocument);
-         // Find one document
-        //  const myDoc = await col.findOne();
-         // Print to the console
-        //  console.log(myDoc);
-        const all = await colA.find();
-        console.log(all);
-        } catch (err) {
-         console.log(err.stack);
-     }
-     finally {
+        await client.connect();
+        console.log("Connected correctly to server");
+        const db = client.db(dbName);
+        const airportDataCol = db.collection("airportDataTest");
+        const coordsCol = db.collection("coordinates");
+
+        let coords = [[],[],[]];
+
+        await airportDataCol.find().forEach(doc => {
+            coords[0].push(doc.IATA);
+            coords[1].push(doc.LAT);
+            coords[2].push(doc.LNG);   
+        });
+        let allCoords = {
+            "coords": coords
+        }         
+        const p = await coordsCol.insertOne(allCoords);
+
+    } catch (err) {
+        console.log(err.stack);
+    } finally {
         await client.close();
     }
 }
 
-// run().catch(console.dir);
-updateDistanceToArray();
+loadCoordinates();
+// updateDistanceToArray();
 async function updateDistanceToArray() {
     var ops = [];
     const db = client.db(dbName);

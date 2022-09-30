@@ -13,7 +13,7 @@ export class airportFinder {
         this.current25 = 0;
 
     }
-    async findAirport(startLat: number, startLong: number, airportsToSort: any[],
+    async findAirport(startLat: number, startLng: number, airportsToSort: any[],
                          driveTime: number, travelMethod: string) {
         //initialize all my global vars.
         this.maxDriveTime = driveTime * 3600; //get max drive time in seconds.
@@ -25,7 +25,7 @@ export class airportFinder {
 
         //starting location
         let startArr = [];
-        let start = [startLat, startLong];
+        let start = [startLat, startLng];
         startArr.push(start);
         //make calls to the api 25 at a time.
         let index:number = 0;
@@ -34,7 +34,7 @@ export class airportFinder {
             //split the Airports to search into groups of 25.
             for (let i = 0; i < 25; i++) {
                 if (index < airportsToSort.length) {
-                    //add our latLongCodes to the distanceMatrixCalls
+                    //add our latLngCodes to the distanceMatrixCalls
                     var airport = airportsToSort[index];
                     distanceMatrixCall[i] = [airport.LAT, airport.LNG];
                     index++;
