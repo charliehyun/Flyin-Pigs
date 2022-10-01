@@ -60,7 +60,7 @@
             --->
 
             <label for="departDate">Departure Date: </label>
-            <input pInputText type="date" [(ngModel)]="departDate" id="dddepartDateate" name="departDate" min="{{this.date}}" required>
+            <input pInputText type="date" [(ngModel)]="departDate" id="departDate" name="departDate" min="{{this.date}}" required>
             <label for="returnDate" *ngIf="isRoundTrip">Return Date: </label>
             <input pInputText type="date" [(ngModel)]="returnDate" id="returnDate" name="returnDate" min="{{this.departDate}}" *ngIf="isRoundTrip"><br>
 
