@@ -4,6 +4,7 @@ import { Options } from 'ngx-google-places-autocomplete/objects/options/options'
 import { SearchService} from "./search.service";
 import {AirportSchema} from "../airportSchema";
 import { SearchSchema, DropdownOption } from '../searchSchema';
+import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
 
@@ -14,6 +15,7 @@ import { DataService } from "../data.service";
 })
 
 export class SearchComponent implements OnInit, OnDestroy {
+  // COPY START
   classes: DropdownOption[];  // Flight class options
   selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
@@ -26,24 +28,17 @@ export class SearchComponent implements OnInit, OnDestroy {
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
 
-  drivingStartHours: DropdownOption = {name: '3 hr', code: '3 hr'}; //default starting driving hours
-  drivingEndHours: DropdownOption = {name: '1 hr', code: '1 hr'}; //default end driving hours
+  maxTimeStart: DropdownOption = {name: '3 hr', code: '3 hr'}; //default starting driving hours
+  maxTimeEnd: DropdownOption = {name: '1 hr', code: '1 hr'}; //default end driving hours
 
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
-
-  message!: string;
   subscription!: Subscription;
   date: any;
-  ddate!: string;
-  adate!: string;
+  departDate: string;
+  returnDate: string;
   dates: any;
-  daddress!: string;
-  aaddress!: string;
-  
-
-
-  
-  constructor(private searchService: SearchService, private data: DataService, private fb: FormBuilder) {
+    
+  constructor(private searchService: SearchService, private data: DataService, private router: Router, private fb: FormBuilder) {
     this.classes = [
       {name: 'Economy', code: 'E'},
       {name: 'Premium Economy', code: 'P'},
@@ -69,17 +64,17 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   //google autocomplete stuff.
-  formattedaddress1= "";
-  formattedaddress2= "";
+  departAdd= "";
+  arriveAdd= "";
   options:Options = new Options({
     componentRestrictions:{
       country:"US"}
   });
   AddressChange1(address: any) {
-    this.formattedaddress1 = address.formatted_address;
+    this.departAdd = address.formatted_address;
   }
   AddressChange2(address: any) {
-    this.formattedaddress2 = address.formatted_address;
+    this.arriveAdd = address.formatted_address;
   }
   //backend calls
 
@@ -91,6 +86,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
   }
 
+  handleOneWay(e) {
+    if(e.checked) {
+      this.returnDate = ""
+    }
+  }
+
   handleClear() {
     this.selectedClass = {name: 'Economy', code: 'E'};
     this.selectedTransport = {name: 'Car', code: 'Driving'};
@@ -98,13 +99,60 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.adultPass = 1;
     this.childPass = 0;
     this.infantPass = 0;
+    this.departDate = "";
+    this.returnDate = "";
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
-    this.formattedaddress1= "";
-    this.formattedaddress2= "";
+    this.departAdd = "";
+    this.arriveAdd = "";
+    this.maxTimeStart = {name: '3 hr', code: '3 hr'};
+    this.maxTimeEnd = {name: '1 hr', code: '1 hr'};
   }
 
+  search: SearchSchema = {
+    selectedClass: {name: 'Economy', code: 'E'},
+    isRoundTrip: false,
+    adultPass: 1,
+    childPass: 0,
+    infantPass: 0,
+    totalPass: 0,
+    departDate: "",
+    returnDate: "",
+    departAdd: "",
+    arriveAdd: "",
+    selectedTransport: {name: 'Car', code: 'Driving'},
+    maxTimeStart: {name: '3 hr', code: '3 hr'},
+    maxTimeEnd: {name: '1 hr', code: '1 hr'}
+  }
+  handleSearch() {
+    this.search = {
+      selectedClass: this.selectedClass,
+      isRoundTrip: this.isRoundTrip,
+      adultPass: this.adultPass,
+      childPass: this.childPass,
+      infantPass: this.infantPass,
+      totalPass: this.totalPass,
+      departDate: this.departDate,
+      returnDate: this.returnDate,
+      departAdd: this.departAdd,
+      arriveAdd: this.arriveAdd,
+      selectedTransport: this.selectedTransport,
+      maxTimeStart: this.maxTimeStart,
+      maxTimeEnd: this.maxTimeEnd
+    }
+    this.data.changeMessage(this.search)
+    this.router.navigate(['results'])
+  }
+    
+  createForm() {
+    this.dates = this.fb.group({
+       departDate: ['', Validators.required ]
+    });
+  }
+  // COPY END
+
+  // DIFFERENT FROM RESULTS
   ngOnInit() {
-    this.subscription = this.data.currentMessage.subscribe(message => this.message = message);
+    this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
     this.date = new Date().toISOString().slice(0, 10);
   }
   
@@ -112,13 +160,4 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  newMessage() {
-    this.data.changeMessage(this.message)
-  }
-
-  createForm() {
-    this.dates = this.fb.group({
-       ddate: ['', Validators.required ]
-    });
-  }
 }
