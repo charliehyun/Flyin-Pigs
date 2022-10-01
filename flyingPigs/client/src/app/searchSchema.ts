@@ -6,11 +6,13 @@ export interface SearchSchema {
     childPass: number;
     infantPass: number;
     totalPass: number;
+    departDate: string;
+    returnDate: string;
     departAdd: string;
     arriveAdd: string;
     selectedTransport: DropdownOption;
-    maxTimeStart: number;
-    maxTimeEnd: number;
+    maxTimeStart: DropdownOption;
+    maxTimeEnd: DropdownOption;
 }
 
 // option format for input dropdowns

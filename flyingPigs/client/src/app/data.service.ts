@@ -14,11 +14,13 @@ export class DataService {
     childPass: 0,
     infantPass: 0,
     totalPass: 0,
+    departDate: "",
+    returnDate: "",
     departAdd: "",
     arriveAdd: "",
     selectedTransport: {name: 'Car', code: 'Driving'},
-    maxTimeStart: 1,
-    maxTimeEnd: 1
+    maxTimeStart: {name: '3 hr', code: '3 hr'},
+    maxTimeEnd: {name: '1 hr', code: '1 hr'}
   });
   currentMessage = this.messageSource.asObservable();
 

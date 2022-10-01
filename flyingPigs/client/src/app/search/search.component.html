@@ -6,6 +6,7 @@
 
 <!-- Main Search Content -->
 <p-card header="Search Flights">
+  <!-- COPY START -->
   <div>
     <!-- Class -->
     <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
@@ -15,7 +16,7 @@
     
     <!-- One way/Round trip -->
     One Way 
-    <p-inputSwitch [(ngModel)]="isRoundTrip"></p-inputSwitch>
+    <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)"></p-inputSwitch>
     Round Trip
 
     <!-- Passenger # and selection Overlay -->
@@ -62,22 +63,22 @@
     </form> 
     --->
 
-    <label for="ddate">Departure Date: </label>
-    <input pInputText type="date" [(ngModel)]="ddate" id="ddate" name="ddate" min="{{this.date}}" required>
-    <label for="adate" *ngIf="isRoundTrip">Return Date: </label>
-    <input pInputText type="date" [(ngModel)]="adate" id="adate" name="adate" min="{{this.ddate}}" *ngIf="isRoundTrip"><br>
+    <label for="departDate">Departure Date: </label>
+    <input pInputText type="date" [(ngModel)]="departDate" id="dddepartDateate" name="departDate" min="{{this.date}}" required>
+    <label for="returnDate" *ngIf="isRoundTrip">Return Date: </label>
+    <input pInputText type="date" [(ngModel)]="returnDate" id="returnDate" name="returnDate" min="{{this.departDate}}" *ngIf="isRoundTrip"><br>
 
     <label for="daddress">Departure Address: </label>
-    <input pInputText type="text" [(ngModel)]="daddress" id="daddress" name="daddress" size="35" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="formattedaddress1">
+    <input pInputText type="text" id="daddress" name="daddress" size="35" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="departAdd">
     <label for="aaddress">Arrival Address: </label>
-    <input pInputText type="text" [(ngModel)]="aaddress" id="aaddress" name="aaddress" size="35" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange2($event)" [(ngModel)]="formattedaddress2">
+    <input pInputText type="text" id="aaddress" name="aaddress" size="35" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange2($event)" [(ngModel)]="arriveAdd">
     <br>
     
     <!-- Transport Hours Before and After Flight -->
     <label for="drivingStartHours">Maximum {{selectedTransport.code}} Time (start):</label>
-    <p-dropdown [options]="hours" [(ngModel)]="drivingStartHours" optionLabel="name"></p-dropdown>
+    <p-dropdown [options]="hours" [(ngModel)]="maxTimeStart" optionLabel="name"></p-dropdown>
     <label for="drivingEndHours">Maximum {{selectedTransport.code}} Time (end):</label>
-    <p-dropdown [options]="hours" [(ngModel)]="drivingEndHours" optionLabel="name"></p-dropdown>
+    <p-dropdown [options]="hours" [(ngModel)]="maxTimeEnd" optionLabel="name"></p-dropdown>
     
   </div>
   <div align="center">
@@ -85,6 +86,7 @@
     <button pButton pRipple type="button" (click)="handleClear()" label="Clear Search" class="p-button-outlined"></button>
     <button pButton pRipple type="button" (click)="handleSearch()" label="Search"></button>
   </div>
+  <!-- COPY END -->
 </p-card>
 
 <div>

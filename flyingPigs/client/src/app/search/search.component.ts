@@ -15,6 +15,7 @@ import { DataService } from "../data.service";
 })
 
 export class SearchComponent implements OnInit, OnDestroy {
+  // COPY START
   classes: DropdownOption[];  // Flight class options
   selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
@@ -27,17 +28,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
 
-  drivingStartHours: DropdownOption = {name: '3 hr', code: '3 hr'}; //default starting driving hours
-  drivingEndHours: DropdownOption = {name: '1 hr', code: '1 hr'}; //default end driving hours
+  maxTimeStart: DropdownOption = {name: '3 hr', code: '3 hr'}; //default starting driving hours
+  maxTimeEnd: DropdownOption = {name: '1 hr', code: '1 hr'}; //default end driving hours
 
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
   subscription!: Subscription;
   date: any;
-  ddate!: string;
-  adate!: string;
+  departDate: string;
+  returnDate: string;
   dates: any;
-  daddress!: string;
-  aaddress!: string;
     
   constructor(private searchService: SearchService, private data: DataService, private router: Router, private fb: FormBuilder) {
     this.classes = [
@@ -87,6 +86,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
   }
 
+  handleOneWay(e) {
+    if(e.checked) {
+      this.returnDate = ""
+    }
+  }
+
   handleClear() {
     this.selectedClass = {name: 'Economy', code: 'E'};
     this.selectedTransport = {name: 'Car', code: 'Driving'};
@@ -94,9 +99,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.adultPass = 1;
     this.childPass = 0;
     this.infantPass = 0;
+    this.departDate = "";
+    this.returnDate = "";
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
-    this.departAdd= "";
-    this.arriveAdd= "";
+    this.departAdd = "";
+    this.arriveAdd = "";
+    this.maxTimeStart = {name: '3 hr', code: '3 hr'};
+    this.maxTimeEnd = {name: '1 hr', code: '1 hr'};
   }
 
   search: SearchSchema = {
@@ -106,11 +115,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     childPass: 0,
     infantPass: 0,
     totalPass: 0,
+    departDate: "",
+    returnDate: "",
     departAdd: "",
     arriveAdd: "",
     selectedTransport: {name: 'Car', code: 'Driving'},
-    maxTimeStart: 1,
-    maxTimeEnd: 1
+    maxTimeStart: {name: '3 hr', code: '3 hr'},
+    maxTimeEnd: {name: '1 hr', code: '1 hr'}
   }
   handleSearch() {
     this.search = {
@@ -120,16 +131,26 @@ export class SearchComponent implements OnInit, OnDestroy {
       childPass: this.childPass,
       infantPass: this.infantPass,
       totalPass: this.totalPass,
+      departDate: this.departDate,
+      returnDate: this.returnDate,
       departAdd: this.departAdd,
       arriveAdd: this.arriveAdd,
       selectedTransport: this.selectedTransport,
-      maxTimeStart: 1,
-      maxTimeEnd: 1
+      maxTimeStart: this.maxTimeStart,
+      maxTimeEnd: this.maxTimeEnd
     }
     this.data.changeMessage(this.search)
     this.router.navigate(['results'])
   }
+    
+  createForm() {
+    this.dates = this.fb.group({
+       departDate: ['', Validators.required ]
+    });
+  }
+  // COPY END
 
+  // DIFFERENT FROM RESULTS
   ngOnInit() {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
     this.date = new Date().toISOString().slice(0, 10);
@@ -138,10 +159,5 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-  
-  createForm() {
-    this.dates = this.fb.group({
-       ddate: ['', Validators.required ]
-    });
-  }
+
 }
