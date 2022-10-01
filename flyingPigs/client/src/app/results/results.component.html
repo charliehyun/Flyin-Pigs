@@ -3,15 +3,18 @@
 <p-accordion [multiple]="true">
     <p-accordionTab header="Search" [selected]="false">
         <div>
+            <!-- Class -->
             <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
                       
+            <!-- Transportation method -->
             <p-dropdown [options]="transportType" [(ngModel)]="selectedTransport" placeholder="Select a Mode of Transport" optionLabel="name"></p-dropdown>
             
+            <!-- One way/Round trip -->
             One Way 
             <p-inputSwitch [(ngModel)]="isRoundTrip"></p-inputSwitch>
             Round Trip
         
-            <!-- Passenger # Overlay -->
+            <!-- Passenger # and selection Overlay -->
             <p-button (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></p-button>
             <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
             <div>
@@ -30,17 +33,19 @@
                 <p-inputNumber [(ngModel)]="infantPass" inputId="infant" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
               </div>
               <br><br><br>
-                <p-button (onClick)="updatePassengers(); op.hide()" class="pass1">
+              <p-button (onClick)="updatePassengers(); op.hide()" class="pass1">
               <i class="pi pi-check"></i>
               </p-button>
             </div>
             </p-overlayPanel>
             
             <form>
+                <!-- Dates -->
                 <label for="ddate">Departure Date: </label>
                 <input pInputText type="date" id="ddate" name="ddate" required>
                 <label for="adate" *ngIf="isRoundTrip">Return Date: </label>
                 <input pInputText type="date" id="adate" name="adate" required *ngIf="isRoundTrip"><br>
+                <!-- Addresses -->
                 <label for="daddress">Departure Address: </label>
                 <input pInputText type="text" id="daddress" name="daddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="departAdd">
                 <label for="aaddress">Arrival Address: </label>
@@ -48,6 +53,7 @@
                 <br>
             </form>
             <form>    
+                <!-- Traveling times -->
                 <label for="drivingStartHours">Maximum {{selectedTransport.code}} Time (start):</label>
                 <select name="drivingStartHours" id="drivingStartHours">
                     <option value="1">1</option>
@@ -69,11 +75,12 @@
                     <option value="7">7</option>
                 </select>
             </form>
-        </div>
-        <div align="right">
+          </div>
+          <div align="right">
+            <!-- Clear/Search -->
             <button pButton pRipple type="button" (click)="handleClear()" label="Clear Search" class="p-button-outlined"></button>
-            <button pButton pRipple type="button" label="Search"></button>
-        </div>
+            <button pButton pRipple type="button" (click)="handleSearch()" label="Search"></button>
+          </div>
     </p-accordionTab>
     <!-- <p-accordionTab header="Filter" [selected]="false">
         Filter stuff

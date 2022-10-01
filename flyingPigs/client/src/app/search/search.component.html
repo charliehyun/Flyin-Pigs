@@ -3,29 +3,22 @@
   <img src="favicon.ico" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto;">
   <h2>Flyin' Pigs</h2>    
 </div>
-<!-- 
-<div>
-  TESTING:<br>
-  {{message}}
-  <input pInputText type="text" [(ngModel)]="message">
-  <button (click)="newMessage()">New Message</button>
-  <br>
-</div>
-<br> -->
 
 <!-- Main Search Content -->
-<!-- <p-card header="Search Flights" [style]="{'background':'gray'}"> -->
 <p-card header="Search Flights">
   <div>
+    <!-- Class -->
     <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
               
+    <!-- Transportation method -->
     <p-dropdown [options]="transportType" [(ngModel)]="selectedTransport" placeholder="Select a Mode of Transport" optionLabel="name"></p-dropdown>
     
+    <!-- One way/Round trip -->
     One Way 
     <p-inputSwitch [(ngModel)]="isRoundTrip"></p-inputSwitch>
     Round Trip
 
-    <!-- Passenger # Overlay -->
+    <!-- Passenger # and selection Overlay -->
     <p-button (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></p-button>
     <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
     <div>
@@ -51,10 +44,12 @@
     </p-overlayPanel>
     
     <form>
+        <!-- Dates -->
         <label for="ddate">Departure Date: </label>
         <input pInputText type="date" id="ddate" name="ddate" required>
         <label for="adate" *ngIf="isRoundTrip">Return Date: </label>
         <input pInputText type="date" id="adate" name="adate" required *ngIf="isRoundTrip"><br>
+        <!-- Addresses -->
         <label for="daddress">Departure Address: </label>
         <input pInputText type="text" id="daddress" name="daddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="departAdd">
         <label for="aaddress">Arrival Address: </label>
@@ -62,6 +57,7 @@
         <br>
     </form>
     <form>    
+        <!-- Traveling times -->
         <label for="drivingStartHours">Maximum {{selectedTransport.code}} Time (start):</label>
         <select name="drivingStartHours" id="drivingStartHours">
             <option value="1">1</option>
@@ -85,6 +81,7 @@
     </form>
   </div>
   <div align="center">
+    <!-- Clear/Search -->
     <button pButton pRipple type="button" (click)="handleClear()" label="Clear Search" class="p-button-outlined"></button>
     <button pButton pRipple type="button" (click)="handleSearch()" label="Search"></button>
   </div>
