@@ -13,26 +13,28 @@ export class airportFinder {
         this.current25 = 0;
 
     }
-    findAirport(startLat: number, startLong: number, airportsToSort: any[],
-                         driveTime: number, travelMethod: string) : any[] {
+    async findAirport(startLat: number, startLng: number, airportsToSort: any[],
+                         driveTime: number, travelMethod: string) {
         //initialize all my global vars.
-        this.maxDriveTime = driveTime;
+        this.maxDriveTime = driveTime * 3600; //get max drive time in seconds.
         this.current25 = 0;
+        this.inRadiusAirportsIndices = [];
         const {Client} = require("@googlemaps/google-maps-services-js");
 
         const client = new Client({});
+
         //starting location
         let startArr = [];
-        let start = [startLat, startLong];
+        let start = [startLat, startLng];
         startArr.push(start);
         //make calls to the api 25 at a time.
         let index:number = 0;
         while(index < airportsToSort.length) {
-            var distanceMatrixCall:any[] = new Array(25);
+            var distanceMatrixCall: any[] = new Array(25);
             //split the Airports to search into groups of 25.
             for (let i = 0; i < 25; i++) {
                 if (index < airportsToSort.length) {
-                    //add our latLongCodes to the distanceMatrixCalls
+                    //add our latLngCodes to the distanceMatrixCalls
                     var airport = airportsToSort[index];
                     distanceMatrixCall[i] = [airport.LAT, airport.LNG];
                     index++;
@@ -42,42 +44,47 @@ export class airportFinder {
                 }
             }
             //call the matrix call into the callback function
-            client.distancematrix({
+            await client.distancematrix({
                 params: {
                     origins: startArr,
                     destinations: distanceMatrixCall,
-                    travelMode: ['DRIVING'],
-                    key:"AIzaSyA24p5rileUNbxSp8afoKXcwYH3zLlyxuU",
+                    mode: travelMethod,
+                    key: "AIzaSyA24p5rileUNbxSp8afoKXcwYH3zLlyxuU",
                 },
             }).then((r: any) => {
                 this.filterFunc(r);
-                //add to distanceMatrix
-            }).catch((e:any) => {
+            }).catch((e: any) => {
                 console.log(e);
-            });
+            })
         }
-
-        return this.inRadiusAirportsIndices.map(indices => airportsToSort[indices]);
+        let newArray = this.inRadiusAirportsIndices.map(x => airportsToSort[x]);
+        return newArray;
     }
 
     filterFunc(response:any) {
             var origins = response.data.origin_addresses;
             var destinations = response.data.destination_addresses;
-
             for (var i = 0; i < origins.length; i++) {
                 var results = response.data.rows[i].elements;
                 for (var j = 0; j < results.length; j++) {
                     var element = results[j];
-                    var distance = element.distance.text;
-                    var duration = element.duration.text;
-                    var from = origins[i];
-                    var to = destinations[j];
-
-                    var indexBase = this.current25 * 25;
-                    console.log(typeof(duration));
-                    if (duration < this.maxDriveTime)
+                    if (element.status === 'OK')
                     {
-                        this.inRadiusAirportsIndices.push(indexBase + j);
+                        var distance = element.distance.text;
+                        var duration = element.duration.text;
+                        var from = origins[i];
+                        var to = destinations[j];
+                        var indexBase = this.current25 * 25;
+                        console.log(element.duration.value + " " + indexBase);
+                        let durationInt = parseInt(element.duration.value);
+                        if (durationInt <= this.maxDriveTime)
+                        {
+                            this.inRadiusAirportsIndices.push(indexBase + j);
+                        }
+                    }
+                    else
+                    {
+                        console.log("airport is unreachable.");
                     }
                 }
             }

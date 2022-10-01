@@ -5,8 +5,7 @@ import { SearchService} from "./search.service";
 import {AirportSchema} from "../airportSchema";
 import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
-
-
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
 
 @Component({
@@ -22,16 +21,25 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedTransport: DropdownOption = {name: 'Car', code: 'Driving'}; // Transportation option
   filteredAirports$: Observable<AirportSchema[]> = new Observable();
   isRoundTrip: boolean = false; // Round Trip toggle
+  hours: DropdownOption[]; // hours for transportation before/after flight
 
   adultPass: number = 1;  // number of adult passengers
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
-  totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
 
-  message: string;
-  subscription: Subscription;
-  
-  constructor(private searchService: SearchService, private data: DataService, private router: Router) {
+  drivingStartHours: DropdownOption = {name: '3 hr', code: '3 hr'}; //default starting driving hours
+  drivingEndHours: DropdownOption = {name: '1 hr', code: '1 hr'}; //default end driving hours
+
+  totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
+  subscription!: Subscription;
+  date: any;
+  ddate!: string;
+  adate!: string;
+  dates: any;
+  daddress!: string;
+  aaddress!: string;
+    
+  constructor(private searchService: SearchService, private data: DataService, private router: Router, private fb: FormBuilder) {
     this.classes = [
       {name: 'Economy', code: 'E'},
       {name: 'Premium Economy', code: 'P'},
@@ -44,6 +52,16 @@ export class SearchComponent implements OnInit, OnDestroy {
       {name: 'Bike', code: 'Biking'},
       {name: 'Walk', code: 'Walking'}
     ];
+    this.hours = [
+      {name: '1 hr', code: '1 hr'},
+      {name: '2 hr', code: '2 hr'},
+      {name: '3 hr', code: '3 hr'},
+      {name: '4 hr', code: '4 hr'},
+      {name: '5 hr', code: '5 hr'},
+      {name: '6 hr', code: '6 hr'},
+      {name: '7 hr', code: '7 hr'}
+    ];
+    this.createForm();
   }
 
   //google autocomplete stuff.
@@ -114,10 +132,16 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
+    this.date = new Date().toISOString().slice(0, 10);
   }
   
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
+  
+  createForm() {
+    this.dates = this.fb.group({
+       ddate: ['', Validators.required ]
+    });
+  }
 }

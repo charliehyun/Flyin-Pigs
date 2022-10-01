@@ -43,42 +43,42 @@
     </div>
     </p-overlayPanel>
     
-    <form>
-        <!-- Dates -->
-        <label for="ddate">Departure Date: </label>
-        <input pInputText type="date" id="ddate" name="ddate" required>
-        <label for="adate" *ngIf="isRoundTrip">Return Date: </label>
-        <input pInputText type="date" id="adate" name="adate" required *ngIf="isRoundTrip"><br>
-        <!-- Addresses -->
-        <label for="daddress">Departure Address: </label>
-        <input pInputText type="text" id="daddress" name="daddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="departAdd">
-        <label for="aaddress">Arrival Address: </label>
-        <input pInputText type="text" id="aaddress" name="aaddress" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange2($event)" [(ngModel)]="arriveAdd">
-        <br>
-    </form>
-    <form>    
-        <!-- Traveling times -->
-        <label for="drivingStartHours">Maximum {{selectedTransport.code}} Time (start):</label>
-        <select name="drivingStartHours" id="drivingStartHours">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-        </select> 
-        <label for="drivingEndHours">Maximum {{selectedTransport.code}} Time (end):</label>
-        <select name="drivingEndHours" id="drivingEndHours">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-        </select>
-    </form>
+    <!-- Trip Dates and Addresses -->
+    
+    <br>
+    <!----
+    <br>
+    <form [formGroup]="dates" novalidate>
+      <div class="form-group">
+        <label class="center-block">Departure Date:
+          <input class="form-control" formControlName="ddate" pInputText type="date" [(ngModel)]="ddate" id="ddate" name="ddate" required>
+        </label>
+      </div>
+      <div *ngIf="dates.controls['ddate'].invalid && (dates.controls['ddate'].dirty || dates.controls['ddate'].touched || dates.ddate < this.date)" class="alert">
+          <small class="text-danger" *ngIf="dates.controls['ddate'].errors.required">
+          Please enter valid date!
+          </small>
+      </div>
+    </form> 
+    --->
+
+    <label for="ddate">Departure Date: </label>
+    <input pInputText type="date" [(ngModel)]="ddate" id="ddate" name="ddate" min="{{this.date}}" required>
+    <label for="adate" *ngIf="isRoundTrip">Return Date: </label>
+    <input pInputText type="date" [(ngModel)]="adate" id="adate" name="adate" min="{{this.ddate}}" *ngIf="isRoundTrip"><br>
+
+    <label for="daddress">Departure Address: </label>
+    <input pInputText type="text" [(ngModel)]="daddress" id="daddress" name="daddress" size="35" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="formattedaddress1">
+    <label for="aaddress">Arrival Address: </label>
+    <input pInputText type="text" [(ngModel)]="aaddress" id="aaddress" name="aaddress" size="35" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange2($event)" [(ngModel)]="formattedaddress2">
+    <br>
+    
+    <!-- Transport Hours Before and After Flight -->
+    <label for="drivingStartHours">Maximum {{selectedTransport.code}} Time (start):</label>
+    <p-dropdown [options]="hours" [(ngModel)]="drivingStartHours" optionLabel="name"></p-dropdown>
+    <label for="drivingEndHours">Maximum {{selectedTransport.code}} Time (end):</label>
+    <p-dropdown [options]="hours" [(ngModel)]="drivingEndHours" optionLabel="name"></p-dropdown>
+    
   </div>
   <div align="center">
     <!-- Clear/Search -->
