@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
-import { SearchService} from "./search.service";
-import {AirportSchema} from "../airportSchema";
+import { SearchService } from "./search.service";
+import {AirportSchema } from "../airportSchema";
 import { SearchSchema, DropdownOption } from '../searchSchema';
 
 import { DataService } from "../data.service";

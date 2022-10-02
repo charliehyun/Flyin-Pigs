@@ -16,6 +16,15 @@ mongoRouter.get("/", async (_req, res) => {
     }
 });
 
+
+mongoRouter.get("/preFilter", async (req, res) => {
+    try {
+        console.log("preFilter");
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 mongoRouter.get("/filtered", async (_req, res) => {
     try {
         var airportArr:any = [];
