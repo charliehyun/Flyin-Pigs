@@ -1,9 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
+import { SearchService} from "../search/search.service";
 import {AirportSchema} from "../airportSchema";
-import { DataService } from '../data.service';
 import { SearchSchema, DropdownOption } from '../searchSchema';
+import { Router } from '@angular/router';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { DataService } from "../data.service";
 
 @Component({
   selector: 'results',
@@ -12,23 +15,30 @@ import { SearchSchema, DropdownOption } from '../searchSchema';
 })
 
 export class ResultsComponent implements OnInit, OnDestroy {
+  // COPY START
   classes: DropdownOption[];  // Flight class options
   selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
   selectedTransport: DropdownOption = {name: 'Car', code: 'Driving'}; // Transportation option
   filteredAirports$: Observable<AirportSchema[]> = new Observable();
   isRoundTrip: boolean = false; // Round Trip toggle
+  hours: DropdownOption[]; // hours for transportation before/after flight
 
   adultPass: number = 1;  // number of adult passengers
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
-  totalPass: number = this.adultPass + this.childPass + this.infantPass;
 
-  message!:string;
+  maxTimeStart: DropdownOption = {name: '3 hr', code: '3 hr'}; //default starting driving hours
+  maxTimeEnd: DropdownOption = {name: '1 hr', code: '1 hr'}; //default end driving hours
+
+  totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
   subscription!: Subscription;
-
-  
-  constructor(private data: DataService) {
+  date: any;
+  departDate: string;
+  returnDate: string;
+  dates: any;
+    
+  constructor(private searchService: SearchService, private data: DataService, private router: Router, private fb: FormBuilder) {
     this.classes = [
       {name: 'Economy', code: 'E'},
       {name: 'Premium Economy', code: 'P'},
@@ -41,24 +51,45 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: 'Bike', code: 'Biking'},
       {name: 'Walk', code: 'Walking'}
     ];
+    this.hours = [
+      {name: '1 hr', code: '1 hr'},
+      {name: '2 hr', code: '2 hr'},
+      {name: '3 hr', code: '3 hr'},
+      {name: '4 hr', code: '4 hr'},
+      {name: '5 hr', code: '5 hr'},
+      {name: '6 hr', code: '6 hr'},
+      {name: '7 hr', code: '7 hr'}
+    ];
+    this.createForm();
   }
 
   //google autocomplete stuff.
-  formattedaddress1= "";
-  formattedaddress2= "";
+  departAdd= "";
+  arriveAdd= "";
   options:Options = new Options({
     componentRestrictions:{
       country:"US"}
   });
   AddressChange1(address: any) {
-    this.formattedaddress1 = address.formatted_address;
+    this.departAdd = address.formatted_address;
   }
   AddressChange2(address: any) {
-    this.formattedaddress2 = address.formatted_address;
+    this.arriveAdd = address.formatted_address;
+  }
+  //backend calls
+
+  FilterAirports() {
+    this.filteredAirports$ = this.searchService.filterAirports();
   }
 
   updatePassengers() {
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
+  }
+
+  handleOneWay(e) {
+    if(e.checked) {
+      this.returnDate = ""
+    }
   }
 
   handleClear() {
@@ -68,20 +99,78 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.adultPass = 1;
     this.childPass = 0;
     this.infantPass = 0;
+    this.departDate = "";
+    this.returnDate = "";
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
-    this.formattedaddress1= "";
-    this.formattedaddress2= "";
+    this.departAdd = "";
+    this.arriveAdd = "";
+    this.maxTimeStart = {name: '3 hr', code: '3 hr'};
+    this.maxTimeEnd = {name: '1 hr', code: '1 hr'};
   }
 
-  ngOnInit(): void {
-    this.subscription = this.data.currentMessage.subscribe(message => this.message = message)
+  search: SearchSchema = {
+    selectedClass: {name: 'Economy', code: 'E'},
+    isRoundTrip: false,
+    adultPass: 1,
+    childPass: 0,
+    infantPass: 0,
+    totalPass: 0,
+    departDate: "",
+    returnDate: "",
+    departAdd: "",
+    arriveAdd: "",
+    selectedTransport: {name: 'Car', code: 'Driving'},
+    maxTimeStart: {name: '3 hr', code: '3 hr'},
+    maxTimeEnd: {name: '1 hr', code: '1 hr'}
+  }
+  handleSearch() {
+    this.search = {
+      selectedClass: this.selectedClass,
+      isRoundTrip: this.isRoundTrip,
+      adultPass: this.adultPass,
+      childPass: this.childPass,
+      infantPass: this.infantPass,
+      totalPass: this.totalPass,
+      departDate: this.departDate,
+      returnDate: this.returnDate,
+      departAdd: this.departAdd,
+      arriveAdd: this.arriveAdd,
+      selectedTransport: this.selectedTransport,
+      maxTimeStart: this.maxTimeStart,
+      maxTimeEnd: this.maxTimeEnd
+    }
+    this.data.changeMessage(this.search)
+    this.router.navigate(['results'])
+  }
+    
+  createForm() {
+    this.dates = this.fb.group({
+       departDate: ['', Validators.required ]
+    });
+  }
+  // COPY END
 
+  // DIFFERENT FROM SEARCH
+  ngOnInit(): void {
+    this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
+
+    this.selectedClass = this.search.selectedClass;
+    this.isRoundTrip = this.search.isRoundTrip;
+    this.adultPass = this.search.adultPass;
+    this.childPass = this.search.childPass;
+    this.infantPass = this.search.infantPass;
+    this.totalPass = this.search.totalPass;
+    this.departDate = this.search.departDate;
+    this.returnDate = this.search.returnDate;
+    this.departAdd = this.search.departAdd;
+    this.arriveAdd = this.search.arriveAdd;
+    this.selectedTransport = this.search.selectedTransport;
+    this.maxTimeStart = this.search.maxTimeStart;
+    this.maxTimeEnd = this.search.maxTimeEnd;
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
-
 
 }
