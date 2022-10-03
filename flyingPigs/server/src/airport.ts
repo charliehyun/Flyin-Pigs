@@ -15,9 +15,10 @@ const airportSchema = mongoose.Schema({
     Role:{type: String, required:true},
     State:{type: String, required:true},
     City:{type: String, required:true},
+    Driving:{type: Array, required:true},
     _id: {type: mongoose.Schema.Types.ObjectId, required:false}
 }, {
-    collection: 'airportData'
+    collection: 'airportDataTest'
 });
 
 module.exports = mongoose.model('Airport', airportSchema);

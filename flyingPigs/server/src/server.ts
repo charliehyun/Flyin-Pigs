@@ -3,6 +3,11 @@ import cors from "cors";
 import express from "express";
 import { connectToDatabase } from "./database";
 import { mongoRouter } from "./routes"
+// import { airportFinder } from "./findAirports"
+
+// let a = new airportFinder();
+
+// a.findAirportsInRange(40.465600640989585, -86.91021761350135, 12000, "DRIVE");
 
 // Load environment variables from the .env file, where the ATLAS_URI is configured
 dotenv.config();
