@@ -88,6 +88,7 @@ export class airportFinder {
             let res = await Airport.findOne({"IATA": iata});
             validAirports.push(res);
         }
+        // console.log(validAirports);
         return validAirports;
     }
 
