@@ -7,6 +7,7 @@ import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
+// import {Client} from "@googlemaps/google-maps-services-js";
 
 @Component({
   selector: 'search',
@@ -118,12 +119,26 @@ export class SearchComponent implements OnInit, OnDestroy {
     departDate: "",
     returnDate: "",
     departAdd: "",
+    departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     arriveAdd: "",
+    arriveCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     selectedTransport: {name: 'Car', code: 'Driving'},
     maxTimeStart: {name: '3 hr', code: '3 hr'},
     maxTimeEnd: {name: '1 hr', code: '1 hr'}
   }
-  handleSearch() {
+  async handleSearch() {
+    let departureCoord = await this.geocode(this.departAdd);
+    let arrivalCoord = await this.geocode(this.arriveAdd);
+    if(departureCoord == null) {
+      // departure address is invalid probably
+      // should not advance
+      console.log("invalid departure address");
+    }
+    if(arrivalCoord == null) {
+      // arrival address is invalid probably
+      // should not advance
+      console.log("invalid arrival address");
+    }
     this.search = {
       selectedClass: this.selectedClass,
       isRoundTrip: this.isRoundTrip,
@@ -134,18 +149,40 @@ export class SearchComponent implements OnInit, OnDestroy {
       departDate: this.departDate,
       returnDate: this.returnDate,
       departAdd: this.departAdd,
+      departCoord: departureCoord,
       arriveAdd: this.arriveAdd,
+      arriveCoord: arrivalCoord,
       selectedTransport: this.selectedTransport,
       maxTimeStart: this.maxTimeStart,
       maxTimeEnd: this.maxTimeEnd
     }
+
+    console.log(this.search.departCoord.lat());
+
     this.data.changeMessage(this.search)
     this.router.navigate(['results'])
+  }
+  /*
+  Geocodes an address.
+  Returns LatLng object with lat() and lng() getter functions
+  If an error occurs, returns a null. 
+  */
+  async geocode(address) {
+    var coord;
+    var geocoder = new google.maps.Geocoder();
+    await geocoder.geocode({ 'address': address}).then(response => {
+      coord = response.results[0].geometry.location;
+      // console.log(response);
+    }).catch(e => {
+      coord = null;
+      // console.log(e);
+    });
+    return coord;
   }
     
   createForm() {
     this.dates = this.fb.group({
-       departDate: ['', Validators.required ]
+        departDate: ['', Validators.required ]
     });
   }
   // COPY END
