@@ -17,7 +17,9 @@ export class DataService {
     departDate: "",
     returnDate: "",
     departAdd: "",
+    departCoord: new google.maps.LatLng({"lat": 0, 'lng': 0}),
     arriveAdd: "",
+    arriveCoord: new google.maps.LatLng({"lat": 0, 'lng': 0}),
     selectedTransport: {name: 'Car', code: 'Driving'},
     maxTimeStart: {name: '3 hr', code: '3 hr'},
     maxTimeEnd: {name: '1 hr', code: '1 hr'}
