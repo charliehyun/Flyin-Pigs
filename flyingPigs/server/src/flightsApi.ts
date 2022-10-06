@@ -61,6 +61,21 @@ export class flightsApi {
         }).on("error", (err:any) => {
             console.log("Error: " + err.message);
         });
-        return this.response;
+        return this.parseResponse();
+    }
+    parseResponse() {
+        let returnFlightObjects = [];
+
+
+        let myObj: any = this.response;
+        let flightLegs = myObj.legs;
+        let flightIds:any = [];
+        flightLegs.forEach(function (value:any) {
+            if (value.stopoversCount <= 2) {
+                flightIds.push(value.id);
+
+            }
+        }
+    )
     }
 }
