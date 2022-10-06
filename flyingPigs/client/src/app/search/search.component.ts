@@ -51,17 +51,17 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.transportType = [
       {name: 'Car', code: 'Driving'},
       {name: 'Public Transit', code: 'Public Transit'},
-      {name: 'Bike', code: 'Biking'},
-      {name: 'Walk', code: 'Walking'}
+      // {name: 'Bike', code: 'Biking'},
+      // {name: 'Walk', code: 'Walking'}
     ];
     this.hours = [
-      {name: '1 hr', code: '1 hr'},
-      {name: '2 hr', code: '2 hr'},
-      {name: '3 hr', code: '3 hr'},
-      {name: '4 hr', code: '4 hr'},
-      {name: '5 hr', code: '5 hr'},
-      {name: '6 hr', code: '6 hr'},
-      {name: '7 hr', code: '7 hr'}
+      {name: '1 hr', code: '3600'},
+      {name: '2 hr', code: '7200'},
+      {name: '3 hr', code: '10800'},
+      {name: '4 hr', code: '14400'},
+      {name: '5 hr', code: '18000'},
+      {name: '6 hr', code: '21600'},
+      {name: '7 hr', code: '25200'}
     ];
     this.createForm();
   }
@@ -128,41 +128,64 @@ export class SearchComponent implements OnInit, OnDestroy {
     maxTimeStart: {name: '3 hr', code: '3 hr'},
     maxTimeEnd: {name: '1 hr', code: '1 hr'}
   }
+
   async handleSearch() {
     let departureCoord = await this.geocode(this.departAdd);
     let arrivalCoord = await this.geocode(this.arriveAdd);
-    if(departureCoord == null) {
+
+    let route = true;
+    if(!this.departDate) {
+      const x = document.getElementById('departDate');
+      x?.classList.add('ng-invalid')
+      x?.classList.add('ng-dirty')
+      route = false
+    } 
+    if(this.isRoundTrip && !this.returnDate) {
+      const x = document.getElementById('returnDate');
+      x?.classList.add('ng-invalid')
+      x?.classList.add('ng-dirty')
+      route = false
+    }
+    if(!this.departAdd || departureCoord == null) {
       // departure address is invalid probably
       // should not advance
-      console.log("invalid departure address");
+      const x = document.getElementById('daddress');
+      x?.classList.add('ng-invalid')
+      x?.classList.add('ng-dirty')
+      route = false
     }
-    if(arrivalCoord == null) {
+    if(!this.arriveAdd || arrivalCoord == null) {
       // arrival address is invalid probably
       // should not advance
-      console.log("invalid arrival address");
-    }
-    this.search = {
-      selectedClass: this.selectedClass,
-      isRoundTrip: this.isRoundTrip,
-      adultPass: this.adultPass,
-      childPass: this.childPass,
-      infantPass: this.infantPass,
-      totalPass: this.totalPass,
-      departDate: this.departDate,
-      returnDate: this.returnDate,
-      departAdd: this.departAdd,
-      departCoord: departureCoord,
-      arriveAdd: this.arriveAdd,
-      arriveCoord: arrivalCoord,
-      selectedTransport: this.selectedTransport,
-      maxTimeStart: this.maxTimeStart,
-      maxTimeEnd: this.maxTimeEnd
+      const x = document.getElementById('aaddress');
+      x?.classList.add('ng-invalid')
+      x?.classList.add('ng-dirty')
+      route = false
     }
 
-    console.log(this.search.departCoord.lat());
-    this.results$ = this.searchService.searchAirports(this.search);
-    this.data.changeMessage(this.search)
-    //this.router.navigate(['results'])
+    if(route) {
+      this.search = {
+        selectedClass: this.selectedClass,
+        isRoundTrip: this.isRoundTrip,
+        adultPass: this.adultPass,
+        childPass: this.childPass,
+        infantPass: this.infantPass,
+        totalPass: this.totalPass,
+        departDate: this.departDate,
+        returnDate: this.returnDate,
+        departAdd: this.departAdd,
+        departCoord: departureCoord,
+        arriveAdd: this.arriveAdd,
+        arriveCoord: arrivalCoord,
+        selectedTransport: this.selectedTransport,
+        maxTimeStart: this.maxTimeStart,
+        maxTimeEnd: this.maxTimeEnd
+      }
+      this.data.changeMessage(this.search)
+      this.router.navigate(['results'])
+    } else {
+      alert("invalid")
+    }
   }
   /*
   Geocodes an address.

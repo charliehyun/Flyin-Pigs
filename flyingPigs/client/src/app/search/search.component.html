@@ -66,7 +66,7 @@
     <label for="departDate">Departure Date: </label>
     <input pInputText type="date" [(ngModel)]="departDate" id="departDate" name="departDate" min="{{this.date}}" required>
     <label for="returnDate" *ngIf="isRoundTrip">Return Date: </label>
-    <input pInputText type="date" [(ngModel)]="returnDate" id="returnDate" name="returnDate" min="{{this.departDate}}" *ngIf="isRoundTrip"><br>
+    <input pInputText type="date" [(ngModel)]="returnDate" id="returnDate" name="returnDate" min="{{this.departDate}}" required *ngIf="isRoundTrip"><br>
 
     <label for="daddress">Departure Address: </label>
     <input pInputText type="text" id="daddress" name="daddress" size="35" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="departAdd">
