@@ -217,6 +217,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
   resetValidity() {
+    // const x = document.getElementById('departDate');
+    // const x = document.getElementById('returnDate');
+    // const x = document.getElementById('daddress');
+    // const x = document.getElementById('aaddress');
 
   }
   // daysInMonth(month, year) {
