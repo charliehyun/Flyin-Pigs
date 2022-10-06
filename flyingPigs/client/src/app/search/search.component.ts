@@ -92,6 +92,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   handleClear() {
+    this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'E'};
     this.selectedTransport = {name: 'Car', code: 'Driving'};
     this.isRoundTrip = false;
@@ -126,6 +127,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   async handleSearch() {
+    this.resetValidity();
     let departureCoord = await this.geocode(this.departAdd);
     let arrivalCoord = await this.geocode(this.arriveAdd);
 
@@ -136,11 +138,41 @@ export class SearchComponent implements OnInit, OnDestroy {
       x?.classList.add('ng-dirty')
       route = false
     } 
-    if(this.isRoundTrip && !this.returnDate) {
+    else {      
+      // var departDateObj = new Date(this.departDate);
+      // var year = departDateObj.getFullYear();
+      // var month = departDateObj.getMonth();
+      // var day   = departDateObj.getDate();
+      // if(departDateObj < this.date || departDateObj > this.maxDate || this.daysInMonth(month, year) > day) {
+      //   const x = document.getElementById('departDate');
+      //   x?.classList.add('ng-invalid')
+      //   x?.classList.add('ng-dirty')
+      //   route = false
+      // }
+      const x = document.getElementById('departDate');
+      var departDateObj = new Date(this.departDate);
+      if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
+        x?.classList.add('ng-invalid')
+        x?.classList.add('ng-dirty')
+        route = false
+      }
+    }
+    if(!this.returnDate) {
+      if(this.isRoundTrip) {
+        const x = document.getElementById('returnDate');
+        x?.classList.add('ng-invalid')
+        x?.classList.add('ng-dirty')
+        route = false
+      }
+    }
+    else {
       const x = document.getElementById('returnDate');
-      x?.classList.add('ng-invalid')
-      x?.classList.add('ng-dirty')
-      route = false
+      var returnDateObj = new Date(this.returnDate);
+      if(returnDateObj < new Date(this.departDate) || returnDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
+        x?.classList.add('ng-invalid')
+        x?.classList.add('ng-dirty')
+        route = false
+      }
     }
     if(!this.departAdd || departureCoord == null) {
       // departure address is invalid probably
@@ -184,6 +216,22 @@ export class SearchComponent implements OnInit, OnDestroy {
       alert("invalid")
     }
   }
+  resetValidity() {
+
+  }
+  // daysInMonth(month, year) {
+  //   let dayNum = -1;
+  //   if (['January', 'March', 'May', 'July', 'August', 'October', 'December'].includes(month)) {
+  //     dayNum = 31;
+  //   } else if (['April', 'June', 'September', 'November'].includes(month)) {
+  //     dayNum = 30;
+  //   } else {
+  //     // If month is February, calculate whether it is a leap year or not
+  //     const isLeap = new Date(year, 2, 29).getMonth() === 1;
+  //     dayNum = isLeap ? 29 : 28;
+  //   }
+  //   return dayNum;
+  // }
   /*
   Geocodes an address.
   Returns LatLng object with lat() and lng() getter functions
