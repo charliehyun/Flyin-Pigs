@@ -136,6 +136,18 @@ export class SearchComponent implements OnInit, OnDestroy {
       x?.classList.add('ng-dirty')
       route = false
     } 
+    else {      
+      var departDateObj = new Date(this.departDate);
+      var year = departDateObj.getFullYear();
+      var month = departDateObj.getMonth();
+      var day   = departDateObj.getDate();
+      if(departDateObj > this.maxDate || this.daysInMonth(month, year) > day) {
+        const x = document.getElementById('departDate');
+        x?.classList.add('ng-invalid')
+        x?.classList.add('ng-dirty')
+        route = false
+      }
+    }
     if(this.isRoundTrip && !this.returnDate) {
       const x = document.getElementById('returnDate');
       x?.classList.add('ng-invalid')
@@ -183,6 +195,19 @@ export class SearchComponent implements OnInit, OnDestroy {
     } else {
       alert("invalid")
     }
+  }
+  daysInMonth(month, year) {
+    let dayNum = -1;
+    if (['January', 'March', 'May', 'July', 'August', 'October', 'December'].includes(month)) {
+      dayNum = 31;
+    } else if (['April', 'June', 'September', 'November'].includes(month)) {
+      dayNum = 30;
+    } else {
+      // If month is February, calculate whether it is a leap year or not
+      const isLeap = new Date(year, 1, 29).getMonth() === 1;
+      dayNum = isLeap ? 29 : 28;
+    }
+    return dayNum;
   }
   /*
   Geocodes an address.
