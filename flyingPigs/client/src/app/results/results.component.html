@@ -89,5 +89,67 @@
     </p-accordionTab> -->
 </p-accordion>
 
-<results-box></results-box>
+<!-- <tr *ngFor="let flight of results$ | async" >
+    <td>{{flight[0].airlines}}</td>
+    <td>{{flight[0].price}}</td>
+</tr> -->
+
+<!-- <i class="pi pi-spin pi-spinner" *ngIf="! results$[0]"></i> -->
+
+<p-table *ngFor="let flight of results$ | async" [value]="flight" dataKey="name">
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="name">Airline <p-sortIcon field="name"></p-sortIcon></th>
+            <!-- <th pSortableColumn="price">{{selectedTransport.code}} Time<p-sortIcon field="price"></p-sortIcon></th> -->
+            <th pSortableColumn="category">Departure Airport<p-sortIcon field="category"></p-sortIcon></th>
+            <th pSortableColumn="price">Departure Time<p-sortIcon field="price"></p-sortIcon></th>
+            <th pSortableColumn="rating">Flight Time<p-sortIcon field="rating"></p-sortIcon></th>
+            <th pSortableColumn="inventoryStatus">Arrival Airport<p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+            <th pSortableColumn="price">Arrival Time<p-sortIcon field="price"></p-sortIcon></th>
+            <!-- <th pSortableColumn="inventoryStatus">{{selectedTransport.code}} Time<p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
+            <!-- <th pSortableColumn="inventoryStatus">Total Travel Time<p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
+            <th pSortableColumn="inventoryStatus">Number of Stops<p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+            <th pSortableColumn="inventoryStatus">Price<p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+            <th style="width: 3rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-trip let-expanded="expanded">
+        <tr >
+            <td>{{flight[0].airlines}}</td>
+            <!-- <td>{{flight[0].drivingTime1}}</td>  -->
+            <td>{{flight[0].departureAirport}}</td>
+            <td>{{flight[0].departureTime}}</td>
+            <td>{{flight[0].flightTime}}</td>
+            <td>{{flight[0].arrivalTime}}</td>
+            <td>{{flight[0].departureAirport}}</td>
+
+            <!-- <td>{{flight[0].drivingTime2}}</td>  -->
+            <!-- <td>{{flight[0].totalTime}}</td> -->
+            <td>{{flight[0].numberOfStops}}</td>
+            <td>{{flight[0].price}}</td>
+            <td>
+                <button type="button" pButton pRipple [pRowToggler]="trip" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-trip>
+        <tr>
+            <td colspan="7">
+                <div class="p-3">
+                    <p-card header="Stop Overs">
+                        <tr *ngFor="let stops of trip.stopOvers">
+                            <td>{{stops.airportCode}}</td>
+                            <td>{{stops.stopOverDuration}}</td>
+                            <td>{{stops.arrivalTime}}</td>
+                        </tr>
+                    </p-card>
+                </div>
+            </td>
+        </tr>
+        
+    </ng-template>
+
+</p-table>
+
+<!-- <results-box></results-box> -->
 

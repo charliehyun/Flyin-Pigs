@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, tap } from 'rxjs';
-import { AirportSchema } from '../airportSchema';
 import { SearchSchema } from '../searchSchema';
 import { FlightSchema, StopOverFlightSchema} from '../flightSchema';
 @Injectable({
     providedIn: 'root'
 })
-export class SearchService {
+export class ResultsService {
     private url = 'http://localhost:5200';
     private flights$: Subject<FlightSchema[][]> = new Subject();
 
