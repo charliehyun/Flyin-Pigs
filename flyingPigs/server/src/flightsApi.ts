@@ -4,7 +4,7 @@ import {Flight, stopOverFlight} from "./flight";
 
 export class flightsApi {
 
-    apiKey = `6317610e1779bb9b70bb01cd`;
+    apiKey = `633f49aa7bd606b2436e4074`;
     departureAirport:string;
     arrivalAirport:string;
     departureDate:string;

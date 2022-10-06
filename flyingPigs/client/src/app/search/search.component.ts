@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
-import { SearchService } from "./search.service";
-import { AirportSchema } from "../airportSchema";
 import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
@@ -22,7 +20,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
   selectedTransport: DropdownOption = {name: 'Car', code: 'Driving'}; // Transportation option
-  results$: Observable<FlightSchema[][]> = new Observable();
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -30,8 +27,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
 
-  maxTimeStart: DropdownOption = {name: '3 hr', code: '3 hr'}; //default starting driving hours
-  maxTimeEnd: DropdownOption = {name: '1 hr', code: '1 hr'}; //default end driving hours
+  maxTimeStart: DropdownOption = {name: '3 hr', code: '10800'}; //default starting driving hours
+  maxTimeEnd: DropdownOption = {name: '1 hr', code: '3600'}; //default end driving hours
 
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
   subscription!: Subscription;
@@ -41,7 +38,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   returnDate: string;
   dates: any;
     
-  constructor(private searchService: SearchService, private data: DataService, private router: Router, private fb: FormBuilder) {
+  constructor(private data: DataService, private router: Router, private fb: FormBuilder) {
     this.classes = [
       {name: 'Economy', code: 'E'},
       {name: 'Premium Economy', code: 'P'},
@@ -132,6 +129,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     let arrivalCoord = await this.geocode(this.arriveAdd);
 
     let route = true;
+    console.log(this.departDate)
     if(!this.departDate) {
       const x = document.getElementById('departDate');
       x?.classList.add('ng-invalid')
@@ -139,16 +137,16 @@ export class SearchComponent implements OnInit, OnDestroy {
       route = false
     } 
     else {      
-      // var departDateObj = new Date(this.departDate);
-      // var year = departDateObj.getFullYear();
-      // var month = departDateObj.getMonth();
-      // var day   = departDateObj.getDate();
-      // if(departDateObj < this.date || departDateObj > this.maxDate || this.daysInMonth(month, year) > day) {
-      //   const x = document.getElementById('departDate');
-      //   x?.classList.add('ng-invalid')
-      //   x?.classList.add('ng-dirty')
-      //   route = false
-      // }
+    // var departDateObj = new Date(this.departDate);
+    // var year = departDateObj.getFullYear();
+    // var month = departDateObj.getMonth();
+    // var day   = departDateObj.getDate();
+    // if(departDateObj < this.date || departDateObj > this.maxDate || this.daysInMonth(month, year) > day) {
+    //   const x = document.getElementById('departDate');
+    //   x?.classList.add('ng-invalid')
+    //   x?.classList.add('ng-dirty')
+    //   route = false
+    // }
       const x = document.getElementById('departDate');
       var departDateObj = new Date(this.departDate);
       if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
@@ -209,11 +207,10 @@ export class SearchComponent implements OnInit, OnDestroy {
         maxTimeStart: this.maxTimeStart,
         maxTimeEnd: this.maxTimeEnd
       }
-      this.results$ = this.searchService.searchAirports(this.search);
       this.data.changeMessage(this.search)
-      // this.router.navigate(['results'])
+      this.router.navigate(['results'])
     } else {
-      alert("invalid")
+      alert("Error: Some fields are invalid or empty they are are marked in red. Please fix them and try again.  ")
     }
   }
   resetValidity() {
