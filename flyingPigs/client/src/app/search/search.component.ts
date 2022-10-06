@@ -7,6 +7,7 @@ import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
+import {FlightSchema} from "../flightSchema";
 // import {Client} from "@googlemaps/google-maps-services-js";
 
 @Component({
@@ -22,6 +23,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   transportType: DropdownOption[];  // Transportation to airport options
   selectedTransport: DropdownOption = {name: 'Car', code: 'Driving'}; // Transportation option
   filteredAirports$: Observable<AirportSchema[]> = new Observable();
+  results$: Observable<FlightSchema[][]> = new Observable();
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
