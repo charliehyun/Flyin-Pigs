@@ -181,8 +181,9 @@ export class SearchComponent implements OnInit, OnDestroy {
         maxTimeStart: this.maxTimeStart,
         maxTimeEnd: this.maxTimeEnd
       }
+      this.results$ = this.searchService.searchAirports(this.search);
       this.data.changeMessage(this.search)
-      this.router.navigate(['results'])
+      // this.router.navigate(['results'])
     } else {
       alert("invalid")
     }
