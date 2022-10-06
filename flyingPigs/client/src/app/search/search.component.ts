@@ -7,6 +7,7 @@ import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
+// import {Client} from "@googlemaps/google-maps-services-js";
 
 @Component({
   selector: 'search',
@@ -118,30 +119,44 @@ export class SearchComponent implements OnInit, OnDestroy {
     departDate: "",
     returnDate: "",
     departAdd: "",
+    departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     arriveAdd: "",
+    arriveCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     selectedTransport: {name: 'Car', code: 'Driving'},
     maxTimeStart: {name: '3 hr', code: '3 hr'},
     maxTimeEnd: {name: '1 hr', code: '1 hr'}
   }
-  handleSearch() {
+
+  async handleSearch() {
+    let departureCoord = await this.geocode(this.departAdd);
+    let arrivalCoord = await this.geocode(this.arriveAdd);
+
     let route = true;
     if(!this.departDate) {
       const x = document.getElementById('departDate');
+      x?.classList.add('ng-invalid')
       x?.classList.add('ng-dirty')
       route = false
     } 
     if(this.isRoundTrip && !this.returnDate) {
       const x = document.getElementById('returnDate');
+      x?.classList.add('ng-invalid')
       x?.classList.add('ng-dirty')
       route = false
     }
-    if(!this.departAdd) {
+    if(!this.departAdd || departureCoord == null) {
+      // departure address is invalid probably
+      // should not advance
       const x = document.getElementById('daddress');
+      x?.classList.add('ng-invalid')
       x?.classList.add('ng-dirty')
       route = false
     }
-    if(!this.arriveAdd) {
+    if(!this.arriveAdd || arrivalCoord == null) {
+      // arrival address is invalid probably
+      // should not advance
       const x = document.getElementById('aaddress');
+      x?.classList.add('ng-invalid')
       x?.classList.add('ng-dirty')
       route = false
     }
@@ -157,7 +172,9 @@ export class SearchComponent implements OnInit, OnDestroy {
         departDate: this.departDate,
         returnDate: this.returnDate,
         departAdd: this.departAdd,
+        departCoord: departureCoord,
         arriveAdd: this.arriveAdd,
+        arriveCoord: arrivalCoord,
         selectedTransport: this.selectedTransport,
         maxTimeStart: this.maxTimeStart,
         maxTimeEnd: this.maxTimeEnd
@@ -168,10 +185,27 @@ export class SearchComponent implements OnInit, OnDestroy {
       alert("invalid")
     }
   }
+  /*
+  Geocodes an address.
+  Returns LatLng object with lat() and lng() getter functions
+  If an error occurs, returns a null. 
+  */
+  async geocode(address) {
+    var coord;
+    var geocoder = new google.maps.Geocoder();
+    await geocoder.geocode({ 'address': address}).then(response => {
+      coord = response.results[0].geometry.location;
+      // console.log(response);
+    }).catch(e => {
+      coord = null;
+      // console.log(e);
+    });
+    return coord;
+  }
     
   createForm() {
     this.dates = this.fb.group({
-       departDate: ['', Validators.required ]
+        departDate: ['', Validators.required ]
     });
   }
   // COPY END

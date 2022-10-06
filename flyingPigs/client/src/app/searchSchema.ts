@@ -9,7 +9,9 @@ export interface SearchSchema {
     departDate: string;
     returnDate: string;
     departAdd: string;
+    departCoord: google.maps.LatLng;
     arriveAdd: string;
+    arriveCoord: google.maps.LatLng;
     selectedTransport: DropdownOption;
     maxTimeStart: DropdownOption;
     maxTimeEnd: DropdownOption;

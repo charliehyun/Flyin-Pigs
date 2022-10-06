@@ -50,7 +50,7 @@ export class airportFinder {
         let closestAirportCoords = [{"lat": res["LAT"], "lng": res["LNG"]}];
         let timeToClosestArpt = 0;
 
-        if(travelMethod == "DRIVE") {
+        if(travelMethod == "drive") {
             driveTimeArr = res["Driving"];
             // API call to determine drive(or others) time to closest airport
             timeToClosestArpt = Number.MAX_VALUE;
