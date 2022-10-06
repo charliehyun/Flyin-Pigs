@@ -9,27 +9,9 @@ import { FlightSchema, StopOverFlightSchema} from '../flightSchema';
 })
 export class SearchService {
     private url = 'http://localhost:5200';
-    private airports$: Subject<AirportSchema[]> = new Subject();
     private flights$: Subject<FlightSchema[][]> = new Subject();
 
     constructor(private httpClient: HttpClient) { }
-
-    getAirports(): Subject<AirportSchema[]> {
-        return this.airports$;
-    }
-
-    private getFiltered() {
-        this.httpClient.get<AirportSchema[]>(`${this.url}/airports/filtered`)
-            .subscribe(airports => {
-                this.airports$.next(airports);
-            });
-    }
-
-    filterAirports(): Subject<AirportSchema[]> {
-        this.getFiltered();
-        console.log("filtering Airports");
-        return this.airports$;
-    }
 
     sendSearch(inputObject:SearchSchema) {
         this.httpClient.post<FlightSchema[][]>(`${this.url}/airports/search`, inputObject)
