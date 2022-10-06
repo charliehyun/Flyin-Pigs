@@ -89,5 +89,10 @@
     </p-accordionTab> -->
 </p-accordion>
 
+<tr *ngFor="let flight of results$ | async" >
+    <td>{{flight[0].airlines}}</td>
+    <td>{{flight[0].price}}</td>
+  </tr>
+
 <results-box></results-box>
 

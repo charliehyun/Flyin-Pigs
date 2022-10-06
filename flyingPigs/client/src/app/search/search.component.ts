@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
-import { SearchService } from "./search.service";
-import { AirportSchema } from "../airportSchema";
 import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
@@ -22,7 +20,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
   selectedTransport: DropdownOption = {name: 'Car', code: 'Driving'}; // Transportation option
-  results$: Observable<FlightSchema[][]> = new Observable();
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -41,7 +38,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   returnDate: string;
   dates: any;
     
-  constructor(private searchService: SearchService, private data: DataService, private router: Router, private fb: FormBuilder) {
+  constructor(private data: DataService, private router: Router, private fb: FormBuilder) {
     this.classes = [
       {name: 'Economy', code: 'E'},
       {name: 'Premium Economy', code: 'P'},
@@ -132,6 +129,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     let arrivalCoord = await this.geocode(this.arriveAdd);
 
     let route = true;
+    console.log(this.departDate)
     if(!this.departDate) {
       const x = document.getElementById('departDate');
       x?.classList.add('ng-invalid')
@@ -209,9 +207,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         maxTimeStart: this.maxTimeStart,
         maxTimeEnd: this.maxTimeEnd
       }
-      this.results$ = this.searchService.searchAirports(this.search);
       this.data.changeMessage(this.search)
-      // this.router.navigate(['results'])
+      this.router.navigate(['results'])
     } else {
       alert("invalid")
     }
