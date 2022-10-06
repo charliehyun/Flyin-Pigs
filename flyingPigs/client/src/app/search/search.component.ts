@@ -148,17 +148,25 @@ export class SearchComponent implements OnInit, OnDestroy {
       //   route = false
       // }
       const x = document.getElementById('departDate');
-
-      if(x?.classList.contains('ng-invalid')) {
+      var departDateObj = new Date(this.departDate);
+      if(departDateObj < this.date || departDateObj > this.maxDate || x?.classList.contains('ng-invalid')) {
         route = false
       }
-
     }
-    if(this.isRoundTrip && !this.returnDate) {
+    if(!this.returnDate) {
+      if(this.isRoundTrip) {
+        const x = document.getElementById('returnDate');
+        x?.classList.add('ng-invalid')
+        x?.classList.add('ng-dirty')
+        route = false
+      }
+    }
+    else {
       const x = document.getElementById('returnDate');
-      x?.classList.add('ng-invalid')
-      x?.classList.add('ng-dirty')
-      route = false
+      var returnDateObj = new Date(this.returnDate);
+      if(returnDateObj < this.date || returnDateObj > this.maxDate || x?.classList.contains('ng-invalid')) {
+        route = false
+      }
     }
     if(!this.departAdd || departureCoord == null) {
       // departure address is invalid probably
@@ -202,19 +210,19 @@ export class SearchComponent implements OnInit, OnDestroy {
       alert("invalid")
     }
   }
-  daysInMonth(month, year) {
-    let dayNum = -1;
-    if (['January', 'March', 'May', 'July', 'August', 'October', 'December'].includes(month)) {
-      dayNum = 31;
-    } else if (['April', 'June', 'September', 'November'].includes(month)) {
-      dayNum = 30;
-    } else {
-      // If month is February, calculate whether it is a leap year or not
-      const isLeap = new Date(year, 2, 29).getMonth() === 1;
-      dayNum = isLeap ? 29 : 28;
-    }
-    return dayNum;
-  }
+  // daysInMonth(month, year) {
+  //   let dayNum = -1;
+  //   if (['January', 'March', 'May', 'July', 'August', 'October', 'December'].includes(month)) {
+  //     dayNum = 31;
+  //   } else if (['April', 'June', 'September', 'November'].includes(month)) {
+  //     dayNum = 30;
+  //   } else {
+  //     // If month is February, calculate whether it is a leap year or not
+  //     const isLeap = new Date(year, 2, 29).getMonth() === 1;
+  //     dayNum = isLeap ? 29 : 28;
+  //   }
+  //   return dayNum;
+  // }
   /*
   Geocodes an address.
   Returns LatLng object with lat() and lng() getter functions
