@@ -52,13 +52,13 @@ export class SearchComponent implements OnInit, OnDestroy {
       // {name: 'Walk', code: 'Walking'}
     ];
     this.hours = [
-      {name: '1 hr', code: '1 hr'},
-      {name: '2 hr', code: '2 hr'},
-      {name: '3 hr', code: '3 hr'},
-      {name: '4 hr', code: '4 hr'},
-      {name: '5 hr', code: '5 hr'},
-      {name: '6 hr', code: '6 hr'},
-      {name: '7 hr', code: '7 hr'}
+      {name: '1 hr', code: '3600'},
+      {name: '2 hr', code: '7200'},
+      {name: '3 hr', code: '10800'},
+      {name: '4 hr', code: '14400'},
+      {name: '5 hr', code: '18000'},
+      {name: '6 hr', code: '21600'},
+      {name: '7 hr', code: '25200'}
     ];
     this.createForm();
   }
@@ -124,23 +124,49 @@ export class SearchComponent implements OnInit, OnDestroy {
     maxTimeEnd: {name: '1 hr', code: '1 hr'}
   }
   handleSearch() {
-    this.search = {
-      selectedClass: this.selectedClass,
-      isRoundTrip: this.isRoundTrip,
-      adultPass: this.adultPass,
-      childPass: this.childPass,
-      infantPass: this.infantPass,
-      totalPass: this.totalPass,
-      departDate: this.departDate,
-      returnDate: this.returnDate,
-      departAdd: this.departAdd,
-      arriveAdd: this.arriveAdd,
-      selectedTransport: this.selectedTransport,
-      maxTimeStart: this.maxTimeStart,
-      maxTimeEnd: this.maxTimeEnd
+    let route = true;
+    if(!this.departDate) {
+      const x = document.getElementById('departDate');
+      x?.classList.add('ng-dirty')
+      route = false
+    } 
+    if(this.isRoundTrip && !this.returnDate) {
+      const x = document.getElementById('returnDate');
+      x?.classList.add('ng-dirty')
+      route = false
     }
-    this.data.changeMessage(this.search)
-    this.router.navigate(['results'])
+    if(!this.departAdd) {
+      const x = document.getElementById('daddress');
+      x?.classList.add('ng-dirty')
+      route = false
+    }
+    if(!this.arriveAdd) {
+      const x = document.getElementById('aaddress');
+      x?.classList.add('ng-dirty')
+      route = false
+    }
+
+    if(route) {
+      this.search = {
+        selectedClass: this.selectedClass,
+        isRoundTrip: this.isRoundTrip,
+        adultPass: this.adultPass,
+        childPass: this.childPass,
+        infantPass: this.infantPass,
+        totalPass: this.totalPass,
+        departDate: this.departDate,
+        returnDate: this.returnDate,
+        departAdd: this.departAdd,
+        arriveAdd: this.arriveAdd,
+        selectedTransport: this.selectedTransport,
+        maxTimeStart: this.maxTimeStart,
+        maxTimeEnd: this.maxTimeEnd
+      }
+      this.data.changeMessage(this.search)
+      this.router.navigate(['results'])
+    } else {
+      alert("invalid")
+    }
   }
     
   createForm() {

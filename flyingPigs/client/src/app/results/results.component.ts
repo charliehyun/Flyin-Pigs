@@ -124,23 +124,49 @@ export class ResultsComponent implements OnInit, OnDestroy {
     maxTimeEnd: {name: '1 hr', code: '1 hr'}
   }
   handleSearch() {
-    this.search = {
-      selectedClass: this.selectedClass,
-      isRoundTrip: this.isRoundTrip,
-      adultPass: this.adultPass,
-      childPass: this.childPass,
-      infantPass: this.infantPass,
-      totalPass: this.totalPass,
-      departDate: this.departDate,
-      returnDate: this.returnDate,
-      departAdd: this.departAdd,
-      arriveAdd: this.arriveAdd,
-      selectedTransport: this.selectedTransport,
-      maxTimeStart: this.maxTimeStart,
-      maxTimeEnd: this.maxTimeEnd
+    let route = true;
+    if(!this.departDate) {
+      const x = document.getElementById('departDate');
+      x?.classList.add('ng-dirty')
+      route = false
+    } 
+    if(this.isRoundTrip && !this.returnDate) {
+      const x = document.getElementById('returnDate');
+      x?.classList.add('ng-dirty')
+      route = false
     }
-    this.data.changeMessage(this.search)
-    this.router.navigate(['results'])
+    if(!this.departAdd) {
+      const x = document.getElementById('daddress');
+      x?.classList.add('ng-dirty')
+      route = false
+    }
+    if(!this.arriveAdd) {
+      const x = document.getElementById('aaddress');
+      x?.classList.add('ng-dirty')
+      route = false
+    }
+
+    if(route) {
+      this.search = {
+        selectedClass: this.selectedClass,
+        isRoundTrip: this.isRoundTrip,
+        adultPass: this.adultPass,
+        childPass: this.childPass,
+        infantPass: this.infantPass,
+        totalPass: this.totalPass,
+        departDate: this.departDate,
+        returnDate: this.returnDate,
+        departAdd: this.departAdd,
+        arriveAdd: this.arriveAdd,
+        selectedTransport: this.selectedTransport,
+        maxTimeStart: this.maxTimeStart,
+        maxTimeEnd: this.maxTimeEnd
+      }
+      this.data.changeMessage(this.search)
+      this.router.navigate(['results'])
+    } else {
+      alert("invalid")
+    }
   }
     
   createForm() {
