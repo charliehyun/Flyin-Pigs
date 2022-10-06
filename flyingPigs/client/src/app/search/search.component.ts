@@ -36,6 +36,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
   subscription!: Subscription;
   date: any;
+  maxDate: any;
   departDate: string;
   returnDate: string;
   dates: any;
@@ -211,7 +212,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   // DIFFERENT FROM RESULTS
   ngOnInit() {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
-    this.date = new Date().toISOString().slice(0, 10);
+    this.date = new Date().toISOString().split("T")[0];
+    this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
   }
   
   ngOnDestroy() {
