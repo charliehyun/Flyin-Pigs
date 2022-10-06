@@ -45,8 +45,8 @@ async function loadCoordinates() {
     }
 }
 
-loadCoordinates();
-// updateDistanceToArray();
+// loadCoordinates();
+updateDistanceToArray();
 async function updateDistanceToArray() {
     var ops = [];
     const db = client.db(dbName);
