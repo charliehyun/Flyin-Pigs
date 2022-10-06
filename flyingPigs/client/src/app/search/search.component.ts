@@ -166,7 +166,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     else {
       const x = document.getElementById('returnDate');
       var returnDateObj = new Date(this.returnDate);
-      if(returnDateObj < new Date(this.date) || returnDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
+      if(returnDateObj < new Date(this.departDate) || returnDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
         x?.classList.add('ng-invalid')
         x?.classList.add('ng-dirty')
         route = false
