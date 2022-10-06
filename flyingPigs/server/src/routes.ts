@@ -26,6 +26,19 @@ mongoRouter.get("/preFilter", async (req, res) => {
     }
 });
 
+mongoRouter.post("/search", async (req, res) => {
+    try {
+
+        let myFlightApi = new flightsApi("ORD", "IND",
+            "2022-10-21", "2022-10-23", 1, 0, 0, "Economy", true);
+        let flightsTen = await myFlightApi.queryApi()
+        console.log(flightsTen.slice(0,10));
+        res.status(200).send(flightsTen.slice(0,10));
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+})
+
 mongoRouter.get("/filtered", async (_req, res) => {
     try {
         var airportArr:any = [];
@@ -39,12 +52,13 @@ mongoRouter.get("/filtered", async (_req, res) => {
         let drivetime = 50;
         let travelMethod = 'driving';
         let myFinder = new airportFinder();
-        let airportArray = await myFinder.findAirport(startLat, startLng, airportArr, drivetime, travelMethod);
-
-        let myFlightApi = new flightsApi("IND", "ORD",
-            "2022-10-11", "", 1, 0, 0, "Economy", true);
+        //let airportArray = await myFinder.findAirport(startLat, startLng, airportArr, drivetime, travelMethod);
+        let airportArray:any = [];
+        let myFlightApi = new flightsApi("GST", "GUM",
+            "2022-10-21", "2022-10-23", 1, 0, 0, "Economy", true);
 
         let myJson = await myFlightApi.queryApi();
+        console.log(myJson);
         //do whatever with my json, or just do it all in `flightsApi.ts`
         res.status(200).send(airportArray);
     } catch (error) {
