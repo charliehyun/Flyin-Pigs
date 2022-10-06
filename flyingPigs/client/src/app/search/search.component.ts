@@ -210,7 +210,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.data.changeMessage(this.search)
       this.router.navigate(['results'])
     } else {
-      alert("invalid")
+      alert("invalid inputs are marked in red")
     }
   }
   resetValidity() {
