@@ -48,8 +48,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.transportType = [
       {name: 'Car', code: 'Driving'},
       {name: 'Public Transit', code: 'Public Transit'},
-      {name: 'Bike', code: 'Biking'},
-      {name: 'Walk', code: 'Walking'}
+      // {name: 'Bike', code: 'Biking'},
+      // {name: 'Walk', code: 'Walking'}
     ];
     this.hours = [
       {name: '1 hr', code: '1 hr'},

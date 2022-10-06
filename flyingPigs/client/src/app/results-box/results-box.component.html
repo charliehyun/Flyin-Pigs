@@ -1,12 +1,13 @@
 <!-- <p-table [value]="products" dataKey="name"> -->
-<p-table dataKey="name">
+hello?
+<p-table [value]="products" dataKey="name">
         <!-- Column names -->
-    <ng-template pTemplate="header">
+    <!-- <ng-template pTemplate="header">
         <tr>
             <th style="width: 3rem"></th>
-            <th>Airline</th>
+            <th>Airline</th> -->
             <!-- All times would include Xhr Ymin as well as 12:00AM - 3:00PM times -->
-            <th>Drive Time</th>
+            <!-- <th>Drive Time</th>
             <th>Departure Airport</th>
             <th>Flight Time</th>
             <th>Arrival Airport</th>
@@ -31,7 +32,7 @@
             <td>Nonstop</td>
             <td>$7000</td>
         </tr>
-    </ng-template>
+    </ng-template> -->
     <!-- Table content -->
     <!-- <ng-template pTemplate="body" let-product let-expanded="expanded">
         <tr>
@@ -82,4 +83,68 @@
             </td>
         </tr>
     </ng-template> -->
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+            <th>Code</th>
+            <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+            <th pSortableColumn="category">Category <p-sortIcon field="category"></p-sortIcon></th>
+            <th pSortableColumn="rating">Reviews <p-sortIcon field="rating"></p-sortIcon></th>
+            <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+            <th style="width: 3rem"></th>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product let-expanded="expanded">
+        <tr>
+
+            <td>{{product.name}}</td>
+            <td>{{product.code}}</td>
+            <td>{{product.price | currency:'USD'}}</td>
+            <td>{{product.category}}</td>
+            <td>product.rating</td>
+            <td>{{product.inventoryStatus}}</td>
+            <td>
+                <button type="button" pButton pRipple [pRowToggler]="product" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-product>
+        <tr>
+            <td colspan="7">
+                <div class="p-p-3">
+                    <p-table [value]="product.orders" dataKey="id">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="id">Id <p-sortIcon field="price"></p-sortIcon></th>
+                                <th pSortableColumn="customer">Customer <p-sortIcon field="customer"></p-sortIcon></th>
+                                <th pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>
+                                <th pSortableColumn="amount">Amount <p-sortIcon field="amount"></p-sortIcon></th>
+                                <th pSortableColumn="stats">Status <p-sortIcon field="status"></p-sortIcon></th>
+                                <th style="width: 4rem"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-order>
+                            <tr>
+                                <td>{{order.id}}</td>
+                                <td>{{order.customer}}</td>
+                                <td>{{order.id}}</td>
+                                <td>{{order.amount | currency:'USD'}}</td>
+                                <td><span [class]="'order-badge order-' + order.status.toLowerCase()">{{order.status}}</span></td>
+                                <td><p-button type="button" icon="pi pi-search"></p-button></td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="6">There are no order for this product yet.</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
 </p-table>
+
+<i class="pi pi-arrow-circle-down" style="font-size: 2rem"></i>
