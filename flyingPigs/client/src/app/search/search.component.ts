@@ -92,6 +92,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   handleClear() {
+    this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'E'};
     this.selectedTransport = {name: 'Car', code: 'Driving'};
     this.isRoundTrip = false;
@@ -126,6 +127,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   async handleSearch() {
+    this.resetValidity();
     let departureCoord = await this.geocode(this.departAdd);
     let arrivalCoord = await this.geocode(this.arriveAdd);
 
@@ -213,6 +215,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     } else {
       alert("invalid")
     }
+  }
+  resetValidity() {
+
   }
   // daysInMonth(month, year) {
   //   let dayNum = -1;
