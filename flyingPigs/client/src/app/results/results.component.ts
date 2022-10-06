@@ -80,10 +80,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
   //backend calls
 
-  FilterAirports() {
-    this.filteredAirports$ = this.searchService.filterAirports();
-  }
-
   updatePassengers() {
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
   }

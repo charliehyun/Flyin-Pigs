@@ -18,16 +18,14 @@ mongoRouter.get("/", async (_req, res) => {
 });
 
 
-mongoRouter.get("/preFilter", async (req, res) => {
-    try {
-        console.log("preFilter");
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
 
 mongoRouter.post("/search", async (req, res) => {
     try {
+        let searchParams = req.body;
+        //use searchParams.departCoord to prefilter get list of prefilter airports.
+        //pass list of prefilter airports and searchParams.departCoord to findAirports
+        //for each airport the findAirports returns, call flight api with search params.
+        //combine all lists and pass to res.
 
         let myFlightApi = new flightsApi("ORD", "IND",
             "2022-10-21", "2022-10-23", 1, 0, 0, "Economy", true);
@@ -52,8 +50,7 @@ mongoRouter.get("/filtered", async (_req, res) => {
         let drivetime = 50;
         let travelMethod = 'driving';
         let myFinder = new airportFinder();
-        //let airportArray = await myFinder.findAirport(startLat, startLng, airportArr, drivetime, travelMethod);
-        let airportArray:any = [];
+        let airportArray = await myFinder.findAirport(startLat, startLng, airportArr, drivetime, travelMethod);
         let myFlightApi = new flightsApi("GST", "GUM",
             "2022-10-21", "2022-10-23", 1, 0, 0, "Economy", true);
 

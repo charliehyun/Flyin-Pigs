@@ -22,7 +22,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
   selectedTransport: DropdownOption = {name: 'Car', code: 'Driving'}; // Transportation option
-  filteredAirports$: Observable<AirportSchema[]> = new Observable();
   results$: Observable<FlightSchema[][]> = new Observable();
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
@@ -81,10 +80,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.arriveAdd = address.formatted_address;
   }
   //backend calls
-
-  FilterAirports() {
-    this.filteredAirports$ = this.searchService.filterAirports();
-  }
 
   updatePassengers() {
     this.totalPass = this.adultPass + this.childPass + this.infantPass;

@@ -90,8 +90,7 @@
 </p-card>
 
 <div>
-  backend call:
-  <p-button (click)="FilterAirports()">Filter My Airports</p-button>
+  Backend Call:
   <tr *ngFor="let flight of results$ | async" >
     <td>{{flight[0].airlines}}</td>
     <td>{{flight[0].price}}</td>
