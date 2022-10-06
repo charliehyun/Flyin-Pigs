@@ -27,8 +27,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
 
-  maxTimeStart: DropdownOption = {name: '3 hr', code: '3 hr'}; //default starting driving hours
-  maxTimeEnd: DropdownOption = {name: '1 hr', code: '1 hr'}; //default end driving hours
+  maxTimeStart: DropdownOption = {name: '3 hr', code: '10800'}; //default starting driving hours
+  maxTimeEnd: DropdownOption = {name: '1 hr', code: '3600'}; //default end driving hours
 
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
   subscription!: Subscription;
@@ -137,16 +137,16 @@ export class SearchComponent implements OnInit, OnDestroy {
       route = false
     } 
     else {      
-      // var departDateObj = new Date(this.departDate);
-      // var year = departDateObj.getFullYear();
-      // var month = departDateObj.getMonth();
-      // var day   = departDateObj.getDate();
-      // if(departDateObj < this.date || departDateObj > this.maxDate || this.daysInMonth(month, year) > day) {
-      //   const x = document.getElementById('departDate');
-      //   x?.classList.add('ng-invalid')
-      //   x?.classList.add('ng-dirty')
-      //   route = false
-      // }
+    // var departDateObj = new Date(this.departDate);
+    // var year = departDateObj.getFullYear();
+    // var month = departDateObj.getMonth();
+    // var day   = departDateObj.getDate();
+    // if(departDateObj < this.date || departDateObj > this.maxDate || this.daysInMonth(month, year) > day) {
+    //   const x = document.getElementById('departDate');
+    //   x?.classList.add('ng-invalid')
+    //   x?.classList.add('ng-dirty')
+    //   route = false
+    // }
       const x = document.getElementById('departDate');
       var departDateObj = new Date(this.departDate);
       if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
@@ -210,7 +210,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.data.changeMessage(this.search)
       this.router.navigate(['results'])
     } else {
-      alert("invalid inputs are marked in red")
+      alert("Error: Some fields are invalid or empty they are are marked in red. Please fix them and try again.  ")
     }
   }
   resetValidity() {
