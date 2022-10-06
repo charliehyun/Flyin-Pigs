@@ -55,7 +55,6 @@ function initialize() {
                     /*
                     TESTING
                     */
-                    // let airports:any = await getColumn("IATA");
                     // airports = airports.slice(0, 3);
                     /*
                     END TESTING
@@ -138,8 +137,8 @@ function getDistanceMatrix() {
                                                             params: {
                                                                 origins: originArray,
                                                                 destinations: destinationArray,
-                                                                mode: 'walking',
-                                                                key: "AIzaSyDJ4emuadT_6scGa81gXbvJZ8MwEXKBr9o"
+                                                                mode: 'transit',
+                                                                key: "AIzaSyDkza414g1-f7ry3P5mInUEJrFv9iDk1O0"
                                                             }
                                                         })
                                                             .then(function (r) {
@@ -219,13 +218,12 @@ function writeToCSV() {
                     catch (err) {
                         console.error(err);
                     }
-                    lines = data.split("\r\n");
+                    lines = data.split("\n");
                     output = output + lines[0] + ",Transit\r\n";
                     // console.log(lines.length);
-                    // for(let i = 1; i < lines.length - 1; i++) {
-                    for (i = 1; i < 3; i++) {
+                    // lines.length - 1 because new line
+                    for (i = 1; i < lines.length - 1; i++) {
                         formatted = formatArpt(distanceMatrix[i]);
-                        // console.log(formatted);
                         output = output + lines[i] + "," + formatted + "\r\n";
                     }
                     console.log(output);

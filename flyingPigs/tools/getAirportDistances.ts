@@ -13,11 +13,12 @@ writeToCSV();
 const distanceMatrix: any[][] = [[]];
 
 async function initialize() {
-    const airports:any = await getColumn("IATA");
+    // const airports:any = await getColumn("IATA");
+    let airports:any = await getColumn("IATA");
+
     /*
     TESTING
     */
-    // let airports:any = await getColumn("IATA");
     // airports = airports.slice(0, 3);
     /*
     END TESTING
@@ -48,10 +49,12 @@ function getColumn(columnToRetrieve: string) {
 
 async function getDistanceMatrix() {
     
-    const airports:any = await getColumn("IATA");
-    const lat:any = await getColumn("LAT");
-    const lng:any = await getColumn("LNG");
-    
+    // const airports:any = await getColumn("IATA");
+    // const lat:any = await getColumn("LAT");
+    // const lng:any = await getColumn("LNG");
+    let airports:any = await getColumn("IATA");
+    let lat:any = await getColumn("LAT");
+    let lng:any = await getColumn("LNG");
     const locations:{"lat": number,"lng": number}[] = [];
     /*
     TESTING
@@ -85,8 +88,8 @@ async function getDistanceMatrix() {
                 params: {
                     origins: originArray,
                     destinations: destinationArray,
-                    mode: 'walking',
-                    key: "AIzaSyDJ4emuadT_6scGa81gXbvJZ8MwEXKBr9o",
+                    mode: 'transit',
+                    key: "AIzaSyDkza414g1-f7ry3P5mInUEJrFv9iDk1O0",
                 },
             })
             .then((r: any) => {   
@@ -128,14 +131,12 @@ async function writeToCSV() {
     } catch (err) {
         console.error(err);
     }
-    const lines = data.split("\r\n"); 
+    const lines = data.split("\n"); 
     output = output + lines[0] + ",Transit\r\n";
     // console.log(lines.length);
-    // for(let i = 1; i < lines.length - 1; i++) {
-    for(let i = 1; i < 3; i++) {
-    // for(let i = 1; i < distanceMatrix[0].length - 1; i++) {
+    // lines.length - 1 because new line
+    for(let i = 1; i < lines.length - 1; i++) {
         let formatted = formatArpt(distanceMatrix[i])
-        // console.log(formatted);
         output = output + lines[i] + "," + formatted + "\r\n";
     }
     console.log(output);
