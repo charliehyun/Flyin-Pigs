@@ -149,7 +149,9 @@ export class SearchComponent implements OnInit, OnDestroy {
       // }
       const x = document.getElementById('departDate');
       var departDateObj = new Date(this.departDate);
-      if(departDateObj < this.date || departDateObj > this.maxDate || x?.classList.contains('ng-invalid')) {
+      if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
+        x?.classList.add('ng-invalid')
+        x?.classList.add('ng-dirty')
         route = false
       }
     }
@@ -164,7 +166,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     else {
       const x = document.getElementById('returnDate');
       var returnDateObj = new Date(this.returnDate);
-      if(returnDateObj < this.date || returnDateObj > this.maxDate || x?.classList.contains('ng-invalid')) {
+      if(returnDateObj < new Date(this.date) || returnDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
+        x?.classList.add('ng-invalid')
+        x?.classList.add('ng-dirty')
         route = false
       }
     }
