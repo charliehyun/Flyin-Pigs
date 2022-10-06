@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
 import { ResultsComponent } from './results/results.component';
-import { ResultsBoxComponent } from './results-box/results-box.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -25,8 +24,7 @@ import {TableModule} from 'primeng/table';
   declarations: [
     AppComponent,
     SearchComponent,
-    ResultsComponent,
-    ResultsBoxComponent
+    ResultsComponent
   ],
   imports: [
     BrowserModule,
