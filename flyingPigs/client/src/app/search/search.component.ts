@@ -137,16 +137,22 @@ export class SearchComponent implements OnInit, OnDestroy {
       route = false
     } 
     else {      
-      var departDateObj = new Date(this.departDate);
-      var year = departDateObj.getFullYear();
-      var month = departDateObj.getMonth();
-      var day   = departDateObj.getDate();
-      if(departDateObj > this.maxDate || this.daysInMonth(month, year) > day) {
-        const x = document.getElementById('departDate');
-        x?.classList.add('ng-invalid')
-        x?.classList.add('ng-dirty')
+      // var departDateObj = new Date(this.departDate);
+      // var year = departDateObj.getFullYear();
+      // var month = departDateObj.getMonth();
+      // var day   = departDateObj.getDate();
+      // if(departDateObj < this.date || departDateObj > this.maxDate || this.daysInMonth(month, year) > day) {
+      //   const x = document.getElementById('departDate');
+      //   x?.classList.add('ng-invalid')
+      //   x?.classList.add('ng-dirty')
+      //   route = false
+      // }
+      const x = document.getElementById('departDate');
+
+      if(x?.classList.contains('ng-invalid')) {
         route = false
       }
+
     }
     if(this.isRoundTrip && !this.returnDate) {
       const x = document.getElementById('returnDate');
@@ -204,7 +210,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       dayNum = 30;
     } else {
       // If month is February, calculate whether it is a leap year or not
-      const isLeap = new Date(year, 1, 29).getMonth() === 1;
+      const isLeap = new Date(year, 2, 29).getMonth() === 1;
       dayNum = isLeap ? 29 : 28;
     }
     return dayNum;
