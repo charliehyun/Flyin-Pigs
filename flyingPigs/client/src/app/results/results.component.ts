@@ -126,6 +126,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   async handleSearch() {
+    this.results$ = new Observable();
     this.resetValidity();
     let departureCoord = await this.geocode(this.departAdd);
     let arrivalCoord = await this.geocode(this.arriveAdd);
@@ -210,8 +211,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
         maxTimeEnd: this.maxTimeEnd
       }
       this.data.changeMessage(this.search)
-      this.router.navigate(['results'])
-      // this.results$ = this.resultsService.searchAirports(this.search);
+      // this.router.navigate(['results'])
+      this.results$ = this.resultsService.searchAirports(this.search);
     } else {
       alert("Error: Some fields are invalid or empty they are are marked in red. Please fix them and try again.  ")
     }

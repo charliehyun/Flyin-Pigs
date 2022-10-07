@@ -75,7 +75,7 @@
 </p-accordion>
 
 <!-- RESULTS -->
-<div *ngIf="(results$ | async)?.length != 0">
+<div>
     <h4>Results</h4>
 </div>
 
@@ -114,9 +114,8 @@
             <td>{{flight[0].departureAirport}}</td>
             <td>{{flight[0].departureTime}}</td>
             <td>{{flight[0].flightTime}}</td>
-            <td>{{flight[0].arrivalTime}}</td>
             <td>{{flight[0].arrivalAirport}}</td>
-
+            <td>{{flight[0].arrivalTime}}</td>
             <!-- <td>{{flight[0].drivingTime2}}</td>  -->
             <!-- <td>{{flight[0].totalTime}}</td> -->
             <td>{{flight[0].numberOfStops}}</td>
