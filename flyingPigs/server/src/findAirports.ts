@@ -80,6 +80,8 @@ export class airportFinder {
         // if closest airport is within driveTime, push to validAirports
         if(timeToClosestArpt <= driveTime) {
             validAirports.push(res);
+        } else {
+            return [];
         }
 
         // let buffer be an additional overestimation 
