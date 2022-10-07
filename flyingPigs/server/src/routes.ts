@@ -29,6 +29,8 @@ mongoRouter.post("/search", async (req, res) => {
 
         let myFlightApi = new flightsApi("ORD", "IND",
             "2022-10-21", "2022-10-23", 1, 0, 0, "Economy", true);
+        // let myFlightApi = new flightsApi("GST", "GUM",
+        // "2022-10-21", "2022-10-23", 1, 0, 0, "Economy", true);
         let flightsTen = await myFlightApi.queryApi()
         console.log(flightsTen.slice(0,10));
         res.status(200).send(flightsTen.slice(0,10));
