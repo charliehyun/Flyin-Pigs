@@ -93,9 +93,6 @@ export class airportFinder {
         } else {
             return [];
         }
-        else {
-            return [];
-        }
 
         // let buffer be an additional overestimation 
         const buffer = 0;
