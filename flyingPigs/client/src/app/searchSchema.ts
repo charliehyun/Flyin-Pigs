@@ -20,5 +20,6 @@ export interface SearchSchema {
 // option format for input dropdowns
 export interface DropdownOption {
     name: string;
-    code: string;
+    code?: string;
+    sec?: number;
 }
