@@ -130,7 +130,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     let arrivalCoord = await this.geocode(this.arriveAdd);
 
     let route = true;
-    console.log(this.departDate)
+    // input validation
     if(!this.departDate) {
       const x = document.getElementById('departDate');
       x?.classList.add('ng-invalid')
@@ -190,6 +190,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       route = false
     }
 
+    // if valid, create search object and route to results
+    // else, alert
     if(route) {
       this.search = {
         selectedClass: this.selectedClass,
@@ -214,8 +216,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       alert("Error: Some fields are invalid or empty they are are marked in red. Please fix them and try again.  ")
     }
   }
+  
   resetValidity() {
-
+    const elements: Element[] = Array.from(document.getElementsByTagName("input"));
+    elements.forEach((el: Element) => {
+      el.classList.remove('ng-invalid')
+      el.classList.remove('ng-dirty')
+      el.classList.add('ng-pristine')
+    })
   }
   // daysInMonth(month, year) {
   //   let dayNum = -1;
