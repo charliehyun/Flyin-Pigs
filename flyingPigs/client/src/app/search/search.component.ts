@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
 import {FlightSchema} from "../flightSchema";
+import {Message} from 'primeng/api';
 // import {Client} from "@googlemaps/google-maps-services-js";
 
 @Component({
@@ -129,7 +130,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     let arrivalCoord = await this.geocode(this.arriveAdd);
 
     let route = true;
-    console.log(this.departDate)
+    // input validation
     if(!this.departDate) {
       const x = document.getElementById('departDate');
       x?.classList.add('ng-invalid')
@@ -189,6 +190,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       route = false
     }
 
+    // if valid, create search object and route to results
+    // else, alert
     if(route) {
       this.search = {
         selectedClass: this.selectedClass,
@@ -213,12 +216,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       alert("Error: Some fields are invalid or empty they are are marked in red. Please fix them and try again.  ")
     }
   }
+  
   resetValidity() {
-    // const x = document.getElementById('departDate');
-    // const x = document.getElementById('returnDate');
-    // const x = document.getElementById('daddress');
-    // const x = document.getElementById('aaddress');
-
+    const elements: Element[] = Array.from(document.getElementsByTagName("input"));
+    elements.forEach((el: Element) => {
+      el.classList.remove('ng-invalid')
+      el.classList.remove('ng-dirty')
+      el.classList.add('ng-pristine')
+    })
   }
   // daysInMonth(month, year) {
   //   let dayNum = -1;
