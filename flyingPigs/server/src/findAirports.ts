@@ -58,7 +58,10 @@ export class airportFinder {
             driveTimeArr = res["Driving"];
         }
         else if(travelMethod == "transit") {
+            // console.log("in transit");
+            // console.log(res);
             driveTimeArr = res["Transit"];
+            // console.log(driveTimeArr);
         }
 
         // API call to determine drive(or others) time to closest airport
@@ -72,14 +75,24 @@ export class airportFinder {
                 key: "AIzaSyA24p5rileUNbxSp8afoKXcwYH3zLlyxuU",
             },
         }).then((r: any) => {
-            timeToClosestArpt = r.data.rows[0].elements[0].duration.value;
+            if(r.data.rows[0].elements[0].status == "OK") {
+                timeToClosestArpt = r.data.rows[0].elements[0].duration.value;
+            }
+            else {
+                timeToClosestArpt = Number.MAX_VALUE;
+            }
+            console.log("time to closest airport: ", timeToClosestArpt);
         }).catch((e: any) => {
             console.log(e);
         })
 
         // if closest airport is within driveTime, push to validAirports
         if(timeToClosestArpt <= driveTime) {
+            console.log("valid airport");
             validAirports.push(res);
+        }
+        else {
+            return [];
         }
 
         // let buffer be an additional overestimation 
@@ -100,7 +113,7 @@ export class airportFinder {
             let res = await Airport.findOne({"IATA": iata});
             validAirports.push(res);
         }
-        // console.log(validAirports);
+        console.log("valid airports: ", validAirports);
         return validAirports;
     }
 
@@ -151,6 +164,7 @@ export class airportFinder {
             })
         }
         let newArray = this.inRadiusAirportsIndices.map(x => airportsToSort[x]);
+        console.log("new array", newArray);
         return newArray;
     }
 
