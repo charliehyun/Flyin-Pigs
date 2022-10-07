@@ -75,13 +75,17 @@
 </p-accordion>
 
 <!-- RESULTS -->
-<!-- Loading -->
-<i class="pi pi-spin pi-spinner" *ngIf="!(results$ | async)"></i>
+<div *ngIf="(results$ | async)?.length != 0">
+    <h4>Results</h4>
+</div>
 
 <!-- No flights -->
 <div *ngIf="(results$ | async)?.length == 0">
     <p>No flights match your search:(</p>
 </div>
+
+<!-- Loading -->
+<i class="pi pi-spin pi-spinner" *ngIf="!(results$ | async)" style="font-size: 2rem; display: flex; align-items: center; justify-content: center;" ></i>
 
 <!-- Table -->
 <p-table *ngFor="let flight of results$ | async" [value]="flight" dataKey="name">
@@ -125,7 +129,7 @@
     <!-- More details -->
     <ng-template pTemplate="rowexpansion" let-trip>
         <tr>
-            <td colspan="7">
+            <td colspan="9">
                 <div class="p-3">
                     <p-card header="Stop Overs">
                         <tr *ngFor="let stops of trip.stopOvers">
