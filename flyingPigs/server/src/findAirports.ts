@@ -34,6 +34,7 @@ export class airportFinder {
     // this function finds all the airports within the driving time + time to closest airport from
     // the closest airport
     async findAirportsInRange(startLat: number, startLng: number, driveTime: number, travelMethod: string) {
+        console.log("pre filter");
         const {Client} = require("@googlemaps/google-maps-services-js");
         const client = new Client({});
 
@@ -43,30 +44,42 @@ export class airportFinder {
         // correspond to the IATA code 
         // e.x. 11880687278 will correspond to 11880 driving time to airport DHN
         // 68=D 72=H 78=N
-
+        let validAirports: any[] = [];
         let res = await Airport.findOne({"IATA": closestAirport});
         let driveTimeArr: any[] = [];
         let startCoords = [{"lat": startLat, "lng": startLng}];
         let closestAirportCoords = [{"lat": res["LAT"], "lng": res["LNG"]}];
         let timeToClosestArpt = 0;
 
-        if(travelMethod == "drive") {
-            driveTimeArr = res["Driving"];
-            // API call to determine drive(or others) time to closest airport
-            timeToClosestArpt = Number.MAX_VALUE;
+        // TODO if coord is same as closest airport, set timeToClosestArpt to 0 and skip api call
+        // check |x-y| < .1 or something instead of x == y.
 
-            await client.distancematrix({
-                params: {
-                    origins: startCoords,
-                    destinations: closestAirportCoords,
-                    mode: travelMethod,
-                    key: "AIzaSyA24p5rileUNbxSp8afoKXcwYH3zLlyxuU",
-                },
-            }).then((r: any) => {
-                timeToClosestArpt = r.data.rows[0].elements[0].duration.value;
-            }).catch((e: any) => {
-                console.log(e);
-            })
+        if(travelMethod == "driving") {
+            driveTimeArr = res["Driving"];
+        }
+        else if(travelMethod == "transit") {
+            driveTimeArr = res["Transit"];
+        }
+
+        // API call to determine drive(or others) time to closest airport
+        timeToClosestArpt = Number.MAX_VALUE;
+
+        await client.distancematrix({
+            params: {
+                origins: startCoords,
+                destinations: closestAirportCoords,
+                mode: travelMethod,
+                key: "AIzaSyA24p5rileUNbxSp8afoKXcwYH3zLlyxuU",
+            },
+        }).then((r: any) => {
+            timeToClosestArpt = r.data.rows[0].elements[0].duration.value;
+        }).catch((e: any) => {
+            console.log(e);
+        })
+
+        // if closest airport is within driveTime, push to validAirports
+        if(timeToClosestArpt <= driveTime) {
+            validAirports.push(res);
         }
 
         // let buffer be an additional overestimation 
@@ -77,7 +90,6 @@ export class airportFinder {
             lastIndex = (lastIndex + 2) * -1;
         }
         
-        let validAirports: any[] = [];
         driveTimeArr = driveTimeArr.slice(0, lastIndex + 1); 
 
         for(let i = 0; i < driveTimeArr.length; i++) {
@@ -94,8 +106,10 @@ export class airportFinder {
 
     async findAirport(startLat: number, startLng: number, airportsToSort: any[],
                          driveTime: number, travelMethod: string) {
+        console.log("filter");
         //initialize all my global vars.
-        this.maxDriveTime = driveTime * 3600; //get max drive time in seconds.
+        //this.maxDriveTime = driveTime * 3600; //get max drive time in seconds.
+        this.maxDriveTime = driveTime;
         this.current25 = 0;
         this.inRadiusAirportsIndices = [];
         const {Client} = require("@googlemaps/google-maps-services-js");
@@ -154,7 +168,7 @@ export class airportFinder {
                         var from = origins[i];
                         var to = destinations[j];
                         var indexBase = this.current25 * 25;
-                        console.log(element.duration.value + " " + indexBase);
+                        // console.log(element.duration.value + " " + indexBase);
                         let durationInt = parseInt(element.duration.value);
                         if (durationInt <= this.maxDriveTime)
                         {

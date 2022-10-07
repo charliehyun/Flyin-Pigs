@@ -16,11 +16,10 @@ import {Message} from 'primeng/api';
 })
 
 export class SearchComponent implements OnInit, OnDestroy {
-  // COPY START
   classes: DropdownOption[];  // Flight class options
-  selectedClass: DropdownOption = {name: 'Economy', code: 'E'}; // Selected flight class
+  selectedClass: DropdownOption = {name: 'Economy', code: 'Economy'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
-  selectedTransport: DropdownOption = {name: 'Car', code: 'Driving'}; // Transportation option
+  selectedTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -28,8 +27,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   childPass: number = 0;  // number of child passengers
   infantPass: number = 0; // number of infant passengers
 
-  maxTimeStart: DropdownOption = {name: '3 hr', code: '10800'}; //default starting driving hours
-  maxTimeEnd: DropdownOption = {name: '1 hr', code: '3600'}; //default end driving hours
+  maxTimeStart: DropdownOption = {name: '3 hr', sec: 10800}; //default starting driving hours
+  maxTimeEnd: DropdownOption = {name: '1 hr', sec: 3600}; //default end driving hours
 
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
   subscription!: Subscription;
@@ -40,26 +39,27 @@ export class SearchComponent implements OnInit, OnDestroy {
   dates: any;
     
   constructor(private data: DataService, private router: Router, private fb: FormBuilder) {
+  // COPY START
     this.classes = [
-      {name: 'Economy', code: 'E'},
-      {name: 'Premium Economy', code: 'P'},
-      {name: 'Business', code: 'B'},
-      {name: 'First', code: 'F'}
+      {name: 'Economy', code: 'Economy'},
+      {name: 'Premium Economy', code: 'Premium Economy'},
+      {name: 'Business', code: 'Business'},
+      {name: 'First', code: 'First'}
     ];
     this.transportType = [
-      {name: 'Car', code: 'Driving'},
-      {name: 'Public Transit', code: 'Public Transit'},
+      {name: 'Car', code: 'driving'},
+      {name: 'Public Transit', code: 'transit'},
       // {name: 'Bike', code: 'Biking'},
       // {name: 'Walk', code: 'Walking'}
     ];
     this.hours = [
-      {name: '1 hr', code: '3600'},
-      {name: '2 hr', code: '7200'},
-      {name: '3 hr', code: '10800'},
-      {name: '4 hr', code: '14400'},
-      {name: '5 hr', code: '18000'},
-      {name: '6 hr', code: '21600'},
-      {name: '7 hr', code: '25200'}
+      {name: '1 hr', sec: 3600},
+      {name: '2 hr', sec: 7200},
+      {name: '3 hr', sec: 10800},
+      {name: '4 hr', sec: 14400},
+      {name: '5 hr', sec: 18000},
+      {name: '6 hr', sec: 21600},
+      {name: '7 hr', sec: 25200}
     ];
     this.createForm();
   }
@@ -91,8 +91,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   handleClear() {
     this.resetValidity();
-    this.selectedClass = {name: 'Economy', code: 'E'};
-    this.selectedTransport = {name: 'Car', code: 'Driving'};
+    this.selectedClass = {name: 'Economy', code: 'Economy'};
+    this.selectedTransport = {name: 'Car', code: 'driving'};
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
@@ -102,12 +102,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
     this.departAdd = "";
     this.arriveAdd = "";
-    this.maxTimeStart = {name: '3 hr', code: '3 hr'};
-    this.maxTimeEnd = {name: '1 hr', code: '1 hr'};
+    this.maxTimeStart = {name: '3 hr', sec: 10800};
+    this.maxTimeEnd = {name: '1 hr', sec: 3600};
   }
 
   search: SearchSchema = {
-    selectedClass: {name: 'Economy', code: 'E'},
+    selectedClass: {name: 'Economy', code: 'Economy'},
     isRoundTrip: false,
     adultPass: 1,
     childPass: 0,
@@ -119,9 +119,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     arriveAdd: "",
     arriveCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
-    selectedTransport: {name: 'Car', code: 'Driving'},
-    maxTimeStart: {name: '3 hr', code: '3 hr'},
-    maxTimeEnd: {name: '1 hr', code: '1 hr'}
+    selectedTransport: {name: 'Car', code: 'driving'},
+    maxTimeStart: {name: '3 hr', sec: 10800},
+    maxTimeEnd: {name: '1 hr', sec: 3600}
   }
 
   async handleSearch() {
