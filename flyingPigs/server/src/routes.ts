@@ -44,7 +44,7 @@ mongoRouter.post("/search", async (req, res) => {
         let arrPrefilter = await myArrFinder.findAirportsInRange(searchParams.arriveCoord.lat, searchParams.arriveCoord.lng, searchParams.maxTimeEnd.sec, searchParams.selectedTransport.code);        
         // let arrAirportArray = await myArrFinder.findAirport(searchParams.departCoord.lat, searchParams.departCoord.lng, arrPrefilter, searchParams.maxTimeStart.sec, searchParams.selectedTransport.code);
         let arrAirportArray = await myArrFinder.findAirport(searchParams.arriveCoord.lat, searchParams.arriveCoord.lng, arrPrefilter, searchParams.maxTimeEnd.sec, searchParams.selectedTransport.code);
-        console.log(arrAirportArray);
+        // console.log(arrAirportArray);
 
         for(let i = 0; i < depAirportArray.length; i++) {
             for(let j = 0; j < arrAirportArray.length; j++) {

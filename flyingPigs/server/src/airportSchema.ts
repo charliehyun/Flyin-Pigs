@@ -14,5 +14,6 @@ export interface AirportSchema {
     State:string;
     City:string;
     Driving:string[];
+    Transit:string[];
     _id?: mongodb.ObjectId;
 }

@@ -218,11 +218,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
     }
   }
   resetValidity() {
-    // const x = document.getElementById('departDate');
-    // const x = document.getElementById('returnDate');
-    // const x = document.getElementById('daddress');
-    // const x = document.getElementById('aaddress');
-
+    const elements: Element[] = Array.from(document.getElementsByTagName("input"));
+    elements.forEach((el: Element) => {
+      el.classList.remove('ng-invalid')
+      el.classList.remove('ng-dirty')
+      el.classList.add('ng-pristine')
+    })
   }
   // daysInMonth(month, year) {
   //   let dayNum = -1;
