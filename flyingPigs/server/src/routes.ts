@@ -1,11 +1,11 @@
 import * as express from "express";
-import * as mongodb from "mongodb";
 import {airportFinder} from "./findAirports";
-import mongoose from "mongoose";
 export const mongoRouter = express.Router();
 import {flightsApi} from "./flightsApi";
 mongoRouter.use(express.json());
 var Airport = require("./airport");
+import log4js from "log4js";
+var logger = log4js.getLogger();
 
 mongoRouter.get("/", async (_req, res) => {
     try {
@@ -32,6 +32,7 @@ mongoRouter.post("/search", async (req, res) => {
         let flightsList:any[][] = [];
 
         console.log(searchParams);
+        logger.info(searchParams);
         let myDepFinder = new airportFinder();
         let depPrefilter = await myDepFinder.findAirportsInRange(searchParams.departCoord.lat, searchParams.departCoord.lng, searchParams.maxTimeStart.sec, searchParams.selectedTransport.code);        
         let depAirportArray = await myDepFinder.findAirport(searchParams.departCoord.lat, searchParams.departCoord.lng, depPrefilter, searchParams.maxTimeStart.sec, searchParams.selectedTransport.code);
