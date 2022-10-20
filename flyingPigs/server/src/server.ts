@@ -3,13 +3,7 @@ import cors from "cors";
 import express from "express";
 import { connectToDatabase } from "./database";
 import { mongoRouter } from "./routes"
-// import { airportFinder } from "./findAirports"
-
-// let a = new airportFinder();
-
-// a.findAirportsInRange(40.465600640989585, -86.91021761350135, 12000, "DRIVE");
-
-// Load environment variables from the .env file, where the ATLAS_URI is configured
+import log4js from "log4js";
 dotenv.config();
 
 const { ATLAS_URI } = process.env;
@@ -21,6 +15,15 @@ if (!ATLAS_URI) {
 
 connectToDatabase(ATLAS_URI)
     .then(() => {
+        log4js.configure({
+            appenders: {
+                file: { type: 'file', filename: '../logs/server.log' }
+            },
+            categories: {
+                default: { appenders: ['file'], level: 'debug' }
+            }
+        });
+        let logger = log4js.getLogger();
         const app = express();
         app.use(cors());
 
@@ -28,6 +31,7 @@ connectToDatabase(ATLAS_URI)
         // start the Express server
         app.listen(5200, () => {
             console.log(`Server running at http://localhost:5200...`);
+            logger.info("Server started running...");
         });
 
     })

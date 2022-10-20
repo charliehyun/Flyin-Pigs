@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 var Airport = require("./airport");
 var Coordinates = require("./coordinates");
+import log4js from "log4js";
 
 //this function will take in a starting address, a list of Airport objects with address field, airport code field,
 //and a driving range in hours. From there, the algorithm will find a list of all the airport objects that are within
@@ -10,10 +11,11 @@ export class airportFinder {
     inRadiusAirportsIndices:number[] = [];
     maxDriveTime:number;
     current25:number; //0 for the first 25 (indices 0-24), 1 for next 25 (indices 25-49), 2 for the next 25 (indices 50-74).
+    logger:log4js.Logger;
     constructor() {
         this.maxDriveTime = 0;
         this.current25 = 0;
-
+        this.logger = log4js.getLogger();
     }
     // this function finds the closest airport to the starting location
     async findClosestAirport(startLat: number, startLng: number) {
@@ -112,7 +114,7 @@ export class airportFinder {
             let res = await Airport.findOne({"IATA": iata});
             validAirports.push(res);
         }
-        console.log("valid airports: ", validAirports);
+        //console.log("valid airports: ", validAirports);
         return validAirports;
     }
 
@@ -163,7 +165,7 @@ export class airportFinder {
             })
         }
         let newArray = this.inRadiusAirportsIndices.map(x => airportsToSort[x]);
-        console.log("new array", newArray);
+        //console.log("new array", newArray);
         return newArray;
     }
 
@@ -181,7 +183,6 @@ export class airportFinder {
                         var from = origins[i];
                         var to = destinations[j];
                         var indexBase = this.current25 * 25;
-                        // console.log(element.duration.value + " " + indexBase);
                         let durationInt = parseInt(element.duration.value);
                         if (durationInt <= this.maxDriveTime)
                         {
@@ -190,7 +191,7 @@ export class airportFinder {
                     }
                     else
                     {
-                        console.log("airport is unreachable.");
+                        this.logger.warn("Airport is not reachable");
                     }
                 }
             }
