@@ -22,13 +22,15 @@ import { CardModule } from 'primeng/card';
 import {TableModule} from 'primeng/table';
 import {DialogModule} from 'primeng/dialog';
 import {TooltipModule} from 'primeng/tooltip';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     ResultsComponent,
-    LoginSignupComponent
+    LoginSignupComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

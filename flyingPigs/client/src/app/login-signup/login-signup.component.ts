@@ -29,7 +29,7 @@ export class LoginSignupComponent {
 
     passHide: boolean
 
-    constructor() {
+    constructor(private router: Router) {
         this.passHide = true
         this.displayLogin = false
         this.displaySignup = false
@@ -78,6 +78,10 @@ export class LoginSignupComponent {
         // check if satisfies password reqs
         // if invalid, reprompt
         // if valid new account, prompt to log in and close modal
+    }
+
+    handlePassword() {
+        this.router.navigate(['forgot-password'])
     }
 
     resetValidity() {
