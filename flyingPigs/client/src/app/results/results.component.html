@@ -1,5 +1,6 @@
 <img src="favicon.ico" alt="Flyin' Pigs" routerLink="/search" width="100px" [style]="{cursor:'pointer'}">
 <h2>Flights</h2>
+<!-- SEARCH -->
 <p-accordion [multiple]="true">
     <p-accordionTab header="Search" [selected]="false">
         <!-- COPY START -->
@@ -18,52 +19,36 @@
             <!-- Passenger # and selection Overlay -->
             <p-button (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></p-button>
             <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
-            <div>
-            <label for="adult" class="pass1">Adults</label>
-            <div class="pass2" align="right">
-                <p-inputNumber [(ngModel)]="adultPass" inputId="adult" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
-            </div>
-            <br><br><br>
-            <label for="child" class="pass1">Children &nbsp;</label>
-            <div class="pass2" align="right">
-                <p-inputNumber [(ngModel)]="childPass" inputId="child" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
-            </div>
-            <br><br><br>
-            <label for="infant" class="pass1">Infants</label>
-            <div class="pass2" align="right">
-                <p-inputNumber [(ngModel)]="infantPass" inputId="infant" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
-            </div>
-            <br><br><br>
-            <p-button (onClick)="updatePassengers(); op.hide()" class="pass1">
-            <i class="pi pi-check"></i>
-            </p-button>
-            </div>
+                <div>
+                    <label for="adult" class="pass1">Adults</label>
+                    <div class="pass2" align="right">
+                        <p-inputNumber [(ngModel)]="adultPass" inputId="adult" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
+                    </div>
+                    <br><br><br>
+                    <label for="child" class="pass1">Children &nbsp;</label>
+                    <div class="pass2" align="right">
+                        <p-inputNumber [(ngModel)]="childPass" inputId="child" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
+                    </div>
+                    <br><br><br>
+                    <label for="infant" class="pass1">Infants</label>
+                    <div class="pass2" align="right">
+                        <p-inputNumber [(ngModel)]="infantPass" inputId="infant" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]=0 [size]=1></p-inputNumber>
+                    </div>
+                    <br><br><br>
+                    <p-button (onClick)="updatePassengers(); op.hide()" class="pass1">
+                    <i class="pi pi-check"></i>
+                    </p-button>
+                </div>
             </p-overlayPanel>
             
-            <!-- Trip Dates and Addresses -->
-            
+            <!-- Dates -->
             <br>
-            <!----
-            <br>
-            <form [formGroup]="dates" novalidate>
-            <div class="form-group">
-                <label class="center-block">Departure Date:
-                <input class="form-control" formControlName="ddate" pInputText type="date" [(ngModel)]="ddate" id="ddate" name="ddate" required>
-                </label>
-            </div>
-            <div *ngIf="dates.controls['ddate'].invalid && (dates.controls['ddate'].dirty || dates.controls['ddate'].touched || dates.ddate < this.date)" class="alert">
-                <small class="text-danger" *ngIf="dates.controls['ddate'].errors.required">
-                Please enter valid date!
-                </small>
-            </div>
-            </form> 
-            --->
-
             <label for="departDate">Departure Date: </label>
             <input pInputText type="date" [(ngModel)]="departDate" id="departDate" name="departDate" min="{{this.date}}" required>
             <label for="returnDate" *ngIf="isRoundTrip">Return Date: </label>
             <input pInputText type="date" [(ngModel)]="returnDate" id="returnDate" name="returnDate" min="{{this.departDate}}" *ngIf="isRoundTrip"><br>
 
+            <!-- Addresses -->
             <label for="daddress">Departure Address: </label>
             <input pInputText type="text" id="daddress" name="daddress" size="35" required ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange1($event)" [(ngModel)]="departAdd">
             <label for="aaddress">Arrival Address: </label>
@@ -89,30 +74,39 @@
     </p-accordionTab> -->
 </p-accordion>
 
-<!-- <tr *ngFor="let flight of results$ | async" >
-    <td>{{flight[0].airlines}}</td>
-    <td>{{flight[0].price}}</td>
-</tr> -->
+<!-- RESULTS -->
+<div>
+    <h4>Results</h4>
+</div>
 
-<!-- <i class="pi pi-spin pi-spinner" *ngIf="! results$[0]"></i> -->
+<!-- No flights -->
+<div *ngIf="(results$ | async)?.length == 0">
+    <p>No flights match your search:(</p>
+</div>
 
+<!-- Loading -->
+<i class="pi pi-spin pi-spinner" *ngIf="!(results$ | async)" style="font-size: 2rem; display: flex; align-items: center; justify-content: center;" ></i>
+
+<!-- Table -->
 <p-table *ngFor="let flight of results$ | async" [value]="flight" dataKey="name">
+    <!-- Column names -->
     <ng-template pTemplate="header">
         <tr>
-            <th pSortableColumn="name">Airline <p-sortIcon field="name"></p-sortIcon></th>
+            <th>Airline</th>
             <!-- <th pSortableColumn="price">{{selectedTransport.code}} Time<p-sortIcon field="price"></p-sortIcon></th> -->
-            <th pSortableColumn="category">Departure Airport<p-sortIcon field="category"></p-sortIcon></th>
-            <th pSortableColumn="price">Departure Time<p-sortIcon field="price"></p-sortIcon></th>
-            <th pSortableColumn="rating">Flight Time<p-sortIcon field="rating"></p-sortIcon></th>
-            <th pSortableColumn="inventoryStatus">Arrival Airport<p-sortIcon field="inventoryStatus"></p-sortIcon></th>
-            <th pSortableColumn="price">Arrival Time<p-sortIcon field="price"></p-sortIcon></th>
-            <!-- <th pSortableColumn="inventoryStatus">{{selectedTransport.code}} Time<p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
-            <!-- <th pSortableColumn="inventoryStatus">Total Travel Time<p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
-            <th pSortableColumn="inventoryStatus">Number of Stops<p-sortIcon field="inventoryStatus"></p-sortIcon></th>
-            <th pSortableColumn="inventoryStatus">Price<p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+            <th>Departure Airport</th>
+            <th>Departure Time</th>
+            <th>Flight Time</th>
+            <th>Arrival Airport</th>
+            <th>Arrival Time</th>
+            <!-- <th>{{selectedTransport.code}} Time<p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
+            <!-- <th>Total Travel Time<p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
+            <th>Number of Stops</th>
+            <th>Price</th>
             <th style="width: 3rem"></th>
         </tr>
     </ng-template>
+    <!-- Row content -->
     <ng-template pTemplate="body" let-trip let-expanded="expanded">
         <tr >
             <td>{{flight[0].airlines}}</td>
@@ -120,21 +114,21 @@
             <td>{{flight[0].departureAirport}}</td>
             <td>{{flight[0].departureTime}}</td>
             <td>{{flight[0].flightTime}}</td>
+            <td>{{flight[0].arrivalAirport}}</td>
             <td>{{flight[0].arrivalTime}}</td>
-            <td>{{flight[0].departureAirport}}</td>
-
             <!-- <td>{{flight[0].drivingTime2}}</td>  -->
             <!-- <td>{{flight[0].totalTime}}</td> -->
             <td>{{flight[0].numberOfStops}}</td>
-            <td>{{flight[0].price}}</td>
+            <td>${{flight[0].price}}</td>
             <td>
                 <button type="button" pButton pRipple [pRowToggler]="trip" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></button>
             </td>
         </tr>
     </ng-template>
+    <!-- More details -->
     <ng-template pTemplate="rowexpansion" let-trip>
         <tr>
-            <td colspan="7">
+            <td colspan="9">
                 <div class="p-3">
                     <p-card header="Stop Overs">
                         <tr *ngFor="let stops of trip.stopOvers">
@@ -146,10 +140,5 @@
                 </div>
             </td>
         </tr>
-        
     </ng-template>
-
 </p-table>
-
-<!-- <results-box></results-box> -->
-

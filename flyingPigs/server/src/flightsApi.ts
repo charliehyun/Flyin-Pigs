@@ -1,10 +1,11 @@
 const https = require('https');
+import log4js from "log4js";
 
 import {Flight, stopOverFlight} from "./flight";
 
 export class flightsApi {
 
-    apiKey = `633f49aa7bd606b2436e4074`;
+    apiKey = `633fc180b8f7611a58d22a60`;
     departureAirport:string;
     arrivalAirport:string;
     departureDate:string;
@@ -15,6 +16,7 @@ export class flightsApi {
     cabinClass:string = "Economy";
     oneWayRoundTrip:string = "onewaytrip";
     response:any;
+    logger:log4js.Logger;
     constructor(departure:string, arrival:string, departureDate:string, arrivalDate:string,
     adults:number, children:number, infants:number, cabin:string, oneway:boolean)
     {
@@ -29,6 +31,7 @@ export class flightsApi {
         if(!oneway) {
             this.oneWayRoundTrip = "roundtrip";
         }
+        this.logger = log4js.getLogger();
     }
     async queryApi() {
         var apiString = ""

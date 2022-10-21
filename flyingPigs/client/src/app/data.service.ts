@@ -8,7 +8,7 @@ import { SearchSchema, DropdownOption } from './searchSchema';
 export class DataService {
 
   private messageSource = new BehaviorSubject<SearchSchema>({
-    selectedClass: {name: 'Economy', code: 'E'},
+    selectedClass: {name: 'Economy', code: 'Economy'},
     isRoundTrip: false,
     adultPass: 1,
     childPass: 0,
@@ -20,9 +20,9 @@ export class DataService {
     departCoord: new google.maps.LatLng({"lat": 0, 'lng': 0}),
     arriveAdd: "",
     arriveCoord: new google.maps.LatLng({"lat": 0, 'lng': 0}),
-    selectedTransport: {name: 'Car', code: 'Driving'},
-    maxTimeStart: {name: '3 hr', code: '3 hr'},
-    maxTimeEnd: {name: '1 hr', code: '1 hr'}
+    selectedTransport: {name: 'Car', code: 'driving'},
+    maxTimeStart: {name: '3 hr', sec: 10800},
+    maxTimeEnd: {name: '1 hr', sec: 3600}
   });
   currentMessage = this.messageSource.asObservable();
 
