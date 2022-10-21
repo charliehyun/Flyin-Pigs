@@ -17,11 +17,16 @@ export class airportFinder {
         this.current25 = 0;
         this.logger = log4js.getLogger();
     }
-    // this function finds the closest airport to the starting location
-    async findClosestAirport(startLat: number, startLng: number) {
+    // this function finds the closest (reachable) airport from the starting location
+    // and the time to that airport
+    async findClosestAirport(startLat: number, startLng: number, travelMethod: string) {
+        const {Client} = require("@googlemaps/google-maps-services-js");
+        const client = new Client({});
         // let coords be an array of [iata, lat, lng, dist]
         let res = await Coordinates.findOne({});
         let coords = res["coords"];
+        let startCoords = [{"lat": startLat, "lng": startLng}];
+        let destCoords = [];
 
         for(let i = 0; i < coords.length; i++) {
             var a = coords[i][1] - startLat;
@@ -30,7 +35,36 @@ export class airportFinder {
         }
 
         coords.sort(this.sortOnDistances);
-        return coords[0][0];
+
+        // currently only checking the closest 25 euclidean distance airports to find closest reachable airport
+        // edge case where all 25 closest euclidean distance are not reachable will fail 
+        destCoords = coords.slice(0,25).map((element: any) => {return {"lat": element[1], "lng": element[2]}});
+
+        // API call to determine drive(or others) time to closest airport
+        let timeToClosestArpt = Number.MAX_VALUE;
+        let cloestAirportIndex = -1;
+        await client.distancematrix({
+            params: {
+                origins: startCoords,
+                destinations: destCoords,
+                mode: travelMethod,
+                key: "AIzaSyA24p5rileUNbxSp8afoKXcwYH3zLlyxuU",
+            },
+        }).then((r: any) => {
+            r.data.rows[0].elements.forEach(function (item:any, index:number) {
+                if(item.hasOwnProperty("duration") && item["status"] == "OK" && item["duration"]["value"] < timeToClosestArpt){
+                    timeToClosestArpt = item["duration"]["value"];
+                    cloestAirportIndex = index;
+                }
+            });
+        }).catch((e: any) => {
+            console.log(e);
+        })
+
+        this.logger.info("closest reachable airport: ", coords[cloestAirportIndex][0]);
+        this.logger.info("time to closest reachable airport: ", timeToClosestArpt);
+        // this.logger.info("closest airport list", coords);
+        return {"IATA": coords[cloestAirportIndex][0], "timeToClosestAirport": timeToClosestArpt};
     }
 
     // this function finds all the airports within the driving time + time to closest airport from
@@ -40,18 +74,18 @@ export class airportFinder {
         const {Client} = require("@googlemaps/google-maps-services-js");
         const client = new Client({});
 
-        let closestAirport = await this.findClosestAirport(startLat, startLng);
+        let closestAirport = await this.findClosestAirport(startLat, startLng, travelMethod);
 
         // the driving time array is stored where the 6 least significant digits
         // correspond to the IATA code 
         // e.x. 11880687278 will correspond to 11880 driving time to airport DHN
         // 68=D 72=H 78=N
         let validAirports: any[] = [];
-        let res = await Airport.findOne({"IATA": closestAirport});
+        let res = await Airport.findOne({"IATA": closestAirport["IATA"]});
         let driveTimeArr: any[] = [];
         let startCoords = [{"lat": startLat, "lng": startLng}];
-        let closestAirportCoords = [{"lat": res["LAT"], "lng": res["LNG"]}];
-        let timeToClosestArpt = 0;
+        // let closestAirportCoords = [{"lat": res["LAT"], "lng": res["LNG"]}];
+        let timeToClosestArpt = closestAirport["timeToClosestAirport"];
 
         // TODO if coord is same as closest airport, set timeToClosestArpt to 0 and skip api call
         // check |x-y| < .1 or something instead of x == y.
@@ -60,33 +94,8 @@ export class airportFinder {
             driveTimeArr = res["Driving"];
         }
         else if(travelMethod == "transit") {
-            // console.log("in transit");
-            // console.log(res);
             driveTimeArr = res["Transit"];
-            // console.log(driveTimeArr);
         }
-
-        // API call to determine drive(or others) time to closest airport
-        timeToClosestArpt = Number.MAX_VALUE;
-
-        await client.distancematrix({
-            params: {
-                origins: startCoords,
-                destinations: closestAirportCoords,
-                mode: travelMethod,
-                key: "AIzaSyA24p5rileUNbxSp8afoKXcwYH3zLlyxuU",
-            },
-        }).then((r: any) => {
-            if(r.data.rows[0].elements[0].status == "OK") {
-                timeToClosestArpt = r.data.rows[0].elements[0].duration.value;
-            }
-            else {
-                timeToClosestArpt = Number.MAX_VALUE;
-            }
-            console.log("time to closest airport: ", timeToClosestArpt);
-        }).catch((e: any) => {
-            console.log(e);
-        })
 
         // if closest airport is within driveTime, push to validAirports
         if(timeToClosestArpt <= driveTime) {
@@ -108,17 +117,16 @@ export class airportFinder {
 
         for(let i = 0; i < driveTimeArr.length; i++) {
             let decimal = (parseInt(driveTimeArr[i])) % 1000000;
-
             let iata = this.decodeAscii(decimal);
-
             let res = await Airport.findOne({"IATA": iata});
             validAirports.push(res);
         }
         //console.log("valid airports: ", validAirports);
+        this.logger.info("prefilter list: ", validAirports);
         return validAirports;
     }
 
-    async findAirport(startLat: number, startLng: number, airportsToSort: any[],
+    async findAirports(startLat: number, startLng: number, airportsToSort: any[],
                          driveTime: number, travelMethod: string) {
         console.log("filter");
         //initialize all my global vars.
@@ -166,36 +174,37 @@ export class airportFinder {
         }
         let newArray = this.inRadiusAirportsIndices.map(x => airportsToSort[x]);
         //console.log("new array", newArray);
+        this.logger.info("airports in range: ", newArray);
         return newArray;
     }
 
     filterFunc(response:any) {
-            var origins = response.data.origin_addresses;
-            var destinations = response.data.destination_addresses;
-            for (var i = 0; i < origins.length; i++) {
-                var results = response.data.rows[i].elements;
-                for (var j = 0; j < results.length; j++) {
-                    var element = results[j];
-                    if (element.status === 'OK')
+        var origins = response.data.origin_addresses;
+        var destinations = response.data.destination_addresses;
+        for (var i = 0; i < origins.length; i++) {
+            var results = response.data.rows[i].elements;
+            for (var j = 0; j < results.length; j++) {
+                var element = results[j];
+                if (element.status === 'OK')
+                {
+                    var distance = element.distance.text;
+                    var duration = element.duration.text;
+                    var from = origins[i];
+                    var to = destinations[j];
+                    var indexBase = this.current25 * 25;
+                    let durationInt = parseInt(element.duration.value);
+                    if (durationInt <= this.maxDriveTime)
                     {
-                        var distance = element.distance.text;
-                        var duration = element.duration.text;
-                        var from = origins[i];
-                        var to = destinations[j];
-                        var indexBase = this.current25 * 25;
-                        let durationInt = parseInt(element.duration.value);
-                        if (durationInt <= this.maxDriveTime)
-                        {
-                            this.inRadiusAirportsIndices.push(indexBase + j);
-                        }
-                    }
-                    else
-                    {
-                        this.logger.warn("Airport is not reachable");
+                        this.inRadiusAirportsIndices.push(indexBase + j);
                     }
                 }
+                else
+                {
+                    this.logger.warn("Airport is not reachable");
+                }
             }
-            this.current25++;
+        }
+        this.current25++;
     }
 
     decodeAscii(decimal: number) {
