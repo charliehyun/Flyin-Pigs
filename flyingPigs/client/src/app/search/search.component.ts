@@ -16,6 +16,7 @@ import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, f
   selector: 'search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
+  // styleUrls: ['../app.component.scss']
 })
 
 export class SearchComponent implements OnInit, OnDestroy {

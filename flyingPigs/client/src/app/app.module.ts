@@ -24,6 +24,7 @@ import {DialogModule} from 'primeng/dialog';
 import {TooltipModule} from 'primeng/tooltip';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DividerModule } from "primeng/divider";
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
       TableModule,
       DialogModule,
       TooltipModule,
-      FontAwesomeModule
+      FontAwesomeModule,
+      DividerModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]
