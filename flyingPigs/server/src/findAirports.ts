@@ -8,7 +8,7 @@ import log4js from "log4js";
 //the radius of the address for the inputted hours.
 //global variables so we can have the appropriate
 export class airportFinder {
-    inRadiusAirportsIndices:number[] = [];
+    inRadiusAirportsIndices:{index: number; duration:number}[] = [];
     maxDriveTime:number;
     current25:number; //0 for the first 25 (indices 0-24), 1 for next 25 (indices 25-49), 2 for the next 25 (indices 50-74).
     logger:log4js.Logger;
@@ -172,7 +172,11 @@ export class airportFinder {
                 console.log(e);
             })
         }
-        let newArray = this.inRadiusAirportsIndices.map(x => airportsToSort[x]);
+        let newArray: any[] = [];
+        this.inRadiusAirportsIndices.forEach(function (item:any, index:number) {
+            newArray.push(airportsToSort[item["index"]]["TimeTo"] = item["duration"]);
+        });
+        // let newArray = this.inRadiusAirportsIndices.map(x => airportsToSort[x["index"]]);
         //console.log("new array", newArray);
         this.logger.info("airports in range: ", newArray);
         return newArray;
@@ -195,7 +199,7 @@ export class airportFinder {
                     let durationInt = parseInt(element.duration.value);
                     if (durationInt <= this.maxDriveTime)
                     {
-                        this.inRadiusAirportsIndices.push(indexBase + j);
+                        this.inRadiusAirportsIndices.push({index: indexBase + j, duration: durationInt});
                     }
                 }
                 else
