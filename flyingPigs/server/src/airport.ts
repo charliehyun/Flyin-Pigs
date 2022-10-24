@@ -17,7 +17,7 @@ const airportSchema = mongoose.Schema({
     City:{type: String, required:true},
     Driving:{type: Array, required:true},
     Transit:{type: Array, required:true},
-    TimeTo:{type: Number, required:false},
+    TravelTime:{type: Number, required:false},
     _id: {type: mongoose.Schema.Types.ObjectId, required:false}
 }, {
     collection: 'airportDataTest'

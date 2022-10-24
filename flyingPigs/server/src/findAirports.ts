@@ -174,7 +174,9 @@ export class airportFinder {
         }
         let newArray: any[] = [];
         this.inRadiusAirportsIndices.forEach(function (item:any, index:number) {
-            newArray.push(airportsToSort[item["index"]]["TimeTo"] = item["duration"]);
+            let tempAirport = airportsToSort[item["index"]];
+            tempAirport["TravelTime"] = item["duration"]
+            newArray.push(tempAirport);
         });
         // let newArray = this.inRadiusAirportsIndices.map(x => airportsToSort[x["index"]]);
         //console.log("new array", newArray);

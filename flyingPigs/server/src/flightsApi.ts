@@ -16,9 +16,11 @@ export class flightsApi {
     cabinClass:string = "Economy";
     oneWayRoundTrip:string = "onewaytrip";
     response:any;
+    timeToAirport:number = -1;
+    timeFromAirport:number = -1;
     logger:log4js.Logger;
     constructor(departure:string, arrival:string, departureDate:string, arrivalDate:string,
-    adults:number, children:number, infants:number, cabin:string, oneway:boolean)
+    adults:number, children:number, infants:number, cabin:string, oneway:boolean, timeToAirport:number, timeFromAirport:number)
     {
         this.departureAirport = departure;
         this.arrivalAirport = arrival;
@@ -28,6 +30,8 @@ export class flightsApi {
         this.childrenPassengers = children;
         this.infantPassengers = infants;
         this.cabinClass = cabin;
+        this.timeToAirport = timeToAirport;
+        this.timeFromAirport = timeFromAirport;
         if(!oneway) {
             this.oneWayRoundTrip = "roundtrip";
         }
@@ -89,7 +93,7 @@ export class flightsApi {
 
                 let newFlight = new Flight(value.airlineCodes, this.departureAirport, this.arrivalAirport,
                     value.departureDateTime, value.arrivalDateTime,
-                    value.durationMinutes * 60, value.stopoversCount, value.id);
+                    value.durationMinutes * 60, value.stopoversCount, value.id, this.timeToAirport, this.timeFromAirport);
 
                 //add stopovers
                 let flightStopovers:stopOverFlight[] = [];
@@ -139,7 +143,7 @@ export class flightsApi {
             if (leg.stopoversCount <= 2) {
                 let newFlight = new Flight(leg.airlineCodes, this.departureAirport, this.arrivalAirport,
                     leg.departureDateTime, leg.arrivalDateTime,
-                    leg.durationMinutes * 60, leg.stopoversCount, leg.id);
+                    leg.durationMinutes * 60, leg.stopoversCount, leg.id, this.timeToAirport, this.timeFromAirport);
 
                 //add stopovers
                 let flightStopovers:stopOverFlight[] = [];
@@ -181,5 +185,4 @@ export class flightsApi {
 
         return roundTripReturnFlights;
     }
-
 }
