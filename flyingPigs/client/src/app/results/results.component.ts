@@ -19,8 +19,10 @@ import { FlightSchema } from '../flightSchema';
 export class ResultsComponent implements OnInit, OnDestroy {
   classes: DropdownOption[];  // Flight class options
   selectedClass: DropdownOption = {name: 'Economy', code: 'Economy'}; // Selected flight class
-  transportType: DropdownOption[];  // Transportation to airport options
-  selectedTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+  dTransportType: DropdownOption[];  // Transportation to airport options
+  aTransportType: DropdownOption[];
+  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+  selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -47,7 +49,13 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: 'Business', code: 'Business'},
       {name: 'First', code: 'First'}
     ];
-    this.transportType = [
+    this.dTransportType = [
+      {name: 'Car', code: 'driving'},
+      {name: 'Public Transit', code: 'transit'},
+      // {name: 'Bike', code: 'Biking'},
+      // {name: 'Walk', code: 'Walking'}
+    ];
+    this.aTransportType = [
       {name: 'Car', code: 'driving'},
       {name: 'Public Transit', code: 'transit'},
       // {name: 'Bike', code: 'Biking'},
@@ -93,7 +101,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   handleClear() {
     this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'Economy'};
-    this.selectedTransport = {name: 'Car', code: 'driving'};
+    this.selectedDTransport = {name: 'Car', code: 'driving'};
+    this.selectedATransport = {name: 'Car', code: 'driving'};
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
@@ -120,19 +129,19 @@ export class ResultsComponent implements OnInit, OnDestroy {
     departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     arriveAdd: "",
     arriveCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
-    selectedTransport: {name: 'Car', code: 'driving'},
+    selectedDTransport: {name: 'Car', code: 'driving'},
+    selectedATransport: {name: 'Car', code: 'driving'},
     maxTimeStart: {name: '3 hr', sec: 10800},
     maxTimeEnd: {name: '1 hr', sec: 3600}
   }
 
   async handleSearch() {
-    this.results$ = new Observable();
     this.resetValidity();
     let departureCoord = await this.geocode(this.departAdd);
     let arrivalCoord = await this.geocode(this.arriveAdd);
 
     let route = true;
-    console.log(this.departDate)
+    // input validation
     if(!this.departDate) {
       const x = document.getElementById('departDate');
       x?.classList.add('ng-invalid')
@@ -192,6 +201,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
       route = false
     }
 
+    // if valid, create search object and route to results
+    // else, alert
     if(route) {
       this.search = {
         selectedClass: this.selectedClass,
@@ -206,17 +217,19 @@ export class ResultsComponent implements OnInit, OnDestroy {
         departCoord: departureCoord,
         arriveAdd: this.arriveAdd,
         arriveCoord: arrivalCoord,
-        selectedTransport: this.selectedTransport,
+        selectedDTransport: this.selectedDTransport,
+        selectedATransport: this.selectedATransport,
         maxTimeStart: this.maxTimeStart,
         maxTimeEnd: this.maxTimeEnd
       }
+      
       this.data.changeMessage(this.search)
-      // this.router.navigate(['results'])
-      this.results$ = this.resultsService.searchAirports(this.search);
+      this.router.navigate(['results'])
     } else {
-      alert("Error: Some fields are invalid or empty they are are marked in red. Please fix them and try again.  ")
+      alert("Error: Some fields are invalid or empty. Please fix them and try again.  ")
     }
   }
+
   resetValidity() {
     const elements: Element[] = Array.from(document.getElementsByTagName("input"));
     elements.forEach((el: Element) => {
@@ -277,7 +290,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.returnDate = this.search.returnDate;
     this.departAdd = this.search.departAdd;
     this.arriveAdd = this.search.arriveAdd;
-    this.selectedTransport = this.search.selectedTransport;
+    this.selectedDTransport = this.search.selectedDTransport;
+    this.selectedATransport = this.search.selectedATransport;
     this.maxTimeStart = this.search.maxTimeStart;
     this.maxTimeEnd = this.search.maxTimeEnd;
 

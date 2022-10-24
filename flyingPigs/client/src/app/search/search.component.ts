@@ -21,8 +21,10 @@ import {Message} from 'primeng/api';
 export class SearchComponent implements OnInit, OnDestroy {
   classes: DropdownOption[];  // Flight class options
   selectedClass: DropdownOption = {name: 'Economy', code: 'Economy'}; // Selected flight class
-  transportType: DropdownOption[];  // Transportation to airport options
-  selectedTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+  dTransportType: DropdownOption[];  // Transportation to airport options
+  aTransportType: DropdownOption[];
+  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+  selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -49,7 +51,13 @@ export class SearchComponent implements OnInit, OnDestroy {
       {name: 'Business', code: 'Business'},
       {name: 'First', code: 'First'}
     ];
-    this.transportType = [
+    this.dTransportType = [
+      {name: 'Car', code: 'driving'},
+      {name: 'Public Transit', code: 'transit'},
+      // {name: 'Bike', code: 'Biking'},
+      // {name: 'Walk', code: 'Walking'}
+    ];
+    this.aTransportType = [
       {name: 'Car', code: 'driving'},
       {name: 'Public Transit', code: 'transit'},
       // {name: 'Bike', code: 'Biking'},
@@ -95,7 +103,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   handleClear() {
     this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'Economy'};
-    this.selectedTransport = {name: 'Car', code: 'driving'};
+    this.selectedDTransport = {name: 'Car', code: 'driving'};
+    this.selectedATransport = {name: 'Car', code: 'driving'};
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
@@ -122,7 +131,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     arriveAdd: "",
     arriveCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
-    selectedTransport: {name: 'Car', code: 'driving'},
+    selectedDTransport: {name: 'Car', code: 'driving'},
+    selectedATransport: {name: 'Car', code: 'driving'},
     maxTimeStart: {name: '3 hr', sec: 10800},
     maxTimeEnd: {name: '1 hr', sec: 3600}
   }
@@ -209,7 +219,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         departCoord: departureCoord,
         arriveAdd: this.arriveAdd,
         arriveCoord: arrivalCoord,
-        selectedTransport: this.selectedTransport,
+        selectedDTransport: this.selectedDTransport,
+        selectedATransport: this.selectedATransport,
         maxTimeStart: this.maxTimeStart,
         maxTimeEnd: this.maxTimeEnd
       }
