@@ -14,6 +14,7 @@ import { FlightSchema } from '../flightSchema';
   selector: 'login-signup',
   templateUrl: './login-signup.component.html',
   styleUrls: ['./login-signup.component.scss']
+//   styleUrls: ['../app.component.scss']
 })
 
 export class LoginSignupComponent {
