@@ -35,7 +35,7 @@ mongoRouter.post("/search", async (req, res) => {
         logger.info(searchParams);
         let myDepFinder = new airportFinder();
         let depPrefilter = await myDepFinder.findAirportsInRange(searchParams.departCoord.lat, searchParams.departCoord.lng, searchParams.maxTimeStart.sec, searchParams.selectedTransport.code);        
-        let depAirportArray = await myDepFinder.findAirport(searchParams.departCoord.lat, searchParams.departCoord.lng, depPrefilter, searchParams.maxTimeStart.sec, searchParams.selectedTransport.code);
+        let depAirportArray = await myDepFinder.findAirports(searchParams.departCoord.lat, searchParams.departCoord.lng, depPrefilter, searchParams.maxTimeStart.sec, searchParams.selectedTransport.code);
         let myArrFinder = new airportFinder();
         // console.log(searchParams.arriveCoord.lat);
         // console.log(searchParams.arriveCoord.lng);
@@ -44,7 +44,7 @@ mongoRouter.post("/search", async (req, res) => {
         // let arrPrefilter = await myArrFinder.findAirportsInRange(searchParams.departCoord.lat, searchParams.departCoord.lng, searchParams.maxTimeStart.sec, searchParams.selectedTransport.code);
         let arrPrefilter = await myArrFinder.findAirportsInRange(searchParams.arriveCoord.lat, searchParams.arriveCoord.lng, searchParams.maxTimeEnd.sec, searchParams.selectedTransport.code);        
         // let arrAirportArray = await myArrFinder.findAirport(searchParams.departCoord.lat, searchParams.departCoord.lng, arrPrefilter, searchParams.maxTimeStart.sec, searchParams.selectedTransport.code);
-        let arrAirportArray = await myArrFinder.findAirport(searchParams.arriveCoord.lat, searchParams.arriveCoord.lng, arrPrefilter, searchParams.maxTimeEnd.sec, searchParams.selectedTransport.code);
+        let arrAirportArray = await myArrFinder.findAirports(searchParams.arriveCoord.lat, searchParams.arriveCoord.lng, arrPrefilter, searchParams.maxTimeEnd.sec, searchParams.selectedTransport.code);
         // console.log(arrAirportArray);
 
         for(let i = 0; i < depAirportArray.length; i++) {
@@ -86,7 +86,7 @@ mongoRouter.get("/filtered", async (_req, res) => {
         let drivetime = 50;
         let travelMethod = 'driving';
         let myFinder = new airportFinder();
-        let airportArray = await myFinder.findAirport(startLat, startLng, airportArr, drivetime, travelMethod);
+        let airportArray = await myFinder.findAirports(startLat, startLng, airportArr, drivetime, travelMethod);
         let myFlightApi = new flightsApi("GST", "GUM",
             "2022-10-21", "2022-10-23", 1, 0, 0, "Economy", true);
 

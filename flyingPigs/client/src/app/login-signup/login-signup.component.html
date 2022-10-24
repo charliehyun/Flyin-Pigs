@@ -9,9 +9,7 @@
         <i class="pi pi-eye" *ngIf="!passHide" (click)="passShowHide()"></i>
     </h6>
     <input pInputText [type]="passHide ? 'password' : 'text'" id="passL" [(ngModel)]="passL">
-    <a href="" style="text-decoration:none">
-        Forgot password?
-    </a> 
+    <button pButton label="Forgot password?" class="p-button-link" (click)="handlePassword()"></button>
 
     <ng-template pTemplate="footer">
         <button pButton type="button" (click)="switchModal()" label="Don't have a Flyin' Pigs account?" class="p-button-sm p-button-outlined"></button>

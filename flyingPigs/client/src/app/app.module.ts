@@ -22,33 +22,37 @@ import { CardModule } from 'primeng/card';
 import {TableModule} from 'primeng/table';
 import {DialogModule} from 'primeng/dialog';
 import {TooltipModule} from 'primeng/tooltip';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { DividerModule } from "primeng/divider";
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     ResultsComponent,
-    LoginSignupComponent
+    LoginSignupComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-      HttpClientModule,
-      ReactiveFormsModule,
-      BrowserAnimationsModule,
-      ButtonModule,
-      DropdownModule,
-      FormsModule,
-      GooglePlaceModule,
-      OverlayPanelModule,
-      InputNumberModule,
-      InputSwitchModule,
-      AccordionModule,
-      InputTextModule,
-      CardModule,
-      TableModule,
-      DialogModule,
-      TooltipModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    ButtonModule,
+    DropdownModule,
+    FormsModule,
+    GooglePlaceModule,
+    OverlayPanelModule,
+    InputNumberModule,
+    InputSwitchModule,
+    AccordionModule,
+    InputTextModule,
+    CardModule,
+    TableModule,
+    DialogModule,
+    TooltipModule,
+    DividerModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]

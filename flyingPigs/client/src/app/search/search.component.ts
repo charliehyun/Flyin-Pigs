@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
+//import { SearchService } from "./search.service";
+//import { AirportSchema } from "../airportSchema";
 import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
@@ -13,6 +15,7 @@ import {Message} from 'primeng/api';
   selector: 'search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
+  // styleUrls: ['../app.component.scss']
 })
 
 export class SearchComponent implements OnInit, OnDestroy {
@@ -210,10 +213,11 @@ export class SearchComponent implements OnInit, OnDestroy {
         maxTimeStart: this.maxTimeStart,
         maxTimeEnd: this.maxTimeEnd
       }
+      
       this.data.changeMessage(this.search)
       this.router.navigate(['results'])
     } else {
-      alert("Error: Some fields are invalid or empty they are are marked in red. Please fix them and try again.  ")
+      alert("Error: Some fields are invalid or empty. Please fix them and try again.  ")
     }
   }
   
