@@ -23,6 +23,7 @@ import {TableModule} from 'primeng/table';
 import {DialogModule} from 'primeng/dialog';
 import {TooltipModule} from 'primeng/tooltip';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
       CardModule,
       TableModule,
       DialogModule,
-      TooltipModule
+      TooltipModule,
+      FontAwesomeModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]
