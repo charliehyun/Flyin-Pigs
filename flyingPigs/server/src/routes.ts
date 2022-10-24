@@ -76,29 +76,29 @@ mongoRouter.post("/search", async (req, res) => {
     }
 })
 
-mongoRouter.get("/filtered", async (_req, res) => {
-    try {
-        var airportArr:any = [];
-        const airports = await Airport.find({});
-        for (let i = 0; i < 10; i++)
-        {
-            airportArr.push(airports[i]);
-        }
-        let startLat = 40.43; //this be the start lat / lng for my apartment
-        let startLng = -86.91;
-        let drivetime = 50;
-        let travelMethod = 'driving';
-        let myFinder = new airportFinder();
-        let airportArray = await myFinder.findAirports(startLat, startLng, airportArr, drivetime, travelMethod);
-        let myFlightApi = new flightsApi("GST", "GUM",
-            "2022-10-21", "2022-10-23", 1, 0, 0, "Economy", true);
+// mongoRouter.get("/filtered", async (_req, res) => {
+//     try {
+//         var airportArr:any = [];
+//         const airports = await Airport.find({});
+//         for (let i = 0; i < 10; i++)
+//         {
+//             airportArr.push(airports[i]);
+//         }
+//         let startLat = 40.43; //this be the start lat / lng for my apartment
+//         let startLng = -86.91;
+//         let drivetime = 50;
+//         let travelMethod = 'driving';
+//         let myFinder = new airportFinder();
+//         let airportArray = await myFinder.findAirports(startLat, startLng, airportArr, drivetime, travelMethod);
+//         let myFlightApi = new flightsApi("GST", "GUM",
+//             "2022-10-21", "2022-10-23", 1, 0, 0, "Economy", true);
 
-        let myJson = await myFlightApi.queryApi();
-        console.log(myJson);
-        //do whatever with my json, or just do it all in `flightsApi.ts`
-        res.status(200).send(airportArray);
-    } catch (error) {
-        console.log(error);
-        res.status(500).send(error.message);
-    }
-})
+//         let myJson = await myFlightApi.queryApi();
+//         console.log(myJson);
+//         //do whatever with my json, or just do it all in `flightsApi.ts`
+//         res.status(200).send(airportArray);
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).send(error.message);
+//     }
+// })
