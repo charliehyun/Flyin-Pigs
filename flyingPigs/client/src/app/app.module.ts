@@ -24,6 +24,7 @@ import {DialogModule} from 'primeng/dialog';
 import {TooltipModule} from 'primeng/tooltip';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { DividerModule } from "primeng/divider";
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,13 @@ import { DividerModule } from "primeng/divider";
     TableModule,
     DialogModule,
     TooltipModule,
-    DividerModule
+    DividerModule,
+    LoggerModule.forRoot({
+      serverLoggingUrl: 'http://localhost:5200/airports/log',
+      level: NgxLoggerLevel.DEBUG,
+      serverLogLevel: NgxLoggerLevel.ERROR,
+      disableConsoleLogging: false
+    })
   ],
   providers: [DataService],
   bootstrap: [AppComponent]
