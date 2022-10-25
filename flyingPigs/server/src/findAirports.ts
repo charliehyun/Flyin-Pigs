@@ -70,7 +70,6 @@ export class airportFinder {
     // this function finds all the airports within the driving time + time to closest airport from
     // the closest airport
     async findAirportsInRange(startLat: number, startLng: number, driveTime: number, travelMethod: string) {
-        console.log("pre filter");
         const {Client} = require("@googlemaps/google-maps-services-js");
         const client = new Client({});
 
@@ -99,7 +98,7 @@ export class airportFinder {
 
         // if closest airport is within driveTime, push to validAirports
         if(timeToClosestArpt <= driveTime) {
-            console.log("valid airport");
+            //console.log("valid airport");
             validAirports.push(res);
         } else {
             return [];
@@ -128,7 +127,7 @@ export class airportFinder {
 
     async findAirports(startLat: number, startLng: number, airportsToSort: any[],
                          driveTime: number, travelMethod: string) {
-        console.log("filter");
+        //console.log("filter");
         //initialize all my global vars.
         //this.maxDriveTime = driveTime * 3600; //get max drive time in seconds.
         this.maxDriveTime = driveTime;
