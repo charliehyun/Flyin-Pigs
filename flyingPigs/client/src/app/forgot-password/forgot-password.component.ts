@@ -11,7 +11,6 @@ import { DataService } from "../data.service";
 import {FlightSchema} from "../flightSchema";
 import {Message} from 'primeng/api';
 // import {Client} from "@googlemaps/google-maps-services-js";
-
 @Component({
   selector: 'forgot-password',
   templateUrl: './forgot-password.component.html',
@@ -20,19 +19,19 @@ import {Message} from 'primeng/api';
 
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
   subscription!: Subscription;
-    
+  email: string = '';
+
+
   constructor(private data: DataService, private router: Router, private fb: FormBuilder) {
   // COPY START
     this.createForm();
   }
 
-  //google autocomplete stuff.
-  email= "";
   //backend calls
 
   
 
-  async handleEmail() {
+  forgotPassword() {
     this.resetValidity();
     let route = true;
     // input validation

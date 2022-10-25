@@ -9,21 +9,6 @@
 <p-card header="Search Flights" [style]="{'width': '100%'}">
   <!-- COPY START -->
   <div>
-    <!-- Class -->
-    <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
-            
-    <!-- Transportation method -->
-    <p-dropdown [options]="transportType" [(ngModel)]="selectedTransport" placeholder="Select a Mode of Transport" optionLabel="name"></p-dropdown>
-    <!--
-      Icons
-      <fa-icon [icon]="faCar"></fa-icon>
-      <fa-icon [icon]="faBus"></fa-icon>
-    -->
-    
-    <!-- One way/Round trip -->
-    One Way 
-    <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)"></p-inputSwitch>
-    Round Trip
     <div class="p-grid p-nogutter">
       <div class="p-col">
         <h4>Departure</h4>
@@ -210,3 +195,6 @@
   </div>
   <!-- COPY END -->
 </p-card>
+
+
+<app-scroll-to-top></app-scroll-to-top>

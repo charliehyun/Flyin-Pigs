@@ -25,6 +25,7 @@ import {TooltipModule} from 'primeng/tooltip';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DividerModule } from "primeng/divider";
+import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { DividerModule } from "primeng/divider";
     SearchComponent,
     ResultsComponent,
     LoginSignupComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ScrollToTopComponent
   ],
   imports: [
     BrowserModule,
