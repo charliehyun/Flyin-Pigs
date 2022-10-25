@@ -203,7 +203,9 @@
 
 <!-- No flights -->
 <div *ngIf="(results$ | async)?.length == 0">
-    <p>No flights match your search:(</p>
+    <p-card [style]="{'background':'#f4cccc'}">
+        No flights match your search:(
+    </p-card>
 </div>
 
 <!-- Loading -->
@@ -214,6 +216,15 @@
     <!-- Column names -->
     <ng-template pTemplate="header">
         <tr>
+            <!-- <th>Airline</th> -->
+            <!-- <th pSortableColumn="dAirport">Departure Airport <p-sortIcon field="dAirport"></p-sortIcon></th> -->
+            <!-- <th pSortableColumn="flyTime">Flight Time <p-sortIcon field="flyTime"></p-sortIcon></th> -->
+            <!-- <th pSortableColumn="aAirport">Arrival Airport <p-sortIcon field="aAirport"></p-sortIcon></th> -->
+            <!-- <th pSortableColumn="landTime">Landing Time <p-sortIcon field="landTime"></p-sortIcon></th> -->
+            <!-- <th pSortableColumn="stops">Number of Stops <p-sortIcon field="stops"></p-sortIcon></th> -->
+            <!-- <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th> -->
+
+
             <th>Airline</th>
             <!-- <th pSortableColumn="price">{{selectedTransport.code}} Time<p-sortIcon field="price"></p-sortIcon></th> -->
             <th>Departure Airport</th>

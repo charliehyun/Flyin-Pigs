@@ -60,7 +60,8 @@ export class LoginSignupComponent {
     }
 
     handleLogin() {
-        // check database if valid credentials
+        // check database for email
+        // hash password, check if match
         // if invalid, reprompt
         // if vaid, log in and close modal
     }
