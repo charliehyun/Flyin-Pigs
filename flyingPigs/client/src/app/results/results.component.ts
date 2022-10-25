@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
 import { FlightSchema } from '../flightSchema';
+import {NGXLogger} from "ngx-logger";
 
 // import {Client} from "@googlemaps/google-maps-services-js";
 
@@ -39,7 +40,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   returnDate: string;
   dates: any;
     
-  constructor(private resultsService: ResultsService, private data: DataService, private router: Router, private fb: FormBuilder) {
+  constructor(private resultsService: ResultsService, private data: DataService, private router: Router,
+              private fb: FormBuilder, private logger: NGXLogger) {
   // COPY START
     this.classes = [
       {name: 'Economy', code: 'Economy'},
@@ -257,6 +259,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
     
   createForm() {
+    this.logger.info("Creating Form.");
     this.dates = this.fb.group({
         departDate: ['', Validators.required ]
     });

@@ -19,6 +19,10 @@ export class ResultsService {
             });
     }
 
+    sendSearchSync(inputObject:SearchSchema) {
+        return this.httpClient.post<FlightSchema[][]>(`${this.url}/airports/search`, inputObject).toPromise();
+    }
+
     searchAirports(inputObject:SearchSchema): Subject<FlightSchema[][]> {
         this.sendSearch(inputObject);
         console.log("sending search");
