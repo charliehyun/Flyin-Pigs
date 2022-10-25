@@ -11,6 +11,7 @@ import {FlightSchema} from "../flightSchema";
 import {Message} from 'primeng/api';
 import {NGXLogger} from "ngx-logger";
 // import {Client} from "@googlemaps/google-maps-services-js";
+import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'search',
@@ -41,6 +42,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   departDate: string;
   returnDate: string;
   dates: any;
+
+  //icons
+  faCar = faCar;
+  faBus = faBus;
     
   constructor(private data: DataService, private router: Router, private fb: FormBuilder, private logger: NGXLogger) {
   // COPY START

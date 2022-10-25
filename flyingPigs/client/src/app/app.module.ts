@@ -23,8 +23,10 @@ import {TableModule} from 'primeng/table';
 import {DialogModule} from 'primeng/dialog';
 import {TooltipModule} from 'primeng/tooltip';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DividerModule } from "primeng/divider";
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
     SearchComponent,
     ResultsComponent,
     LoginSignupComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ScrollToTopComponent
   ],
   imports: [
     BrowserModule,
