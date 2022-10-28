@@ -4,6 +4,7 @@
   <img src="favicon.ico" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto;">
   <h2>Flyin' Pigs</h2>  
 </div>
+<p-scrollTop [threshold]="100"></p-scrollTop>
 
 <!-- Main Search Content -->
 <p-card header="Search Flights" [style]="{'width': '100%'}">
@@ -196,5 +197,9 @@
   <!-- COPY END -->
 </p-card>
 
-
-<app-scroll-to-top></app-scroll-to-top>
+<p-scrollTop
+      target="parent"
+      styleClass="custom-scrolltop"
+      [threshold]="100"
+      icon="pi pi-arrow-up"
+    ></p-scrollTop>

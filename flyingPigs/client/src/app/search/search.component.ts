@@ -11,6 +11,7 @@ import {FlightSchema} from "../flightSchema";
 import {Message} from 'primeng/api';
 // import {Client} from "@googlemaps/google-maps-services-js";
 import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
+import {ScrollTopModule} from 'primeng/scrolltop';
 
 @Component({
   selector: 'search',

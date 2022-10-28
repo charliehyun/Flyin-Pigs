@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
 import { FlightSchema } from '../flightSchema';
+import {ScrollTopModule} from 'primeng/scrolltop';
 
 // import {Client} from "@googlemaps/google-maps-services-js";
 

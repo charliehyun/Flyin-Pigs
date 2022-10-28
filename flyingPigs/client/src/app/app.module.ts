@@ -26,6 +26,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DividerModule } from "primeng/divider";
 import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
+import { ScrollTopModule } from 'primeng/scrolltop';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
       DialogModule,
       TooltipModule,
       FontAwesomeModule,
-      DividerModule
+      DividerModule,
+      ScrollTopModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]

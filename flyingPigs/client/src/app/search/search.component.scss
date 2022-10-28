@@ -14,3 +14,20 @@
 .centered {
     vertical-align: middle;
 }
+
+:host ::ng-deep .custom-scrolltop {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    background-color: blue;
+    color: blue;
+  
+    &:hover {
+      background-color: blue;
+    }
+  
+    .p-scrolltop-icon {
+      font-size: 1rem;
+      color: blue;
+    }
+  }
