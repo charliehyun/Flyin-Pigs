@@ -9,6 +9,8 @@ export interface FlightSchema {
     price:number;
     legId:string;
     stopOvers: StopOverFlightSchema[];
+    timeToAirport:number;
+    timeFromAirport:number;
 }
 export interface StopOverFlightSchema {
     airportCode:string;

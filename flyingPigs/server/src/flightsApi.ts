@@ -22,9 +22,11 @@ export class flightsApi {
     cabinClass:string = "Economy";
     oneWayRoundTrip:string = "onewaytrip";
     response:any;
+    timeToAirport:number = -1;
+    timeFromAirport:number = -1;
     logger:log4js.Logger;
     constructor(departure:string, arrival:string, departureDate:string, arrivalDate:string,
-    adults:number, children:number, infants:number, cabin:string, oneway:boolean)
+    adults:number, children:number, infants:number, cabin:string, oneway:boolean, timeToAirport:number, timeFromAirport:number)
     {
         this.departureAirport = departure;
         this.arrivalAirport = arrival;
@@ -34,6 +36,8 @@ export class flightsApi {
         this.childrenPassengers = children;
         this.infantPassengers = infants;
         this.cabinClass = cabin;
+        this.timeToAirport = timeToAirport;
+        this.timeFromAirport = timeFromAirport;
         if(!oneway) {
             this.oneWayRoundTrip = "roundtrip";
         }
@@ -41,6 +45,7 @@ export class flightsApi {
     }
     async queryApi() {
         let returnFlightObjects: Flight[][] = [];
+<<<<<<< HEAD
         await this.amadeus.shopping.flightOffersSearch.get({
             originLocationCode: this.departureAirport,
             destinationLocationCode: this.arrivalAirport,
@@ -56,10 +61,34 @@ export class flightsApi {
             this.parseApi(response.data);
         }).catch(function(responseError: { code: any; }){
             this.logger.warn(responseError.code);
+=======
+
+        let myObj: any = this.response;
+        let flightLegs = myObj.legs;
+        flightLegs.forEach((value:any) => {
+            if (value.stopoversCount <= 2) {
+                //create new flight with most data
+
+                let newFlight = new Flight(value.airlineCodes, this.departureAirport, this.arrivalAirport,
+                    value.departureDateTime, value.arrivalDateTime,
+                    value.durationMinutes * 60, value.stopoversCount, value.id, this.timeToAirport, this.timeFromAirport);
+
+                //add stopovers
+                let flightStopovers:stopOverFlight[] = [];
+                value.segments.forEach((stopover: any) => {
+                    flightStopovers.push(new stopOverFlight(stopover.arrivalAirportCode,
+                        stopover.durationMinutes * 60, stopover.arrivalDateTime));
+                });
+
+                newFlight.addStopOvers(flightStopovers);
+                returnFlightObjects.push([newFlight]);
+            }
+>>>>>>> 7e0610f23808195bf2a9c74a4b13fa7b929421bf
         });
         return returnFlightObjects;
     }
 
+<<<<<<< HEAD
     parseApi(): Flight[][] {
         throw new Error("Function not implemented.");
     }
@@ -214,3 +243,59 @@ export class flightsApi {
 
 }
 
+=======
+    parseResponseRoundTrip(): Flight[][] {
+
+        let myObj: any = this.response;
+        let flightLegs = myObj.legs;
+        let mapLegIdToFlight = new Map<string, Flight>();
+        //go through legs and create flights if they fit the criteria.
+        //also make a hash map from legId to Flight
+        flightLegs.forEach( (leg:any) => {
+            if (leg.stopoversCount <= 2) {
+                let newFlight = new Flight(leg.airlineCodes, this.departureAirport, this.arrivalAirport,
+                    leg.departureDateTime, leg.arrivalDateTime,
+                    leg.durationMinutes * 60, leg.stopoversCount, leg.id, this.timeToAirport, this.timeFromAirport);
+
+                //add stopovers
+                let flightStopovers:stopOverFlight[] = [];
+                leg.segments.forEach((stopover: any) => {
+                    flightStopovers.push(new stopOverFlight(stopover.arrivalAirportCode,
+                        stopover.durationMinutes * 60, stopover.arrivalDateTime));
+                });
+
+                newFlight.addStopOvers(flightStopovers);
+
+                mapLegIdToFlight.set(leg.id, newFlight);
+            }
+        });
+        //we now have a list of flights. We need to iterate through tripIds and check that each of its legIds are
+        //in the previously made hashmap.
+        let tripIds = myObj.trips;
+        let prices = myObj.fares;
+
+        //map tripIds to prices for searching.
+        let mapTripIdToPrice = new Map<string, number>();
+        prices.forEach( (fare:any) => {
+            mapTripIdToPrice.set(fare.tripId, fare.price.totalAmountUsd);
+        });
+
+        //go through all tripIds and only make a flights tuple for the ones that are valid and in our hashmap.
+        let roundTripReturnFlights:Flight[][] = [];
+
+        tripIds.forEach( (allIds:any) => {
+            let flightLegOne = allIds.legIds[0];
+            let flightLegTwo = allIds.legIds[1];
+            if (mapLegIdToFlight.has(flightLegOne) && mapLegIdToFlight.has(flightLegTwo))
+            {
+                let price = mapTripIdToPrice.get(allIds.id);
+                mapLegIdToFlight.get(flightLegOne).addPrice(price);
+                mapLegIdToFlight.get(flightLegTwo).addPrice(price);
+                roundTripReturnFlights.push([mapLegIdToFlight.get(flightLegOne), mapLegIdToFlight.get(flightLegTwo)]);
+            }
+        });
+
+        return roundTripReturnFlights;
+    }
+}
+>>>>>>> 7e0610f23808195bf2a9c74a4b13fa7b929421bf

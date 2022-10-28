@@ -9,8 +9,10 @@ export class Flight{
     price:number;
     legId:string;
     stopOvers: stopOverFlight[];
+    timeToAirport:number;
+    timeFromAirport:number;
 
-    constructor(air:string[], dpa:string, ara:string, dpt:string, art:string, flt:number, nos:number, legId:string)
+    constructor(air:string[], dpa:string, ara:string, dpt:string, art:string, flt:number, nos:number, legId:string, timeToAirport:number, timeFromAirport:number)
     {
         this.airlines = air;
         this.departureAirport = dpa;
@@ -20,6 +22,8 @@ export class Flight{
         this.flightTime = flt;
         this.numberOfStops = nos;
         this.legId = legId;
+        this.timeToAirport = timeToAirport;
+        this.timeFromAirport = timeFromAirport;
     }
 
     addStopOvers(stopOvers:stopOverFlight[])

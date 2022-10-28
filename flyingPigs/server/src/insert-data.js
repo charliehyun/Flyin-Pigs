@@ -46,7 +46,7 @@ async function loadCoordinates() {
 }
 
 // loadCoordinates();
-updateDistanceToArray();
+// updateDistanceToArray();
 async function updateDistanceToArray() {
     var ops = [];
     const db = client.db(dbName);
@@ -57,6 +57,25 @@ async function updateDistanceToArray() {
             "updateOne": {
             "filter": { "_id": doc._id },
             "update": { "$set": { "Driving": driving } }
+            }
+        });     
+  
+    });
+    console.log(ops);
+    db.collection("airportDataTest").bulkWrite(ops);
+}
+
+updateStringToNum();
+async function updateStringToNum() {
+    var ops = [];
+    const db = client.db(dbName);
+
+    await db.collection("airportDataTest").find({ "Transit": { "$type": 4} }).forEach(doc => {
+        var transit = doc.Transit.map(element => parseInt(element));
+        ops.push({
+            "updateOne": {
+            "filter": { "_id": doc._id },
+            "update": { "$set": { "Transit": transit } }
             }
         });     
   
