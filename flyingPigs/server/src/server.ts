@@ -6,6 +6,9 @@ import { mongoRouter } from "./routes"
 import log4js from "log4js";
 dotenv.config();
 
+var day:Date = new Date();
+var logString = '../logs/log-' + day.getMonth() + '-' + day.getDate() + '.log';
+console.log()
 const { ATLAS_URI } = process.env;
 
 if (!ATLAS_URI) {
@@ -17,7 +20,7 @@ connectToDatabase(ATLAS_URI)
     .then(() => {
         log4js.configure({
             appenders: {
-                file: { type: 'file', filename: '../logs/server.log' }
+                file: { type: 'file', filename: logString }
             },
             categories: {
                 default: { appenders: ['file'], level: 'debug' }
