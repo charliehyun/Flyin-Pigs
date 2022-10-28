@@ -9,8 +9,6 @@ import { DataService } from "../data.service";
 import { FlightSchema } from '../flightSchema';
 import {NGXLogger} from "ngx-logger";
 
-// import {Client} from "@googlemaps/google-maps-services-js";
-
 @Component({
   selector: 'results',
   templateUrl: './results.component.html',
@@ -20,8 +18,8 @@ import {NGXLogger} from "ngx-logger";
 export class ResultsComponent implements OnInit, OnDestroy {
   classes: DropdownOption[];  // Flight class options
   selectedClass: DropdownOption = {name: 'Economy', code: 'Economy'}; // Selected flight class
-  dTransportType: DropdownOption[];  // Transportation to airport options
-  aTransportType: DropdownOption[];
+  dTransportType: DropdownOption[]; // Transportation to airport options
+  aTransportType: DropdownOption[]; // Transportation from airport options
   selectedDTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
@@ -72,10 +70,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: '6 hr', sec: 21600},
       {name: '7 hr', sec: 25200}
     ];
-    this.createForm();
   }
 
-  //google autocomplete stuff.
+  // Google autocomplete stuff
   departAdd= "";
   arriveAdd= "";
   options:Options = new Options({
@@ -88,18 +85,20 @@ export class ResultsComponent implements OnInit, OnDestroy {
   AddressChange2(address: any) {
     this.arriveAdd = address.formatted_address;
   }
-  //backend calls
 
+  // update total passengers display when passenger overlay is exited
   updatePassengers() {
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
   }
 
+  // ensure return date is cleared if one way is selected
   handleOneWay(e) {
     if(e.checked) {
       this.returnDate = ""
     }
   }
 
+  // reset input boxes to valid, clear inputs, set back to default, and set search object back to default
   handleClear() {
     this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'Economy'};
@@ -137,6 +136,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     maxTimeEnd: {name: '1 hr', sec: 3600}
   }
 
+  // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
     this.resetValidity();
     let departureCoord = await this.geocode(this.departAdd);
@@ -150,17 +150,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       x?.classList.add('ng-dirty')
       route = false
     } 
-    else {      
-    // var departDateObj = new Date(this.departDate);
-    // var year = departDateObj.getFullYear();
-    // var month = departDateObj.getMonth();
-    // var day   = departDateObj.getDate();
-    // if(departDateObj < this.date || departDateObj > this.maxDate || this.daysInMonth(month, year) > day) {
-    //   const x = document.getElementById('departDate');
-    //   x?.classList.add('ng-invalid')
-    //   x?.classList.add('ng-dirty')
-    //   route = false
-    // }
+    else {
       const x = document.getElementById('departDate');
       var departDateObj = new Date(this.departDate);
       if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
@@ -228,7 +218,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.data.changeMessage(this.search)
       this.router.navigate(['results'])
     } else {
-      alert("Error: Some fields are invalid or empty. Please fix them and try again.  ")
+      alert("Error: Some fields are invalid or empty. Please fix them and try again.")
     }
   }
 
@@ -240,19 +230,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       el.classList.add('ng-pristine')
     })
   }
-  // daysInMonth(month, year) {
-  //   let dayNum = -1;
-  //   if (['January', 'March', 'May', 'July', 'August', 'October', 'December'].includes(month)) {
-  //     dayNum = 31;
-  //   } else if (['April', 'June', 'September', 'November'].includes(month)) {
-  //     dayNum = 30;
-  //   } else {
-  //     // If month is February, calculate whether it is a leap year or not
-  //     const isLeap = new Date(year, 2, 29).getMonth() === 1;
-  //     dayNum = isLeap ? 29 : 28;
-  //   }
-  //   return dayNum;
-  // }
+
   /*
   Geocodes an address.
   Returns LatLng object with lat() and lng() getter functions
@@ -269,13 +247,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
       // console.log(e);
     });
     return coord;
-  }
-    
-  createForm() {
-    this.logger.info("Creating Form.");
-    this.dates = this.fb.group({
-        departDate: ['', Validators.required ]
-    });
   }
   // COPY END
   // DIFFERENT FROM SEARCH

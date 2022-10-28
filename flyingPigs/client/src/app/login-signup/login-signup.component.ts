@@ -18,17 +18,17 @@ import { FlightSchema } from '../flightSchema';
 })
 
 export class LoginSignupComponent {
-    emailL: string
-    passL: string
+    emailL: string;  // email input for login
+    passL: string;   // password input for login
 
-    emailS: string
-    passS: string
-    confPassS: string
+    emailS: string;  // email input for signup
+    passS: string;   // password input for signup
+    confPassS: string;   // confirm password input for signup
 
-    displayLogin: boolean;
-    displaySignup: boolean;
+    displayLogin: boolean;  // show login modal
+    displaySignup: boolean; // show signup modal
 
-    passHide: boolean
+    passHide: boolean;  // show/hide password text
 
     constructor(private router: Router) {
         this.passHide = true
@@ -37,14 +37,17 @@ export class LoginSignupComponent {
 
     }
 
+    // login button clicked, show modal
     showLogin() {
         this.displayLogin = true;
     }
 
+    // signup button clicked, show modal
     showSignup() {
         this.displaySignup = true;
     }
 
+    // "don't have" or "already have" button pressed. switch to corresponding modal
     switchModal() {
         if(this.displayLogin) {
             this.displayLogin = false
@@ -55,10 +58,12 @@ export class LoginSignupComponent {
         }
     }
 
+    // show/hide password text
     passShowHide() {
         this.passHide = !this.passHide
     }
 
+    // handle login attempt. account validation
     handleLogin() {
         // check database for email
         // hash password, check if match
@@ -66,6 +71,7 @@ export class LoginSignupComponent {
         // if vaid, log in and close modal
     }
 
+    // handle signup attempt. input validation
     handleSignup() {
         this.resetValidity()
 
