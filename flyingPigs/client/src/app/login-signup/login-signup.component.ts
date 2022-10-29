@@ -44,18 +44,22 @@ export class LoginSignupComponent {
     }
 
     showSuccessL() {
+        this.messageService.clear();
         this.messageService.add({severity:'success', summary: 'Success', detail: 'Successfully logged in.'});
     }
 
     showSuccessS() {
-        this.messageService.add({severity:'success', summary: 'Success', detail: 'Successfully signed up.'});
+        this.messageService.clear();
+        this.messageService.add({severity:'success', summary: 'Success', detail: 'Successfully signed up. Log in to get started.'});
     }
 
     showErrorL() {
+        this.messageService.clear();
         this.messageService.add({severity:'error', summary: 'Error', detail: 'Unable to log in. Invalid email or password.'});
     }
 
     showErrorS() {
+        this.messageService.clear();
         this.messageService.add({severity:'error', summary: 'Error', detail: 'Unable to sign up. Invalid emial or password.'});
     }
 
@@ -117,30 +121,23 @@ export class LoginSignupComponent {
                 this.showErrorL();
             }
         });
-        
-
-        // check database for email
-        // //if database doesn't have password, reprompt
-
-        // // hash password, check if match
-        // const match = await bcrypt.compare(userPass, this.emailL);
-
-        // if (match) {
-
-        // }
-        // // if password doesn't match, reprompt
-        // else {
-        //     const x = document.getElementById('passL');
-        //     x?.classList.add('ng-invalid')
-        //     x?.classList.add('ng-dirty')
-        // }
-        // if vaid, log in and close modal
     }
 
     // handle signup attempt. input validation
     handleSignup() {
         this.resetValidity()
         // check if all fields are populated
+        if(!this.emailS) {
+            const x = document.getElementById('emailS');
+            x?.classList.add('ng-invalid')
+            x?.classList.add('ng-dirty')
+        }
+
+        if(!this.passS) {
+            const x = document.getElementById('passS');
+            x?.classList.add('ng-invalid')
+            x?.classList.add('ng-dirty')
+        }
 
         // check if password and confirm password match
         if(this.passS != this.confPassS) {
@@ -149,10 +146,8 @@ export class LoginSignupComponent {
             x?.classList.add('ng-dirty')
         }
 
-        // check database if already exists
-        // check if satisfies password reqs
-        // if invalid, reprompt
-        // if valid new account, prompt to log in and close modal
+        // TODO: check if satisfies password reqs
+        // if satisfies, then call signupUser to check if email exists and to add to DB
 
         let credentialsInput: LoginSchema = {
             email: this.emailS,
@@ -160,7 +155,6 @@ export class LoginSignupComponent {
         }
 
         this.results$ = this.loginSignupService.signupUser(credentialsInput);
-        // this.results$.subscribe(value => console.log(value));
 
         this.results$.subscribe(value => {
             if(value){
