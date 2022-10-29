@@ -1,3 +1,7 @@
+<p-toast position="top-left"></p-toast>
+
+<!-- <button type="button" pButton pRipple (click)="showSuccess()" label="Success" class="p-button-success"></button> -->
+
 <button pButton type="button" class="p-button-sm" (click)="showLogin()" label="Log In"></button>
 <p-dialog header="Log In" [(visible)]="displayLogin" [modal]="true" [style]="{width: '450px'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <h6>Email</h6>
@@ -14,9 +18,6 @@
     <ng-template pTemplate="footer">
         <button pButton type="button" (click)="switchModal()" label="Don't have a Flyin' Pigs account?" class="p-button-sm p-button-outlined p-button-secondary"></button>
         <button pButton type="button" (click)="handleLogin()" class="p-button-sm" label="Log In"></button>
-
-        <!-- <p-button icon="pi pi-check" (click)="displayModal=false" label="Yes" class="p-button-text"></p-button>
-        <p-button icon="pi pi-times" (click)="displayModal=false" label="No"></p-button> -->
     </ng-template>
 </p-dialog>
 
