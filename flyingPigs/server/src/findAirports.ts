@@ -121,7 +121,7 @@ export class airportFinder {
             validAirports.push(res);
         }
         //console.log("valid airports: ", validAirports);
-        this.logger.info("prefilter list: ", validAirports);
+        //this.logger.info("prefilter list: ", validAirports);
         return validAirports;
     }
 
