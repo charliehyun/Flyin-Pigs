@@ -20,7 +20,8 @@ export class DataService {
     departCoord: new google.maps.LatLng({"lat": 0, 'lng': 0}),
     arriveAdd: "",
     arriveCoord: new google.maps.LatLng({"lat": 0, 'lng': 0}),
-    selectedTransport: {name: 'Car', code: 'driving'},
+    selectedDTransport: {name: 'Car', code: 'driving'},
+    selectedATransport: {name: 'Car', code: 'driving'},
     maxTimeStart: {name: '3 hr', sec: 10800},
     maxTimeEnd: {name: '1 hr', sec: 3600}
   });
