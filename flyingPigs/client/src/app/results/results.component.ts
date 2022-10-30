@@ -271,6 +271,18 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
     this.results$ = this.resultsService.searchAirports(this.search);
 
+    this.results$.subscribe(value => {
+      for (let i = 0; i < value.length; i++) {
+        for (let j = 0; j < value[i].length; j++) {
+          value[i][j].departureTime = value[i][j].departureTime.toString()
+          value[i][j].arrivalTime = value[i][j].arrivalTime.toString()
+          
+          // parse price to 2 decimals
+          Math.round(value[i][j].price * 100) / 100
+        }
+      }
+    });
+
   }
 
   ngOnDestroy() {

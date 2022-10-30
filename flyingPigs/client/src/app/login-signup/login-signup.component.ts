@@ -132,7 +132,6 @@ export class LoginSignupComponent {
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
         }
-
         if(!this.passS) {
             const x = document.getElementById('passS');
             x?.classList.add('ng-invalid')
@@ -140,7 +139,7 @@ export class LoginSignupComponent {
         }
 
         // check if password and confirm password match
-        if(this.passS != this.confPassS) {
+        if(!this.confPassS ||this.passS != this.confPassS) {
             const x = document.getElementById('confPassS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')

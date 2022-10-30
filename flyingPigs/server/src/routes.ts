@@ -67,16 +67,11 @@ mongoRouter.post("/log", async (req, res) => {
 
 mongoRouter.post("/login", async (req, res) => {
     let cred = await Credentials.findOne({email: req.body.email});
-    logger.info("cred", cred);
+    // if email exists in DB, check if passwords match
     if(cred) {
         bcrypt.compare(req.body.password, cred["password"]).then(
             passwordMatch => passwordMatch ? res.status(200).send(true): res.status(200).send(false)
         );
-        // if(req.body.password == cred['password']) {
-        //     res.status(200).send(true)
-        // } else {
-        //     res.status(200).send(false)
-        // }
     } else {
         logger.info("Log in failure: user does not exist");
         res.status(200).send(false);
@@ -85,8 +80,8 @@ mongoRouter.post("/login", async (req, res) => {
 
 mongoRouter.post("/signup", async (req, res) => {
     const saltRounds = 10;
-
     let cred = await Credentials.findOne({email: req.body.email});
+    // if email doesnt already exist, hash pass and add to DB
     if(!cred) {
         const newUser = new Credentials({
             _id: new ObjectId(),
@@ -95,7 +90,6 @@ mongoRouter.post("/signup", async (req, res) => {
         });
         bcrypt.genSalt(saltRounds, function(err, salt) {
             bcrypt.hash(req.body.password, salt, function(err, hash) {
-                // Store hash in your password DB.
                 newUser.password = hash;
                 newUser.save()
                 if(!err) {
