@@ -254,7 +254,7 @@
             <!-- <td>{{flight[0].drivingTime2}}</td>  -->
             <!-- <td>{{flight[0].totalTime}}</td> -->
             <td>{{trip[0].numberOfStops}}</td>
-            <td>${{trip[0].price}}</td>
+            <!-- <td>${{flight[0].price}}</td> -->
             <td>
                 <button type="button" pButton pRipple [pRowToggler]="trip" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></button>
             </td>
@@ -276,6 +276,7 @@
             </td>
         </tr>
     </ng-template>
+    <button pButton pRipple type="button" label="Load More"></button>
 </p-table>
 
 <app-scroll-to-top></app-scroll-to-top>

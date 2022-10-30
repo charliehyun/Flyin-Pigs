@@ -26,7 +26,7 @@
             [options]="options" 
             (onAddressChange)="AddressChange1($event)" 
             [(ngModel)]="departAdd"
-            pTooltip="filler info" 
+            pTooltip="Where are you leaving from? Input an address or a general location." 
             tooltipPosition="right" 
             tooltipEvent="focus"
           >
@@ -42,7 +42,7 @@
             [(ngModel)]="selectedDTransport" 
             placeholder="Select a Mode of Transport" 
             optionLabel="name"
-            pTooltip="filler info" 
+            pTooltip="How will you be getting to the departure airport?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
           ></p-dropdown>
@@ -57,7 +57,7 @@
             [options]="hours" 
             [(ngModel)]="maxTimeStart" 
             optionLabel="name"
-            pTooltip="filler info" 
+            pTooltip="How long are you willing to travel to get to the departure airport?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
           ></p-dropdown>
@@ -80,7 +80,7 @@
             [options]="options" 
             (onAddressChange)="AddressChange2($event)" 
             [(ngModel)]="arriveAdd"
-            pTooltip="filler info" 
+            pTooltip="Where are you traveling to?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
           >
@@ -96,8 +96,8 @@
             [(ngModel)]="selectedATransport" 
             placeholder="Select a Mode of Transport" 
             optionLabel="name"
-            pTooltip="filler info" 
-            tooltipPosition="right" 
+            pTooltip="How will you be getting to your destination from the airport?" 
+            tooltipPosition="right"
             tooltipEvent="focus"
           ></p-dropdown>
         </span>
@@ -110,7 +110,7 @@
             [options]="hours" 
             [(ngModel)]="maxTimeEnd" 
             optionLabel="name" 
-            pTooltip="filler info" 
+            pTooltip="How long are you willing to travel to get to your destination from the airport?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
           ></p-dropdown>

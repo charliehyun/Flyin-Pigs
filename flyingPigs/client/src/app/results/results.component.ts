@@ -272,8 +272,18 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.maxTimeEnd = this.search.maxTimeEnd;
 
     this.results$ = this.resultsService.searchAirports(this.search);
-    this.resultsSubscription = this.results$.subscribe(flightSchemaArr => {
-      this.filteredResults$.next(flightSchemaArr);
+
+    this.results$.subscribe(value => {
+      this.filteredResults$.next(value);
+      for (let i = 0; i < value.length; i++) {
+        for (let j = 0; j < value[i].length; j++) {
+          value[i][j].departureTime = value[i][j].departureTime.toString()
+          value[i][j].arrivalTime = value[i][j].arrivalTime.toString()
+          
+          // parse price to 2 decimals
+          // Math.round(value[i][j].price * 100) / 100
+        }
+      }
     });
     //this.filterResults()
   }
@@ -285,10 +295,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   filterResults() {
 
-    this.resultsSubscription.unsubscribe();
-    this.results$.pipe(map(flights =>
-      flights.filter(flight => flight[0].price < 200)))
-        .subscribe(value => this.filteredResults$.next(value));
+    // this.resultsSubscription.unsubscribe();
+    // this.results$.pipe(map(flights =>
+    //   flights.filter(flight => flight[0].price < 200)))
+    //     .subscribe(value => this.filteredResults$.next(value));
 
   }
 
