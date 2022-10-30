@@ -278,7 +278,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
           value[i][j].arrivalTime = value[i][j].arrivalTime.toString()
           
           // parse price to 2 decimals
-          Math.round(value[i][j].price * 100) / 100
+          // Math.round(value[i][j].price * 100) / 100
         }
       }
     });
