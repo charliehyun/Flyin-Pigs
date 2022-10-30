@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import {filter, first, flatMap, map, Observable, Subject, Subscription, take} from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { ResultsService} from "../results/results.service";
 import { SearchSchema, DropdownOption } from '../searchSchema';
@@ -251,6 +251,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   // COPY END
   // DIFFERENT FROM SEARCH
   results$: Observable<FlightSchema[][]> = new Observable();
+  resultsSubscription:Subscription;
+  filteredResults$:Subject<FlightSchema[][]> = new Subject();
   ngOnInit(): void {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
 
@@ -270,11 +272,24 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.maxTimeEnd = this.search.maxTimeEnd;
 
     this.results$ = this.resultsService.searchAirports(this.search);
-
+    this.resultsSubscription = this.results$.subscribe(flightSchemaArr => {
+      this.filteredResults$.next(flightSchemaArr);
+    });
+    //this.filterResults()
   }
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  filterResults() {
+
+    this.resultsSubscription.unsubscribe();
+    this.results$.pipe(map(flights =>
+      flights.filter(flight => flight[0].price < 200)))
+        .subscribe(value => this.filteredResults$.next(value));
+
   }
 
 }

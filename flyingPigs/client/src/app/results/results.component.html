@@ -212,7 +212,7 @@
 <i class="pi pi-spin pi-spinner" *ngIf="!(results$ | async)" style="font-size: 2rem; display: flex; align-items: center; justify-content: center;" ></i>
 
 <!-- Table -->
-<p-table *ngFor="let flight of results$ | async" [value]="flight" dataKey="name">
+<p-table [value] = "(filteredResults$ | async)!" dataKey="name">
     <!-- Column names -->
     <ng-template pTemplate="header">
         <tr>
@@ -244,17 +244,17 @@
     <!-- Row content -->
     <ng-template pTemplate="body" let-trip let-expanded="expanded">
         <tr >
-            <td>{{flight[0].airlines}}</td>
-            <!-- <td>{{flight[0].timeToAirportA}}</td>  -->
-            <td>{{flight[0].departureAirport}}</td>
-            <td>{{flight[0].departureTime}}</td>
-            <td>{{flight[0].flightTime}}</td>
-            <td>{{flight[0].arrivalAirport}}</td>
-            <td>{{flight[0].arrivalTime}}</td>
-            <!-- <td>{{flight[0].timeToAirportB}}</td>  -->
+            <td>{{trip[0].airlines}}</td>
+            <!-- <td>{{flight[0].drivingTime1}}</td>  -->
+            <td>{{trip[0].departureAirport}}</td>
+            <td>{{trip[0].departureTime}}</td>
+            <td>{{trip[0].flightTime}}</td>
+            <td>{{trip[0].arrivalAirport}}</td>
+            <td>{{trip[0].arrivalTime}}</td>
+            <!-- <td>{{flight[0].drivingTime2}}</td>  -->
             <!-- <td>{{flight[0].totalTime}}</td> -->
-            <td>{{flight[0].numberOfStops}}</td>
-            <td>${{flight[0].price}}</td>
+            <td>{{trip[0].numberOfStops}}</td>
+            <td>${{trip[0].price}}</td>
             <td>
                 <button type="button" pButton pRipple [pRowToggler]="trip" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></button>
             </td>
