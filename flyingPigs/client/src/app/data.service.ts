@@ -8,7 +8,7 @@ import { SearchSchema, DropdownOption } from './searchSchema';
 export class DataService {
 
   private messageSource = new BehaviorSubject<SearchSchema>({
-    selectedClass: {name: 'Economy', code: 'Economy'},
+    selectedClass: {name: 'Economy', code: 'ECONOMY'},
     isRoundTrip: false,
     adultPass: 1,
     childPass: 0,

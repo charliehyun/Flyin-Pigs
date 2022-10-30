@@ -17,7 +17,7 @@ import {NGXLogger} from "ngx-logger";
 
 export class ResultsComponent implements OnInit, OnDestroy {
   classes: DropdownOption[];  // Flight class options
-  selectedClass: DropdownOption = {name: 'Economy', code: 'Economy'}; // Selected flight class
+  selectedClass: DropdownOption = {name: 'Economy', code: 'ECONOMY'}; // Selected flight class
   dTransportType: DropdownOption[]; // Transportation to airport options
   aTransportType: DropdownOption[]; // Transportation from airport options
   selectedDTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
@@ -44,10 +44,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
               private fb: FormBuilder, private logger: NGXLogger) {
   // COPY START
     this.classes = [
-      {name: 'Economy', code: 'Economy'},
-      {name: 'Premium Economy', code: 'Premium Economy'},
-      {name: 'Business', code: 'Business'},
-      {name: 'First', code: 'First'}
+      {name: 'Economy', code: 'ECONOMY'},
+      {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
+      {name: 'Business', code: 'BUSINESS'},
+      {name: 'First', code: 'FIRST'}
     ];
     this.dTransportType = [
       {name: 'Car', code: 'driving'},
@@ -101,7 +101,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   // reset input boxes to valid, clear inputs, set back to default, and set search object back to default
   handleClear() {
     this.resetValidity();
-    this.selectedClass = {name: 'Economy', code: 'Economy'};
+    this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
     this.selectedDTransport = {name: 'Car', code: 'driving'};
     this.selectedATransport = {name: 'Car', code: 'driving'};
     this.isRoundTrip = false;
@@ -118,7 +118,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   search: SearchSchema = {
-    selectedClass: {name: 'Economy', code: 'Economy'},
+    selectedClass: {name: 'Economy', code: 'ECONOMY'},
     isRoundTrip: false,
     adultPass: 1,
     childPass: 0,

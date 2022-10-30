@@ -18,11 +18,17 @@ import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, f
 
 export class SearchComponent implements OnInit, OnDestroy {
   classes: DropdownOption[];  // Flight class options
+<<<<<<< HEAD
+  selectedClass: DropdownOption = {name: 'Economy', code: 'ECONOMY'}; // Selected flight class
+  transportType: DropdownOption[];  // Transportation to airport options
+  selectedTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+=======
   selectedClass: DropdownOption = {name: 'Economy', code: 'Economy'}; // Selected flight class
   dTransportType: DropdownOption[]; // Transportation to airport options
   aTransportType: DropdownOption[]; // Transportation from airport options
   selectedDTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+>>>>>>> origin/main
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -48,10 +54,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   constructor(private data: DataService, private router: Router, private fb: FormBuilder, private logger: NGXLogger) {
   // COPY START
     this.classes = [
-      {name: 'Economy', code: 'Economy'},
-      {name: 'Premium Economy', code: 'Premium Economy'},
-      {name: 'Business', code: 'Business'},
-      {name: 'First', code: 'First'}
+      {name: 'Economy', code: 'ECONOMY'},
+      {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
+      {name: 'Business', code: 'BUSINESS'},
+      {name: 'First', code: 'FIRST'}
     ];
     this.dTransportType = [
       {name: 'Car', code: 'driving'},
@@ -105,9 +111,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   // reset input boxes to valid, clear inputs, set back to default, and set search object back to default
   handleClear() {
     this.resetValidity();
+<<<<<<< HEAD
+    this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
+    this.selectedTransport = {name: 'Car', code: 'driving'};
+=======
     this.selectedClass = {name: 'Economy', code: 'Economy'};
     this.selectedDTransport = {name: 'Car', code: 'driving'};
     this.selectedATransport = {name: 'Car', code: 'driving'};
+>>>>>>> origin/main
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
@@ -122,7 +133,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   search: SearchSchema = {
-    selectedClass: {name: 'Economy', code: 'Economy'},
+    selectedClass: {name: 'Economy', code: 'ECONOMY'},
     isRoundTrip: false,
     adultPass: 1,
     childPass: 0,
