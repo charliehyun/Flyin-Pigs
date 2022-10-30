@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import {filter, first, flatMap, map, Observable, Subject, Subscription, take} from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { ResultsService} from "../results/results.service";
 import { SearchSchema, DropdownOption } from '../searchSchema';
@@ -251,6 +251,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   // COPY END
   // DIFFERENT FROM SEARCH
   results$: Observable<FlightSchema[][]> = new Observable();
+  resultsSubscription:Subscription;
+  filteredResults$:Subject<FlightSchema[][]> = new Subject();
   ngOnInit(): void {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
 
@@ -272,6 +274,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.results$ = this.resultsService.searchAirports(this.search);
 
     this.results$.subscribe(value => {
+      this.filteredResults$.next(value);
       for (let i = 0; i < value.length; i++) {
         for (let j = 0; j < value[i].length; j++) {
           value[i][j].departureTime = value[i][j].departureTime.toString()
@@ -282,11 +285,21 @@ export class ResultsComponent implements OnInit, OnDestroy {
         }
       }
     });
-
+    //this.filterResults()
   }
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  filterResults() {
+
+    // this.resultsSubscription.unsubscribe();
+    // this.results$.pipe(map(flights =>
+    //   flights.filter(flight => flight[0].price < 200)))
+    //     .subscribe(value => this.filteredResults$.next(value));
+
   }
 
 }

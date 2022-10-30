@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject, tap, lastValueFrom } from 'rxjs';
+import {Observable, Subject, tap, lastValueFrom, take} from 'rxjs';
 import { SearchSchema } from '../searchSchema';
 import { FlightSchema, StopOverFlightSchema} from '../flightSchema';
 @Injectable({
