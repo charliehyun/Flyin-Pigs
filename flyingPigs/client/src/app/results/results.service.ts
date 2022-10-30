@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject, tap } from 'rxjs';
+import { Observable, Subject, tap, lastValueFrom } from 'rxjs';
 import { SearchSchema } from '../searchSchema';
 import { FlightSchema, StopOverFlightSchema} from '../flightSchema';
 @Injectable({
@@ -9,7 +9,6 @@ import { FlightSchema, StopOverFlightSchema} from '../flightSchema';
 export class ResultsService {
     private url = 'http://localhost:5200';
     private flights$: Subject<FlightSchema[][]> = new Subject();
-
     constructor(private httpClient: HttpClient) { }
 
     sendSearch(inputObject:SearchSchema) {
@@ -21,7 +20,6 @@ export class ResultsService {
 
     searchAirports(inputObject:SearchSchema): Subject<FlightSchema[][]> {
         this.sendSearch(inputObject);
-        console.log("sending search");
         return this.flights$;
     }
 

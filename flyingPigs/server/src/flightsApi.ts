@@ -102,59 +102,42 @@ export class flightsApi {
     }
 
     parseApi(apiResponse: any): Trip[] {
-        console.log("in parseApi");
         let returnTripObjects: Trip[] = [];
         // let that = this;
-        console.log("parseApi param: ", apiResponse);
         apiResponse.forEach(function (flight:any, index:number) {
-            console.log("parseApi: ", index);
             if(flight.itineraries.length < 1) {
                 this.logger.info("FLIGHT ERROR: ", flight);
                 this.logger.info("NO ITINERARIES");
             }
             else {
-                console.log("parseApi else");
                 let departingFlight = this.parseItinerary(flight.itineraries[0]);
-                console.log("parseApi pared the itinerary");
                 let returningFlight = null;
                 if(!flight.oneWay && flight.itineraries.length > 1) {
                     returningFlight = this.parseItinerary(flight.itineraries[1]);
                 }
-                console.log("parseApi creating new trip");
                 let newTrip = new Trip(this.timeToAirportA, this.timeToAirportB, flight.price.total, departingFlight, returningFlight);
-                console.log("parseApi createad new trip");
                 returnTripObjects.push(newTrip);
-                console.log("parseApi end else");
             }
         }, this);
-        console.log("parseApi: ", returnTripObjects);
         return returnTripObjects;
     }
 
     parseItinerary(itinerary: any) {
-        console.log("in parseItinerary");
         let segments = itinerary.segments;
         let newFlight = new Flight(this.departureAirport, this.arrivalAirport,
             segments[0].departure.at, segments[segments.length - 1].arrival.at,
             this.parseApiTimeToSeconds(itinerary.duration), segments.length - 1);
-        console.log(1);
         // loop through segments to add layovers. Skip the last segment
         for(let  i = 0; i < segments.length - 1; i++) {
             let curr = segments[i];
             let next = segments[i + 1];
-            console.log(2);
             let stopOver = new stopOverFlight(curr.carrierCode, curr.departure.iataCode, curr.arrival.iataCode, this.calculateStopover(next.arrival.at, curr.departure.at), curr.departure.at, next.arrival.at);
-            console.log(3);
             newFlight.addStopOver(stopOver);
-            console.log(3.1);
             newFlight.addAirline(curr.carrierCode);
-            console.log(3.2);
             if(i == segments.length - 2) {
                 newFlight.addAirline(next.carrierCode);
             }
-            console.log(4);
         }
-        console.log(5);
         return newFlight;
     }
 

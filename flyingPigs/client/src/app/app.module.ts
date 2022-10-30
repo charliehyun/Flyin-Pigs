@@ -23,6 +23,12 @@ import {TableModule} from 'primeng/table';
 import {DialogModule} from 'primeng/dialog';
 import {TooltipModule} from 'primeng/tooltip';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DividerModule } from "primeng/divider";
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
+import {ToastModule} from 'primeng/toast';
+
 
 @NgModule({
   declarations: [
@@ -30,27 +36,36 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     SearchComponent,
     ResultsComponent,
     LoginSignupComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ScrollToTopComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-      HttpClientModule,
-      ReactiveFormsModule,
-      BrowserAnimationsModule,
-      ButtonModule,
-      DropdownModule,
-      FormsModule,
-      GooglePlaceModule,
-      OverlayPanelModule,
-      InputNumberModule,
-      InputSwitchModule,
-      AccordionModule,
-      InputTextModule,
-      CardModule,
-      TableModule,
-      DialogModule,
-      TooltipModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    ButtonModule,
+    DropdownModule,
+    FormsModule,
+    GooglePlaceModule,
+    OverlayPanelModule,
+    InputNumberModule,
+    InputSwitchModule,
+    AccordionModule,
+    InputTextModule,
+    CardModule,
+    TableModule,
+    DialogModule,
+    TooltipModule,
+    DividerModule,
+    ToastModule,
+    LoggerModule.forRoot({
+      serverLoggingUrl: 'http://localhost:5200/airports/log',
+      level: NgxLoggerLevel.DEBUG,
+      serverLogLevel: NgxLoggerLevel.ERROR,
+      disableConsoleLogging: false
+    })
   ],
   providers: [DataService],
   bootstrap: [AppComponent]
