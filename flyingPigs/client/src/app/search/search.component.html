@@ -12,8 +12,8 @@
     <div class="p-grid p-nogutter">
       <div class="p-col">
         <h4>Departure</h4>
-        <!-- Addresses -->
-        <span style="margin-bottom:50px;">
+        <!-- Address -->
+        <span>
           <label for="daddress">Address:</label>
           <input 
             pInputText 
@@ -38,8 +38,8 @@
           <label for="dTransportType">Mode of Transport:</label>
           <p-dropdown 
             id="dTransportType" 
-            [options]="transportType" 
-            [(ngModel)]="selectedTransport" 
+            [options]="dTransportType" 
+            [(ngModel)]="selectedDTransport" 
             placeholder="Select a Mode of Transport" 
             optionLabel="name"
             pTooltip="filler info" 
@@ -51,7 +51,7 @@
 
         <!-- Transport Hours Before Flight -->
         <span>
-          <label for="drivingStartHours">Maximum {{selectedTransport.code}} time:</label>
+          <label for="drivingStartHours">Maximum {{selectedDTransport.code}} time:</label>
           <p-dropdown 
             id="drivingStartHours" 
             [options]="hours" 
@@ -62,11 +62,11 @@
             tooltipEvent="focus"
           ></p-dropdown>
         </span>
-          
       </div>
       <p-divider layout="vertical"></p-divider>
       <div class="p-col">
         <h4>Arrival</h4>
+        <!-- Address -->
         <span>
           <label for="aaddress">Address:</label>
           <input 
@@ -89,11 +89,11 @@
 
         <!-- Transportation method -->
         <span>
-          <label for="dTransportType">Mode of Transport:</label>
+          <label for="aTransportType">Mode of Transport:</label>
           <p-dropdown 
-            id="dTransportType" 
-            [options]="transportType" 
-            [(ngModel)]="selectedTransport" 
+            id="aTransportType" 
+            [options]="aTransportType" 
+            [(ngModel)]="selectedATransport" 
             placeholder="Select a Mode of Transport" 
             optionLabel="name"
             pTooltip="filler info" 
@@ -105,7 +105,7 @@
 
         <!-- Transport Hours After Flight -->
         <span>
-          <label for="drivingEndHours">Maximum {{selectedTransport.code}} time:</label>
+          <label for="drivingEndHours">Maximum {{selectedATransport.code}} time:</label>
           <p-dropdown 
             [options]="hours" 
             [(ngModel)]="maxTimeEnd" 
@@ -190,7 +190,7 @@
   </div>
   <div align="center">
     <!-- Clear/Search -->
-    <button pButton pRipple type="button" (click)="handleClear()" label="Clear Search" class="p-button-outlined"></button>
+    <button pButton pRipple type="button" (click)="handleClear()" label="Clear Search" class="p-button-outlined p-button-secondary"></button>
     <button pButton pRipple type="button" (click)="handleSearch()" label="Search"></button>
   </div>
   <!-- COPY END -->
