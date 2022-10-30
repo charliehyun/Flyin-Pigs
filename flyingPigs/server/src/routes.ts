@@ -6,6 +6,7 @@ mongoRouter.use(express.json());
 var Airport = require("./airport");
 import log4js from "log4js";
 import { TravelMode } from "@googlemaps/google-maps-services-js";
+import { Trip } from "./flight";
 var logger = log4js.getLogger();
 
 mongoRouter.get("/", async (_req, res) => {
@@ -30,7 +31,7 @@ mongoRouter.post("/search", async (req, res) => {
         //for each airport the findAirports returns, call flight api with search params.
         //combine all lists and pass to res.
 
-        let flightsList:any[][] = [];
+        let tripList:Trip[] = [];
 
         console.log(searchParams);
         logger.info(searchParams);
@@ -53,9 +54,9 @@ mongoRouter.post("/search", async (req, res) => {
                 let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate, 
                     searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
                     depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
-                let flights = await myFlightApi.queryApi()
-                let flightsThree = flights.slice(0,3);
-                flightsThree.forEach(element => flightsList.push(element));
+                let trips = await myFlightApi.queryApi()
+                let tripsThree = trips.slice(0,3);
+                tripsThree.forEach((element: Trip) => tripList.push(element));
             }
         }
 
@@ -68,8 +69,8 @@ mongoRouter.post("/search", async (req, res) => {
         // let flightsTen = await myFlightApi.queryApi()
         // console.log(flightsTen.slice(0,10));
         // res.status(200).send(flightsTen.slice(0,10));
-        console.log(flightsList);
-        res.status(200).send(flightsList);
+        logger.info(tripList);
+        res.status(200).send(tripList);
 
     } catch (error) {
         res.status(500).send(error.message);

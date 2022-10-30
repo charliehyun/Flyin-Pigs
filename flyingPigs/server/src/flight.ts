@@ -6,46 +6,67 @@ export class Flight{
     arrivalTime:string;
     flightTime:number;
     numberOfStops:number;
-    price:number;
-    legId:string;
     stopOvers: stopOverFlight[];
-    timeToAirport:number;
-    timeFromAirport:number;
+    // timeToAirport:number;
+    // timeFromAirport:number;
 
-    constructor(air:string[], dpa:string, ara:string, dpt:string, art:string, flt:number, nos:number, legId:string, timeToAirport:number, timeFromAirport:number)
+    constructor(dpa:string, ara:string, dpt:string, art:string, flt:number, nos:number)
     {
-        this.airlines = air;
         this.departureAirport = dpa;
         this.arrivalAirport = ara;
         this.departureTime = dpt;
         this.arrivalTime = art;
         this.flightTime = flt;
         this.numberOfStops = nos;
-        this.legId = legId;
-        this.timeToAirport = timeToAirport;
-        this.timeFromAirport = timeFromAirport;
+        this.stopOvers = [];
+        this.airlines = [];
+        // this.timeToAirport = timeToAirport;
+        // this.timeFromAirport = timeFromAirport;
     }
 
-    addStopOvers(stopOvers:stopOverFlight[])
-    {
-        this.stopOvers = stopOvers;
+    addStopOver(stopOver:stopOverFlight) {
+        this.stopOvers.push(stopOver);
     }
-
-    addPrice(price:number)
-    {
-        this.price = price;
+    
+    addAirline(al:string) {
+        if(!this.airlines.includes(al)) {
+            this.airlines.push(al);
+        }
     }
-
 }
 
 export class stopOverFlight {
-    airportCode:string;
+    airline:string;
+    depAirportCode:string;
+    arrAirportCode:string;
     stopOverDuration:number;
     arrivalTime:string;
+    departTime:string;
 
-    constructor(airportCode:string, stopOverDuration:number, arrivalTime:string) {
-        this.airportCode = airportCode;
+    constructor(al:string, depAirportCode:string, arrAirportCode:string, stopOverDuration:number, departTime:string, arrivalTime:string) {
+        this.airline = al;
+        this.depAirportCode = depAirportCode;
+        this.arrAirportCode = arrAirportCode;
         this.stopOverDuration = stopOverDuration;
+        this.departTime = departTime;
         this.arrivalTime = arrivalTime;
+    }
+}
+
+export class Trip {
+    departingFlight: Flight;
+    returningFlight?: Flight;
+    timeToAirportA: number;
+    timeToAirportB: number;
+    flightPrice:number;
+
+    constructor(timeToAirportA: number, timeToAirportB: number, flightPrice:number, departingFlight: Flight, returningFlight: Flight) {
+        this.timeToAirportA = timeToAirportA;
+        this.timeToAirportB = timeToAirportB;
+        this.flightPrice = flightPrice;
+        this.departingFlight = departingFlight;
+        if(returningFlight) {
+            this.returningFlight = returningFlight;
+        }
     }
 }

@@ -122,7 +122,7 @@ export class airportFinder {
             validAirports.push(res);
         }
         //console.log("valid airports: ", validAirports);
-        this.logger.info("prefilter list: ", validAirports);
+        // this.logger.info("prefilter list: ", validAirports);
         return validAirports;
     }
 
@@ -180,7 +180,7 @@ export class airportFinder {
         });
         // let newArray = this.inRadiusAirportsIndices.map(x => airportsToSort[x["index"]]);
         //console.log("new array", newArray);
-        this.logger.info("airports in range: ", newArray);
+        // this.logger.info("airports in range: ", newArray);
         return newArray;
     }
 

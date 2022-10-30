@@ -18,7 +18,7 @@ import { FlightSchema } from '../flightSchema';
 
 export class ResultsComponent implements OnInit, OnDestroy {
   classes: DropdownOption[];  // Flight class options
-  selectedClass: DropdownOption = {name: 'Economy', code: 'Economy'}; // Selected flight class
+  selectedClass: DropdownOption = {name: 'Economy', code: 'ECONOMY'}; // Selected flight class
   transportType: DropdownOption[];  // Transportation to airport options
   selectedTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
@@ -42,10 +42,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
   constructor(private resultsService: ResultsService, private data: DataService, private router: Router, private fb: FormBuilder) {
   // COPY START
     this.classes = [
-      {name: 'Economy', code: 'Economy'},
-      {name: 'Premium Economy', code: 'Premium Economy'},
-      {name: 'Business', code: 'Business'},
-      {name: 'First', code: 'First'}
+      {name: 'Economy', code: 'ECONOMY'},
+      {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
+      {name: 'Business', code: 'BUSINESS'},
+      {name: 'First', code: 'FIRST'}
     ];
     this.transportType = [
       {name: 'Car', code: 'driving'},
@@ -92,7 +92,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   handleClear() {
     this.resetValidity();
-    this.selectedClass = {name: 'Economy', code: 'Economy'};
+    this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
     this.selectedTransport = {name: 'Car', code: 'driving'};
     this.isRoundTrip = false;
     this.adultPass = 1;
@@ -108,7 +108,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   search: SearchSchema = {
-    selectedClass: {name: 'Economy', code: 'Economy'},
+    selectedClass: {name: 'Economy', code: 'ECONOMY'},
     isRoundTrip: false,
     adultPass: 1,
     childPass: 0,
