@@ -6,7 +6,7 @@ export interface FlightSchema {
     arrivalTime:string;
     flightTime:number;
     numberOfStops:number;
-    price:number;
+    // price:number;
     stopOvers: StopOverFlightSchema[];
     // timeToAirport:number;
     // timeFromAirport:number;
@@ -25,4 +25,5 @@ export interface TripSchema {
     returningFlight?: FlightSchema;
     timeToAirportA: number;
     timeToAirportB: number;
+    flightPrice: number;
 }
