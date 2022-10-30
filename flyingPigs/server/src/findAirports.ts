@@ -8,7 +8,7 @@ import log4js from "log4js";
 //the radius of the address for the inputted hours.
 //global variables so we can have the appropriate
 export class airportFinder {
-    inRadiusAirportsIndices:number[] = [];
+    inRadiusAirportsIndices:{index: number; duration:number}[] = [];
     maxDriveTime:number;
     current25:number; //0 for the first 25 (indices 0-24), 1 for next 25 (indices 25-49), 2 for the next 25 (indices 50-74).
     logger:log4js.Logger;
@@ -120,16 +120,16 @@ export class airportFinder {
             let res = await Airport.findOne({"IATA": iata});
             validAirports.push(res);
         }
-        //console.log("valid airports: ", validAirports);
-        //this.logger.info("prefilter list: ", validAirports);
+        // console.log("valid airports: ", validAirports);
+        // this.logger.info("prefilter list: ", validAirports);
         return validAirports;
     }
 
     async findAirports(startLat: number, startLng: number, airportsToSort: any[],
                          driveTime: number, travelMethod: string) {
-        //console.log("filter");
-        //initialize all my global vars.
-        //this.maxDriveTime = driveTime * 3600; //get max drive time in seconds.
+        // console.log("filter");
+        // initialize all my global vars.
+        // this.maxDriveTime = driveTime * 3600; //get max drive time in seconds.
         this.maxDriveTime = driveTime;
         this.current25 = 0;
         this.inRadiusAirportsIndices = [];
@@ -171,9 +171,15 @@ export class airportFinder {
                 console.log(e);
             })
         }
-        let newArray = this.inRadiusAirportsIndices.map(x => airportsToSort[x]);
+        let newArray: any[] = [];
+        this.inRadiusAirportsIndices.forEach(function (item:any, index:number) {
+            let tempAirport = airportsToSort[item["index"]];
+            tempAirport["TravelTime"] = item["duration"]
+            newArray.push(tempAirport);
+        });
+        // let newArray = this.inRadiusAirportsIndices.map(x => airportsToSort[x["index"]]);
         //console.log("new array", newArray);
-        this.logger.info("airports in range: ", newArray);
+        // this.logger.info("airports in range: ", newArray);
         return newArray;
     }
 
@@ -194,7 +200,7 @@ export class airportFinder {
                     let durationInt = parseInt(element.duration.value);
                     if (durationInt <= this.maxDriveTime)
                     {
-                        this.inRadiusAirportsIndices.push(indexBase + j);
+                        this.inRadiusAirportsIndices.push({index: indexBase + j, duration: durationInt});
                     }
                 }
                 else
