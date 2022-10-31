@@ -6,7 +6,7 @@ import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
-import { FlightSchema } from '../flightSchema';
+import { FlightSchema, TripSchema } from '../flightSchema';
 import {NGXLogger} from "ngx-logger";
 
 @Component({
@@ -250,9 +250,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
   // COPY END
   // DIFFERENT FROM SEARCH
-  results$: Observable<FlightSchema[][]> = new Observable();
+  results$: Observable<TripSchema[]> = new Observable();
   resultsSubscription:Subscription;
-  filteredResults$:Subject<FlightSchema[][]> = new Subject();
+  filteredResults$:Subject<TripSchema[]> = new Subject();
   ngOnInit(): void {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
 
@@ -275,15 +275,15 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
     this.results$.subscribe(value => {
       this.filteredResults$.next(value);
-      for (let i = 0; i < value.length; i++) {
-        for (let j = 0; j < value[i].length; j++) {
-          value[i][j].departureTime = value[i][j].departureTime.toString()
-          value[i][j].arrivalTime = value[i][j].arrivalTime.toString()
+      // for (let i = 0; i < value.length; i++) {
+      //   for (let j = 0; j < value[i].length; j++) {
+      //     value[i][j].departureTime = value[i][j].departureTime.toString()
+      //     value[i][j].arrivalTime = value[i][j].arrivalTime.toString()
           
           // parse price to 2 decimals
           // Math.round(value[i][j].price * 100) / 100
-        }
-      }
+      //   }
+      // }
     });
     //this.filterResults()
   }
