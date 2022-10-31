@@ -226,19 +226,16 @@
 
 
             <th>Airline</th>
-            <th>Time To Airport</th>
-            <!-- <th pSortableColumn="price">{{selectedTransport.code}} Time<p-sortIcon field="price"></p-sortIcon></th> -->
+            <th pSortableColumn="timeToAirportA">{{selectedDTransport.code}} Time To Airport <p-sortIcon field="timeToAirportA"></p-sortIcon></th>
             <th>Departure Airport</th>
-            <th>Departure Time</th>
-            <th>Flight Duration</th>
+            <th pSortableColumn="departingFlight.departureTime">Departure Time <p-sortIcon field="departingFlight.departureTime"></p-sortIcon></th>
+            <th pSortableColumn="departingFlight.flightTime">Flight Duration <p-sortIcon field="departingFlight.flightTime"></p-sortIcon></th>
             <th>Arrival Airport</th>
-            <th>Arrival Time</th>
-            <th>Time From Airport</th>
-            <!-- <th>{{selectedTransport.code}} Time<p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
-            <th>Total Travel Time</th>
-            <!-- <th>Total Travel Time<p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
-            <th>Number of Stops</th>
-            <th>Price</th>
+            <th pSortableColumn="departingFlight.arrivalTime">Arrival Time <p-sortIcon field="departingFlight.arrivalTime"></p-sortIcon></th>
+            <th pSortableColumn="timeToAirportB">{{selectedATransport.code}} Time From Airport <p-sortIcon field="timeToAirportB"></p-sortIcon></th>
+            <th pSortableColumn="totalDepTime">Total Travel Time <p-sortIcon field="totalDepTime"></p-sortIcon></th>
+            <th pSortableColumn="departingFlight.numberOfStops">Number of Stops <p-sortIcon field="departingFlight.numberOfStops"></p-sortIcon></th>
+            <th pSortableColumn="flightPrice">Price <p-sortIcon field="flightPrice"></p-sortIcon></th>
             <th style="width: 3rem"></th>
         </tr>
     </ng-template>
@@ -253,7 +250,7 @@
             <td>{{trip.departingFlight.arrivalAirport}}</td>
             <td>{{trip.departingFlight.arrivalTime}}</td>
             <td>{{trip.timeToAirportB}}</td> 
-            <td>{{trip.timeToAirportA + trip.timeToAirportB + trip.departingFlight.flightTime}}</td>
+            <td>{{trip.totalDepTime}}</td>
             <td>{{trip.departingFlight.numberOfStops}}</td>
             <td>${{trip.flightPrice}}</td>
             <td>
@@ -268,11 +265,11 @@
                 <div class="p-3">
                     <p-card header="Stop Overs">
                         <tr *ngFor="let stops of trip.departingFlight.stopOvers">
-                          <td>Airline:{{stops.airline}},</td>  
-                          <td>Departure Airport:{{stops.depAirportCode}},</td>
-                          <td>Arrival Airport:{{stops.arrAirportCode}},</td>
-                          <td>Stop Over Duration:{{stops.stopOverDuration}},</td>
-                          <td>Departure Time:{{stops.departTime}},</td>
+                          <td>Airline:{{stops.airline}}, </td>  
+                          <td>Departure Airport:{{stops.depAirportCode}}, </td>
+                          <td>Arrival Airport:{{stops.arrAirportCode}}, </td>
+                          <td>Stop Over Duration:{{stops.stopOverDuration}}, </td>
+                          <td>Departure Time:{{stops.departTime}}, </td>
                           <td>Arrival Time:{{stops.arrivalTime}}</td>
                         </tr>
                     </p-card>
