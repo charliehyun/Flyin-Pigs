@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {filter, first, flatMap, map, Observable, Subject, Subscription, take} from 'rxjs';
+import {filter, first, flatMap, map, Observable, Subject, Subscription, take, tap} from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { ResultsService} from "../results/results.service";
 import { SearchSchema, DropdownOption } from '../searchSchema';
@@ -252,8 +252,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   // COPY END
   // DIFFERENT FROM SEARCH
   results$: Observable<TripSchema[]> = new Observable();
-  resultsSubscription:Subscription;
-  filteredResults$:Subject<TripSchema[]> = new Subject();
+  trips:TripSchema[];
+  filteredTrips:TripSchema[];
   ngOnInit(): void {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
 
@@ -274,20 +274,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.maxTimeEnd = this.search.maxTimeEnd;
 
     this.results$ = this.resultsService.searchAirports(this.search);
-
     this.results$.subscribe(value => {
-      this.filteredResults$.next(value);
-      // for (let i = 0; i < value.length; i++) {
-      //   for (let j = 0; j < value[i].length; j++) {
-      //     value[i][j].departureTime = value[i][j].departureTime.toString()
-      //     value[i][j].arrivalTime = value[i][j].arrivalTime.toString()
-          
-          // parse price to 2 decimals
-          // Math.round(value[i][j].price * 100) / 100
-      //   }
-      // }
+      this.trips = value;
+      this.filteredTrips = value;
     });
-    //this.filterResults()
   }
 
 
@@ -296,12 +286,21 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   filterResults() {
+    let newTripArr:TripSchema[] = [];
+    this.trips.forEach(trip =>
+    {
+      if (trip.flightPrice < 400 && trip.flightPrice > 200)
+      {
+        newTripArr.push(trip);
+      }
+    });
+    this.filteredTrips = newTripArr;
+    this.logger.info("Filtering data...");
+  }
 
-    // this.resultsSubscription.unsubscribe();
-    // this.results$.pipe(map(flights =>
-    //   flights.filter(flight => flight[0].price < 200)))
-    //     .subscribe(value => this.filteredResults$.next(value));
-
+  resetFilter() {
+    this.logger.info("Resetting filter");
+    this.filteredTrips = this.trips;
   }
 
 }
