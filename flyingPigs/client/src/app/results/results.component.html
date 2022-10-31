@@ -212,7 +212,7 @@
 <i class="pi pi-spin pi-spinner" *ngIf="!(results$ | async)" style="font-size: 2rem; display: flex; align-items: center; justify-content: center;" ></i>
 
 <!-- Table -->
-<p-table [value] = "(results$ | async)!" dataKey="name" responsiveLayout="scroll">
+<p-table [value] = "filteredTrips" dataKey="name" responsiveLayout="scroll">
     <!-- Column names -->
     <ng-template pTemplate="header">
         <tr>
@@ -282,5 +282,8 @@
     </ng-template>
     <button pButton pRipple type="button" label="Load More"></button>
 </p-table>
+
+<p-button (click) = "resetFilter()">reset</p-button>
+<p-button (click) = "filterResults()"> filter</p-button>
 
 <app-scroll-to-top></app-scroll-to-top>
