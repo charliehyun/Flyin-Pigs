@@ -26,4 +26,6 @@ export interface TripSchema {
     timeToAirportA: number;
     timeToAirportB: number;
     flightPrice: number;
+    totalDepTime: number;
+    totalRetTime?: number;
 }
