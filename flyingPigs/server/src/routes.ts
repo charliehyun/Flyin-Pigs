@@ -39,20 +39,19 @@ mongoRouter.post("/search", async (req, res) => {
         // let arrAirportArray = await myArrFinder.findAirport(searchParams.departCoord.lat, searchParams.departCoord.lng, arrPrefilter, searchParams.maxTimeStart.sec, searchParams.selectedTransport.code);
         let arrAirportArray = await myArrFinder.findAirports(searchParams.arriveCoord.lat, searchParams.arriveCoord.lng, arrPrefilter, searchParams.maxTimeEnd.sec, searchParams.selectedATransport.code);
         // console.log(arrAirportArray);
-
+        let trips = [];
         for(let i = 0; i < depAirportArray.length; i++) {
             for(let j = 0; j < arrAirportArray.length; j++) {
                 let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate, 
                     searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
                     depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
-                let trips = await myFlightApi.queryApi()
-                let tripsThree = trips.slice(0,3);
-                tripsThree.forEach((element: Trip) => tripList.push(element));
+                trips.push(myFlightApi.queryApi());
+                // let tripsThree = trips.slice(0,3);
+                // tripsThree.forEach((element: Trip) => tripList.push(element));
             }
         }
-
-
-
+        tripList = await Promise.all(trips)
+        tripList = tripList.flat();
         // let myFlightApi = new flightsApi(depAirportArray[6].IATA, arrAirportArray[0].IATA, searchParams.departDate, searchParams.returnDate, searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip);
 
         // let myFlightApi = new flightsApi("ORD", "IND",

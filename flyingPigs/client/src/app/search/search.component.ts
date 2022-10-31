@@ -128,7 +128,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     adultPass: 1,
     childPass: 0,
     infantPass: 0,
-    totalPass: 0,
+    totalPass: 1,
     departDate: "",
     returnDate: "",
     departAdd: "",
