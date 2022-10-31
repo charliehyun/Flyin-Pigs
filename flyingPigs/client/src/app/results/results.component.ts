@@ -100,6 +100,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   // reset input boxes to valid, clear inputs, set back to default, and set search object back to default
   handleClear() {
+    sessionStorage.removeItem('searchParams');
     this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
     this.selectedDTransport = {name: 'Car', code: 'driving'};
@@ -214,7 +215,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
         maxTimeStart: this.maxTimeStart,
         maxTimeEnd: this.maxTimeEnd
       }
-      
+      sessionStorage.setItem('searchParams', JSON.stringify(this.search));
       this.data.changeMessage(this.search)
       this.router.navigate(['results'])
     } else {
@@ -256,6 +257,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
 
+    this.search = JSON.parse(sessionStorage.getItem('searchParams') || "");
     this.selectedClass = this.search.selectedClass;
     this.isRoundTrip = this.search.isRoundTrip;
     this.adultPass = this.search.adultPass;

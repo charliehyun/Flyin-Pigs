@@ -32,11 +32,12 @@ export class LoginSignupComponent {
 
     passHide: boolean;  // show/hide password text
 
+    currentUser: string = "";
+
     constructor(private messageService: MessageService, private primengConfig: PrimeNGConfig, private loginSignupService: LoginSignupService, private router: Router) {
         this.passHide = true
         this.displayLogin = false
         this.displaySignup = false
-
     }
 
     ngOnInit() {
@@ -115,7 +116,8 @@ export class LoginSignupComponent {
 
         this.results$.subscribe(value => {
             if(value){
-                this.displayLogin = false
+                this.displayLogin = false;
+                this.currentUser = this.emailL;
                 this.showSuccessL();
             } else {
                 this.showErrorL();
