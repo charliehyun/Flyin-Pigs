@@ -140,8 +140,22 @@ export class ResultsComponent implements OnInit, OnDestroy {
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
     this.resetValidity();
-    let departureCoord = await this.geocode(this.departAdd);
-    let arrivalCoord = await this.geocode(this.arriveAdd);
+
+    let departureCoord;
+    let arrivalCoord
+    let prevSearch = JSON.parse(sessionStorage.getItem('searchParams') || "");
+    if(!prevSearch || prevSearch.departAdd != this.departAdd){
+      departureCoord = await this.geocode(this.departAdd);
+    }
+    else {
+      departureCoord = prevSearch.departCoord;
+    }
+    if(!prevSearch || prevSearch.arriveAdd != this.arriveAdd){
+      arrivalCoord = await this.geocode(this.arriveAdd);
+    }
+    else {
+      arrivalCoord = prevSearch.arriveCoord;
+    }
 
     let route = true;
     // input validation
@@ -238,6 +252,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   If an error occurs, returns a null. 
   */
   async geocode(address) {
+    // this.logger.info("GEOCODING");
+    console.log("GEOCODING");
     var coord;
     var geocoder = new google.maps.Geocoder();
     await geocoder.geocode({ 'address': address}).then(response => {

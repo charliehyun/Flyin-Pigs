@@ -257,23 +257,23 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   // DIFFERENT FROM RESULTS
   ngOnInit() {
-    this.search = JSON.parse(sessionStorage.getItem('searchParams') || "");
-    if(this.search) {
-      this.selectedClass = this.search.selectedClass;
-      this.isRoundTrip = this.search.isRoundTrip;
-      this.adultPass = this.search.adultPass;
-      this.childPass = this.search.childPass;
-      this.infantPass = this.search.infantPass;
-      this.totalPass = this.search.totalPass;
-      this.departDate = this.search.departDate;
-      this.returnDate = this.search.returnDate;
-      this.departAdd = this.search.departAdd;
-      this.arriveAdd = this.search.arriveAdd;
-      this.selectedDTransport = this.search.selectedDTransport;
-      this.selectedATransport = this.search.selectedATransport;
-      this.maxTimeStart = this.search.maxTimeStart;
-      this.maxTimeEnd = this.search.maxTimeEnd;
-    }
+    // this.search = JSON.parse(sessionStorage.getItem('searchParams') || "");
+    // if(this.search) {
+    //   this.selectedClass = this.search.selectedClass;
+    //   this.isRoundTrip = this.search.isRoundTrip;
+    //   this.adultPass = this.search.adultPass;
+    //   this.childPass = this.search.childPass;
+    //   this.infantPass = this.search.infantPass;
+    //   this.totalPass = this.search.totalPass;
+    //   this.departDate = this.search.departDate;
+    //   this.returnDate = this.search.returnDate;
+    //   this.departAdd = this.search.departAdd;
+    //   this.arriveAdd = this.search.arriveAdd;
+    //   this.selectedDTransport = this.search.selectedDTransport;
+    //   this.selectedATransport = this.search.selectedATransport;
+    //   this.maxTimeStart = this.search.maxTimeStart;
+    //   this.maxTimeEnd = this.search.maxTimeEnd;
+    // }
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
     this.date = new Date().toISOString().split("T")[0];
     this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
