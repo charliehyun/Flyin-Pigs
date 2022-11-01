@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import {filter, first, flatMap, map, Observable, Subject, Subscription, take, tap} from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { ResultsService} from "../results/results.service";
@@ -12,7 +12,8 @@ import {NGXLogger} from "ngx-logger";
 @Component({
   selector: 'results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss']
+  styleUrls: ['./results.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class ResultsComponent implements OnInit, OnDestroy {
@@ -39,6 +40,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   departDate: string;
   returnDate: string;
   dates: any;
+
+  color = {'background':'blue'}
     
   constructor(private resultsService: ResultsService, private data: DataService, private router: Router,
               private fb: FormBuilder, private logger: NGXLogger) {
@@ -139,6 +142,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
+    // this.results$ = this.resultsService.clearAirports();
     this.resetValidity();
 
     let departureCoord;
@@ -231,7 +235,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
       sessionStorage.setItem('searchParams', JSON.stringify(this.search));
       this.data.changeMessage(this.search)
-      this.router.navigate(['results'])
+      // this.router.navigate(['results'])
+      this.ngOnInit();
     } else {
       alert("Error: Some fields are invalid or empty. Please fix them and try again.")
     }

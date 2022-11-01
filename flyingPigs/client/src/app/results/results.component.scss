@@ -12,8 +12,27 @@
 
 }
 
-// :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-//     position: -webkit-sticky;
-//     position: sticky;
-//     top: 5rem;
-// }
+body{
+    overflow-y:scroll;
+}
+
+.p-panel {
+    background: purple;
+    .p-panel-header {
+        background: yellow;
+    }
+    .p-panel-content {
+        background: orange;
+    }
+}
+
+.p-accordion {
+    background: blue;
+    .p-accordion-header {
+        background: red;
+    }
+    .p-accordion-content {
+        background: green;
+    }
+
+}

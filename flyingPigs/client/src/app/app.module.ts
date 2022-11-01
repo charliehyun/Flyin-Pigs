@@ -28,6 +28,7 @@ import { DividerModule } from "primeng/divider";
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
 import {ToastModule} from 'primeng/toast';
+import { PanelModule } from 'primeng/panel';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import {ToastModule} from 'primeng/toast';
     TooltipModule,
     DividerModule,
     ToastModule,
+    PanelModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
