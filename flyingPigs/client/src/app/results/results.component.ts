@@ -13,7 +13,7 @@ import {NGXLogger} from "ngx-logger";
   selector: 'results',
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  // encapsulation: ViewEncapsulation.None
 })
 
 export class ResultsComponent implements OnInit, OnDestroy {

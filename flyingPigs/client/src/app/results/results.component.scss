@@ -16,7 +16,7 @@ body{
     overflow-y:scroll;
 }
 
-.p-panel {
+:host ::ng-deep .p-panel {
     background: lightgray;
     .p-panel-header {
         background: lightgray;
@@ -28,7 +28,7 @@ body{
     }
 }
 
-.p-accordion {
+:host ::ng-deep .p-accordion {
     background: blue;
     .p-accordion-header {
         background: red;
