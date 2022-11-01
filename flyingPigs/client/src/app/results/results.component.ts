@@ -6,6 +6,7 @@ import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
+import {ScrollTopModule} from 'primeng/scrolltop';
 import { FlightSchema, TripSchema } from '../flightSchema';
 import {NGXLogger} from "ngx-logger";
 
