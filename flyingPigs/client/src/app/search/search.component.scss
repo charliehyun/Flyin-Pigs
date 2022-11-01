@@ -9,4 +9,29 @@
 .pass2{
     float:right;
     padding-right:10px;
+<<<<<<< HEAD
 }
+
+.centered {
+    vertical-align: middle;
+}
+
+:host ::ng-deep .custom-scrolltop {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    background-color: blue;
+    color: blue;
+  
+    &:hover {
+      background-color: blue;
+    }
+  
+    .p-scrolltop-icon {
+      font-size: 1rem;
+      color: blue;
+    }
+  }
+=======
+}
+>>>>>>> 011ec68df3c1f854fd0ac0e65fe70939967a8ada
