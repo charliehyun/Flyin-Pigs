@@ -27,8 +27,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DividerModule } from "primeng/divider";
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
+import { ScrollTopModule } from 'primeng/scrolltop';
 import {ToastModule} from 'primeng/toast';
 import { PanelModule } from 'primeng/panel';
+import { ToolbarModule } from 'primeng/toolbar';
+import {TreeSelectModule} from 'primeng/treeselect';
+import { SliderModule } from 'primeng/slider';
 
 
 @NgModule({
@@ -60,8 +64,12 @@ import { PanelModule } from 'primeng/panel';
     DialogModule,
     TooltipModule,
     DividerModule,
+    ScrollTopModule,
     ToastModule,
     PanelModule,
+    ToolbarModule,
+    TreeSelectModule,
+    SliderModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
