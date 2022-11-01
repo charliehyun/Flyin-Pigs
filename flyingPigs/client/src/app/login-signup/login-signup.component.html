@@ -54,4 +54,4 @@
     </ng-template>
 </p-dialog>
 
-<button *ngIf="currentUser" pButton type="button" class="p-button-sm" label="Log Out"></button>
+<button *ngIf="currentUser" pButton type="button" (click)="handleLogOut()" class="p-button-sm" label="Log Out"></button>
