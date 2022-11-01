@@ -26,23 +26,13 @@ body{
     background: lightgray;
     .p-panel-header {
         background: lightgray;
+        cursor:pointer;
     }
     .p-panel-content {
         background: white;
         border-radius: 5px;
         padding: 20px;
     }
-}
-
-:host ::ng-deep .p-accordion {
-    background: blue;
-    .p-accordion-header {
-        background: red;
-    }
-    .p-accordion-content {
-        background: green;
-    }
-
 }
 
 
