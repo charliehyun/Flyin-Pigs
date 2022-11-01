@@ -1,12 +1,9 @@
 <img src="favicon.ico" alt="Flyin' Pigs" routerLink="/search" width="100px" [style]="{cursor:'pointer'}">
 <h2>Flights</h2>
 <!-- SEARCH -->
-<p-panel header="Search Parameters" [toggleable]="true" iconPos="left" expandIcon="pi pi-fw pi-chevron-right" collapseIcon="pi pi-fw pi-chevron-down" [collapsed]="true" styleClass="dark-panel">
-content
-</p-panel>
-
-<p-accordion [multiple]="true">
-  <p-accordionTab header="Search Parameters" [selected]="true" >
+<p-panel header="Search Parameters" [toggleable]="true" expandIcon="pi pi-plus-circle" collapseIcon="pi pi-minus-circle" [collapsed]="true" style="font-size: 2rem">
+<!-- <p-accordion [multiple]="true">
+  <p-accordionTab header="Search Parameters" [selected]="true" > -->
     <!-- COPY START -->
     <div>
       <div class="p-grid p-nogutter">
@@ -224,9 +221,9 @@ content
       <button pButton pRipple type="button" (click)="handleSearch()" label="Search"></button>
     </div>
     <!-- COPY END -->
-  </p-accordionTab>
-</p-accordion>
-<!-- </p-panel> -->
+  <!-- </p-accordionTab>
+</p-accordion> -->
+</p-panel>
 
 <!-- RESULTS -->
 <div>

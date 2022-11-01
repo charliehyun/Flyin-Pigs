@@ -17,12 +17,14 @@ body{
 }
 
 .p-panel {
-    background: purple;
+    background: lightgray;
     .p-panel-header {
-        background: yellow;
+        background: lightgray;
     }
     .p-panel-content {
-        background: orange;
+        background: white;
+        border-radius: 5px;
+        padding: 20px;
     }
 }
 
