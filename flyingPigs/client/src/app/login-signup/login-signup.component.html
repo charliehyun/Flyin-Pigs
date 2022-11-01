@@ -1,4 +1,6 @@
-<button pButton type="button" class="p-button-sm" (click)="showLogin()" label="Log In"></button>
+<p-toast position="top-left"></p-toast>
+
+<button *ngIf="!currentUser" pButton type="button" class="p-button-sm" (click)="showLogin()" label="Log In"></button>
 <p-dialog header="Log In" [(visible)]="displayLogin" [modal]="true" [style]="{width: '450px'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <h6>Email</h6>
     <input pInputText type="email" id="emailL" [(ngModel)]="emailL">
@@ -12,15 +14,12 @@
     <button pButton label="Forgot password?" class="p-button-link" (click)="handlePassword()"></button>
 
     <ng-template pTemplate="footer">
-        <button pButton type="button" (click)="switchModal()" label="Don't have a Flyin' Pigs account?" class="p-button-sm p-button-outlined"></button>
+        <button pButton type="button" (click)="switchModal()" label="Don't have a Flyin' Pigs account?" class="p-button-sm p-button-outlined p-button-secondary"></button>
         <button pButton type="button" (click)="handleLogin()" class="p-button-sm" label="Log In"></button>
-
-        <!-- <p-button icon="pi pi-check" (click)="displayModal=false" label="Yes" class="p-button-text"></p-button>
-        <p-button icon="pi pi-times" (click)="displayModal=false" label="No"></p-button> -->
     </ng-template>
 </p-dialog>
 
-<button pButton type="button" class="p-button-sm" (click)="showSignup()" label="Sign Up"></button>
+<button *ngIf="!currentUser" pButton type="button" class="p-button-sm p-button-secondary" (click)="showSignup()" label="Sign Up"></button>
 <p-dialog header="Sign Up" [(visible)]="displaySignup" [modal]="true" [style]="{width: '450px'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <h6>Email</h6>
     <input pInputText type="email" id="emailS" [(ngModel)]="emailS">
@@ -50,7 +49,9 @@
     <input pInputText [type]="passHide ? 'password' : 'text'" id="confPassS" [(ngModel)]="confPassS">
 
     <ng-template pTemplate="footer">
-        <button pButton type="button" (click)="switchModal()" label="Already have a Flyin' Pigs account?" class="p-button-sm p-button-outlined"></button>
+        <button pButton type="button" (click)="switchModal()" label="Already have a Flyin' Pigs account?" class="p-button-sm p-button-outlined p-button-secondary"></button>
         <button pButton type="button" (click)="handleSignup()" class="p-button-sm" label="Sign Up"></button>
     </ng-template>
 </p-dialog>
+
+<button *ngIf="currentUser" pButton type="button" class="p-button-sm" label="Log Out"></button>

@@ -1,16 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import {filter, first, flatMap, map, Observable, Subject, Subscription, take, tap} from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { ResultsService} from "../results/results.service";
 import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
-import { FlightSchema } from '../flightSchema';
 import {ScrollTopModule} from 'primeng/scrolltop';
+import { FlightSchema, TripSchema } from '../flightSchema';
 import {NGXLogger} from "ngx-logger";
-
-// import {Client} from "@googlemaps/google-maps-services-js";
 
 @Component({
   selector: 'results',
@@ -20,9 +18,11 @@ import {NGXLogger} from "ngx-logger";
 
 export class ResultsComponent implements OnInit, OnDestroy {
   classes: DropdownOption[];  // Flight class options
-  selectedClass: DropdownOption = {name: 'Economy', code: 'Economy'}; // Selected flight class
-  transportType: DropdownOption[];  // Transportation to airport options
-  selectedTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+  selectedClass: DropdownOption = {name: 'Economy', code: 'ECONOMY'}; // Selected flight class
+  dTransportType: DropdownOption[]; // Transportation to airport options
+  aTransportType: DropdownOption[]; // Transportation from airport options
+  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+  selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -45,12 +45,18 @@ export class ResultsComponent implements OnInit, OnDestroy {
               private fb: FormBuilder, private logger: NGXLogger) {
   // COPY START
     this.classes = [
-      {name: 'Economy', code: 'Economy'},
-      {name: 'Premium Economy', code: 'Premium Economy'},
-      {name: 'Business', code: 'Business'},
-      {name: 'First', code: 'First'}
+      {name: 'Economy', code: 'ECONOMY'},
+      {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
+      {name: 'Business', code: 'BUSINESS'},
+      {name: 'First', code: 'FIRST'}
     ];
-    this.transportType = [
+    this.dTransportType = [
+      {name: 'Car', code: 'driving'},
+      {name: 'Public Transit', code: 'transit'},
+      // {name: 'Bike', code: 'Biking'},
+      // {name: 'Walk', code: 'Walking'}
+    ];
+    this.aTransportType = [
       {name: 'Car', code: 'driving'},
       {name: 'Public Transit', code: 'transit'},
       // {name: 'Bike', code: 'Biking'},
@@ -65,10 +71,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: '6 hr', sec: 21600},
       {name: '7 hr', sec: 25200}
     ];
-    this.createForm();
   }
 
-  //google autocomplete stuff.
+  // Google autocomplete stuff
   departAdd= "";
   arriveAdd= "";
   options:Options = new Options({
@@ -81,22 +86,26 @@ export class ResultsComponent implements OnInit, OnDestroy {
   AddressChange2(address: any) {
     this.arriveAdd = address.formatted_address;
   }
-  //backend calls
 
+  // update total passengers display when passenger overlay is exited
   updatePassengers() {
     this.totalPass = this.adultPass + this.childPass + this.infantPass;
   }
 
+  // ensure return date is cleared if one way is selected
   handleOneWay(e) {
     if(e.checked) {
       this.returnDate = ""
     }
   }
 
+  // reset input boxes to valid, clear inputs, set back to default, and set search object back to default
   handleClear() {
+    sessionStorage.removeItem('searchParams');
     this.resetValidity();
-    this.selectedClass = {name: 'Economy', code: 'Economy'};
-    this.selectedTransport = {name: 'Car', code: 'driving'};
+    this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
+    this.selectedDTransport = {name: 'Car', code: 'driving'};
+    this.selectedATransport = {name: 'Car', code: 'driving'};
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
@@ -111,48 +120,53 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   search: SearchSchema = {
-    selectedClass: {name: 'Economy', code: 'Economy'},
+    selectedClass: {name: 'Economy', code: 'ECONOMY'},
     isRoundTrip: false,
     adultPass: 1,
     childPass: 0,
     infantPass: 0,
-    totalPass: 0,
+    totalPass: 1,
     departDate: "",
     returnDate: "",
     departAdd: "",
     departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     arriveAdd: "",
     arriveCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
-    selectedTransport: {name: 'Car', code: 'driving'},
+    selectedDTransport: {name: 'Car', code: 'driving'},
+    selectedATransport: {name: 'Car', code: 'driving'},
     maxTimeStart: {name: '3 hr', sec: 10800},
     maxTimeEnd: {name: '1 hr', sec: 3600}
   }
 
+  // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
-    this.results$ = new Observable();
     this.resetValidity();
-    let departureCoord = await this.geocode(this.departAdd);
-    let arrivalCoord = await this.geocode(this.arriveAdd);
+
+    let departureCoord;
+    let arrivalCoord
+    let prevSearch = JSON.parse(sessionStorage.getItem('searchParams') || "");
+    if(!prevSearch || prevSearch.departAdd != this.departAdd){
+      departureCoord = await this.geocode(this.departAdd);
+    }
+    else {
+      departureCoord = prevSearch.departCoord;
+    }
+    if(!prevSearch || prevSearch.arriveAdd != this.arriveAdd){
+      arrivalCoord = await this.geocode(this.arriveAdd);
+    }
+    else {
+      arrivalCoord = prevSearch.arriveCoord;
+    }
 
     let route = true;
-    console.log(this.departDate)
+    // input validation
     if(!this.departDate) {
       const x = document.getElementById('departDate');
       x?.classList.add('ng-invalid')
       x?.classList.add('ng-dirty')
       route = false
     } 
-    else {      
-    // var departDateObj = new Date(this.departDate);
-    // var year = departDateObj.getFullYear();
-    // var month = departDateObj.getMonth();
-    // var day   = departDateObj.getDate();
-    // if(departDateObj < this.date || departDateObj > this.maxDate || this.daysInMonth(month, year) > day) {
-    //   const x = document.getElementById('departDate');
-    //   x?.classList.add('ng-invalid')
-    //   x?.classList.add('ng-dirty')
-    //   route = false
-    // }
+    else {
       const x = document.getElementById('departDate');
       var departDateObj = new Date(this.departDate);
       if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
@@ -195,6 +209,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
       route = false
     }
 
+    // if valid, create search object and route to results
+    // else, alert
     if(route) {
       this.search = {
         selectedClass: this.selectedClass,
@@ -209,17 +225,19 @@ export class ResultsComponent implements OnInit, OnDestroy {
         departCoord: departureCoord,
         arriveAdd: this.arriveAdd,
         arriveCoord: arrivalCoord,
-        selectedTransport: this.selectedTransport,
+        selectedDTransport: this.selectedDTransport,
+        selectedATransport: this.selectedATransport,
         maxTimeStart: this.maxTimeStart,
         maxTimeEnd: this.maxTimeEnd
       }
+      sessionStorage.setItem('searchParams', JSON.stringify(this.search));
       this.data.changeMessage(this.search)
-      // this.router.navigate(['results'])
-      this.results$ = this.resultsService.searchAirports(this.search);
+      this.router.navigate(['results'])
     } else {
-      alert("Error: Some fields are invalid or empty they are are marked in red. Please fix them and try again.  ")
+      alert("Error: Some fields are invalid or empty. Please fix them and try again.")
     }
   }
+
   resetValidity() {
     const elements: Element[] = Array.from(document.getElementsByTagName("input"));
     elements.forEach((el: Element) => {
@@ -228,25 +246,15 @@ export class ResultsComponent implements OnInit, OnDestroy {
       el.classList.add('ng-pristine')
     })
   }
-  // daysInMonth(month, year) {
-  //   let dayNum = -1;
-  //   if (['January', 'March', 'May', 'July', 'August', 'October', 'December'].includes(month)) {
-  //     dayNum = 31;
-  //   } else if (['April', 'June', 'September', 'November'].includes(month)) {
-  //     dayNum = 30;
-  //   } else {
-  //     // If month is February, calculate whether it is a leap year or not
-  //     const isLeap = new Date(year, 2, 29).getMonth() === 1;
-  //     dayNum = isLeap ? 29 : 28;
-  //   }
-  //   return dayNum;
-  // }
+
   /*
   Geocodes an address.
   Returns LatLng object with lat() and lng() getter functions
   If an error occurs, returns a null. 
   */
   async geocode(address) {
+    // this.logger.info("GEOCODING");
+    console.log("GEOCODING");
     var coord;
     var geocoder = new google.maps.Geocoder();
     await geocoder.geocode({ 'address': address}).then(response => {
@@ -258,19 +266,15 @@ export class ResultsComponent implements OnInit, OnDestroy {
     });
     return coord;
   }
-    
-  createForm() {
-    this.logger.info("Creating Form.");
-    this.dates = this.fb.group({
-        departDate: ['', Validators.required ]
-    });
-  }
   // COPY END
   // DIFFERENT FROM SEARCH
-  results$: Observable<FlightSchema[][]> = new Observable();
+  results$: Observable<TripSchema[]> = new Observable();
+  trips:TripSchema[];
+  filteredTrips:TripSchema[];
   ngOnInit(): void {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
 
+    this.search = JSON.parse(sessionStorage.getItem('searchParams') || "");
     this.selectedClass = this.search.selectedClass;
     this.isRoundTrip = this.search.isRoundTrip;
     this.adultPass = this.search.adultPass;
@@ -281,16 +285,39 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.returnDate = this.search.returnDate;
     this.departAdd = this.search.departAdd;
     this.arriveAdd = this.search.arriveAdd;
-    this.selectedTransport = this.search.selectedTransport;
+    this.selectedDTransport = this.search.selectedDTransport;
+    this.selectedATransport = this.search.selectedATransport;
     this.maxTimeStart = this.search.maxTimeStart;
     this.maxTimeEnd = this.search.maxTimeEnd;
 
     this.results$ = this.resultsService.searchAirports(this.search);
-
+    this.results$.subscribe(value => {
+      this.trips = value;
+      this.filteredTrips = value;
+    });
   }
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  filterResults() {
+    let newTripArr:TripSchema[] = [];
+    this.trips.forEach(trip =>
+    {
+      if (trip.flightPrice < 400 && trip.flightPrice > 200)
+      {
+        newTripArr.push(trip);
+      }
+    });
+    this.filteredTrips = newTripArr;
+    this.logger.info("Filtering data...");
+  }
+
+  resetFilter() {
+    this.logger.info("Resetting filter");
+    this.filteredTrips = this.trips;
   }
 
 }
