@@ -196,6 +196,93 @@
     </p-accordionTab> -->
 </p-accordion>
 
+<p-toolbar class="toolbar" >
+  <div class="p-toolbar-group-left"> 
+      <!--
+        <i class="p-toolbar-separator pi pi-bars mr-2" style="vertical-align: middle"></i>
+        <p-dropdown [options]="numStops" [(ngModel)]="selectedStops" placeholder="Dropdown" optionLabel="stops"></p-dropdown>
+        <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText [(ngModel)]="stops" placeholder="Stops">         
+      </span>
+      -->
+
+      <!--Price overlay-->
+      <button pButton pRipple type="button" (click)="op1.toggle($event)"  label="Price"></button>
+      <p-overlayPanel #op1 [showCloseIcon]="true" (onHide)="updateTotalPrice()"> 
+        <div>
+          <label class="pass3">Max Trip Cost: </label>
+          <div class="pass2">
+            <input type="text" size="5" pInputText [(ngModel)]="totalPrice"/>
+          </div>
+        </div>
+        <p-slider [min]="0" [(ngModel)]="totalPrice"></p-slider>
+      </p-overlayPanel>
+
+      <!-- Duration overlay-->
+      <button pButton pRipple type="button" (click)="op2.toggle($event)"  label="Duration"></button>
+      <p-overlayPanel #op2 [showCloseIcon]="true" (onHide)="updateDuration()"> 
+        <div>
+          <label class="pass3">Max Travel Time (hr)</label>
+          <div class="pass2">
+            <input type="text" size="5" pInputText [(ngModel)]="maxTravelTime"/>
+          </div>
+          <br><br><br>
+          <label class="pass3">Max Flight Duration (hr)</label>
+          <div class="pass2">
+            <input type="text" size="5" pInputText [(ngModel)]="maxFlightTime"/>
+          </div>
+        </div>
+      </p-overlayPanel>
+      
+      <!--Times overlay-->
+      <button pButton pRipple type="button" (click)="op3.toggle($event)"  label="Times"></button>
+      <p-overlayPanel #op3 [showCloseIcon]="true" (onHide)="updateTravelTimes()"> 
+        <div>
+          <label class="pass3">Depart by: </label>
+          <div class="pass2">
+            <input type="text" size="5" pInputText [(ngModel)]="departTime"/>
+          </div>
+        </div>
+        <div>
+          <p-slider [(ngModel)]="departTime"></p-slider>
+        </div>
+        
+        <div>
+          <label class="pass3">Arrive by: </label>
+          <div class="pass2">
+            <input type="text" size="5" pInputText [(ngModel)]="arrivalTime"/>
+          </div>
+        </div>
+        <div>
+          <p-slider [(ngModel)]="arrivalTime"></p-slider>
+        </div>
+      </p-overlayPanel>
+
+      <!-- Layover overlay-->
+      <button pButton pRipple type="button" (click)="op4.toggle($event)"  label="Stops"></button>
+      <p-overlayPanel #op4 [showCloseIcon]="true" (onHide)="updateStops()"> 
+        <div>
+          <label class="pass3">Max # of Stops </label>
+          <div class="pass2">
+            <input type="text" size="5" pInputText [(ngModel)]="stops"/>
+          </div>
+        </div>
+      </p-overlayPanel>
+
+      <p-treeSelect [(ngModel)]="filterAirports" [options]="numStops" display="chip" [metaKeySelection]="false"
+        selectionMode="checkbox" placeholder="Airports">
+      </p-treeSelect>
+      <p-treeSelect [(ngModel)]="filterAirlines" [options]="numStops" display="chip" [metaKeySelection]="false"
+        selectionMode="checkbox" placeholder="Airlines">
+      </p-treeSelect>
+
+      
+      
+  </div>
+  
+</p-toolbar>
+
 <!-- RESULTS -->
 <div>
     <h4>Results</h4>

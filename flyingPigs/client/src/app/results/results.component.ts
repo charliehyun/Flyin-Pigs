@@ -9,6 +9,11 @@ import { DataService } from "../data.service";
 import {ScrollTopModule} from 'primeng/scrolltop';
 import { FlightSchema, ResultInfoSchema, TripSchema } from '../flightSchema';
 import {NGXLogger} from "ngx-logger";
+import {ToolbarModule} from 'primeng/toolbar';
+import { MenuItem } from 'primeng/api';
+import {InputTextModule} from 'primeng/inputtext';
+import {SliderModule} from 'primeng/slider';
+import { Time } from '@angular/common';
 
 @Component({
   selector: 'results',
@@ -25,6 +30,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
+  selectedStops: DropdownOption = {name: '1', code: '1'};
+  numStops: DropdownOption[];
 
   adultPass: number = 1;  // number of adult passengers
   childPass: number = 0;  // number of child passengers
@@ -40,6 +47,19 @@ export class ResultsComponent implements OnInit, OnDestroy {
   departDate: string;
   returnDate: string;
   dates: any;
+
+  stops: string;
+  totalPrice: number;
+  filterAirlines: any[] = [];
+  filterAirports: any[] = [];
+  maxTravelTime: number;
+  maxFlightTime: number;
+  departTime: Time;
+  arrivalTime: Time;
+
+  airports: any[];
+
+  items: MenuItem[];
     
   constructor(private resultsService: ResultsService, private data: DataService, private router: Router,
               private fb: FormBuilder, private logger: NGXLogger) {
@@ -70,6 +90,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: '5 hr', sec: 18000},
       {name: '6 hr', sec: 21600},
       {name: '7 hr', sec: 25200}
+    ];
+    this.numStops = [
+      {name: '0', code: '0'},
+      {name: '1', code: '1'},
+      {name: '2', code: '2'},
+      {name: '3', code: '3'}
     ];
   }
 
@@ -117,6 +143,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.arriveAdd = "";
     this.maxTimeStart = {name: '3 hr', sec: 10800};
     this.maxTimeEnd = {name: '1 hr', sec: 3600};
+    this.selectedStops = {name: '0', code: '0'};
   }
 
   search: SearchSchema = {
@@ -136,6 +163,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     selectedATransport: {name: 'Car', code: 'driving'},
     maxTimeStart: {name: '3 hr', sec: 10800},
     maxTimeEnd: {name: '1 hr', sec: 3600}
+    
   }
 
   // input validation, geocoding, search sent to results, and navigate to results
@@ -295,8 +323,26 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.trips = value["trips"];
       this.filteredTrips = value["trips"];
     });
+
   }
 
+  updateDuration() {
+    this.maxFlightTime = this.maxFlightTime;
+    this.maxTravelTime = this.maxTravelTime;
+  }
+
+  updateTotalPrice() {
+    this.totalPrice = this.totalPrice;
+  }
+
+  updateStops() {
+    this.stops = this.stops;
+  }
+
+  updateTravelTimes() {
+    this.departTime = this.departTime;
+    this.arrivalTime = this.arrivalTime;
+  }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
