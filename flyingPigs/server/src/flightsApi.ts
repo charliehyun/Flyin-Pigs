@@ -24,6 +24,7 @@ export class flightsApi {
     response:any;
     timeToAirportA:number = -1;
     timeToAirportB:number = -1;
+    airlines?:string[];
     logger:log4js.Logger;
 
     constructor(departure:string, arrival:string, departureDate:string, arrivalDate:string,
@@ -134,11 +135,19 @@ export class flightsApi {
             let stopOver = new stopOverFlight(curr.carrierCode, curr.departure.iataCode, curr.arrival.iataCode, this.calculateStopover(next.arrival.at, curr.departure.at), curr.departure.at, next.arrival.at);
             newFlight.addStopOver(stopOver);
             newFlight.addAirline(curr.carrierCode);
+            this.addAirline(curr.carrierCode);
             if(i == segments.length - 2) {
                 newFlight.addAirline(next.carrierCode);
+                this.addAirline(next.carrierCode);
             }
         }
         return newFlight;
+    }
+
+    addAirline(al: string) {
+        if(!this.airlines.includes(al)) {
+            this.airlines.push(al);
+        }
     }
 
     parseApiTimeToSeconds(apiTime: string): number {

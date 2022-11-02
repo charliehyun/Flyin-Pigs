@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
 import {ScrollTopModule} from 'primeng/scrolltop';
-import { FlightSchema, TripSchema } from '../flightSchema';
+import { FlightSchema, ResultInfoSchema, TripSchema } from '../flightSchema';
 import {NGXLogger} from "ngx-logger";
 
 @Component({
@@ -268,7 +268,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
   // COPY END
   // DIFFERENT FROM SEARCH
-  results$: Observable<TripSchema[]> = new Observable();
+  results$: Observable<ResultInfoSchema[]> = new Observable();
   trips:TripSchema[];
   filteredTrips:TripSchema[];
   ngOnInit(): void {
@@ -292,8 +292,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
     this.results$ = this.resultsService.searchAirports(this.search);
     this.results$.subscribe(value => {
-      this.trips = value;
-      this.filteredTrips = value;
+      this.trips = value["trips"];
+      this.filteredTrips = value["trips"];
     });
   }
 
