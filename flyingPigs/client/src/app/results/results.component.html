@@ -289,7 +289,7 @@
 </div>
 
 <!-- No flights -->
-<div *ngIf="(results$ | async)?.length == 0">
+<div *ngIf="filteredTrips?.length == 0">
     <p-card [style]="{'background':'#f4cccc'}">
         No flights match your search:(
     </p-card>
