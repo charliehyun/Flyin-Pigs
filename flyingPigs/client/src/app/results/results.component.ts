@@ -380,9 +380,46 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   filterResults() {
     let newTripArr:TripSchema[] = [];
+    let chosenStops:number;
+
+    //converted selected stops into a number
+    switch(this.selectedStop)
+    {
+      case("none"): chosenStops = 0;
+      break;
+      case("all"): chosenStops = Number.MAX_SAFE_INTEGER;
+      break;
+      case("one"): chosenStops = 1;
+      break;
+      case("two"): chosenStops = 2;
+      break;
+    }
+
+
     this.trips.forEach(trip =>
     {
-      if (trip.flightPrice < 400 && trip.flightPrice > 200)
+      this.logger.info("Filtering data...");
+      //get total trip time
+      let totalTripTime:number = trip.totalDepTime
+      if (trip.totalRetTime)
+      {
+        totalTripTime += trip.totalRetTime;
+      }
+      //get total flight time
+      let totalFlightTime:number = trip.departingFlight.flightTime;
+      if (trip.returningFlight)
+      {
+        totalFlightTime += trip.returningFlight.flightTime;
+      }
+
+      //convert string to Time to object
+
+      if (trip.departingFlight.numberOfStops <= chosenStops &&
+          trip.flightPrice <= this.totalPrice[1] &&
+          trip.flightPrice >= this.totalPrice[0] &&
+          totalTripTime <= (this.maxTravelTime * 3600) &&
+          totalFlightTime <= (this.maxFlightTime * 3600)
+          )
       {
         newTripArr.push(trip);
       }
