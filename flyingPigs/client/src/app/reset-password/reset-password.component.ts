@@ -23,7 +23,7 @@ import { PrimeNGConfig } from 'primeng/api';
 
 export class ResetPasswordComponent implements OnInit, OnDestroy {
   subscription!: Subscription;
-  newPass: string;
+  newPass: string = '';
 
   passHide: boolean;  // show/hide password text
 
