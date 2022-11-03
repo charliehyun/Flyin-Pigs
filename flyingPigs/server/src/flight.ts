@@ -74,3 +74,43 @@ export class Trip {
         this.totalDepTime = timeToAirportA + timeToAirportB + departingFlight.flightTime;
     }
 }
+
+export class ResultInfo {
+    airlines: string[];
+    depAirlines: string[];
+    arrAirlines: string[];
+    minPrice?: number;
+    maxPrice?: number;
+    trips: Trip[];
+
+    constructor(airlines: string[], depAirlines: string[], arrAirlines: string[], trips: Trip[]) {
+        this.airlines = airlines;
+        this.depAirlines = depAirlines;
+        this.arrAirlines = arrAirlines;
+        this.trips = trips;
+    }
+
+}
+
+export function removeDuplicates(arr: string[]) {
+    return Array.from(new Set(arr));
+}
+
+export function sortTrips(trips: Trip[], field: string): Trip[] {
+    let sortedTrips = trips;
+
+    if(field == "flightPrice") {
+        sortedTrips.sort(compareFlightPrice);
+    }
+    return sortedTrips;
+}
+
+function compareFlightPrice(a: Trip, b: Trip) {
+    if (a.flightPrice < b.flightPrice) {
+      return -1;
+    }
+    if (a.flightPrice > b.flightPrice) {
+      return 1;
+    }
+    return 0;
+}
