@@ -297,29 +297,24 @@
 
       <!--Airport overlay-->
       <button pButton pRipple type="button" (click)="op5.toggle($event)" class="p-button-outlined" label="Airports"></button>
-      <p-overlayPanel #op5 [showCloseIcon]="true" [style]="{width: '380px'}"> 
+      <p-overlayPanel #op5 [showCloseIcon]="true" [style]="{width: '350px'}"> 
         <div>
           <label>Departure Airports: </label> <br>
-          All Airports: (add toggle) <br>
-          <p-multiSelect [options]="filterDepartAirports" [(ngModel)]="selectedDepartAirports"></p-multiSelect>
+          <p-multiSelect [options]="filterDepartAirports" [(ngModel)]="selectedDepartAirports" [style]="{width: '100%'}"></p-multiSelect>
         </div>
         <div>
           <label>Arrival Airports: </label> <br>
-          All Airports: (add toggle) <br>
-          <p-multiSelect [options]="filterArrivalAirports" [(ngModel)]="selectedArrivalAirports"></p-multiSelect>
+          <p-multiSelect [options]="filterArrivalAirports" [(ngModel)]="selectedArrivalAirports" [style]="{width: '100%'}"></p-multiSelect>
 
         </div>
       </p-overlayPanel>
 
       <!--Airline overlay-->
       <button pButton pRipple type="button" (click)="op6.toggle($event)" class="p-button-outlined" label="Airlines"></button>
-      <p-overlayPanel #op6 [showCloseIcon]="true"> 
+      <p-overlayPanel #op6 [showCloseIcon]="true" [style]="{width: '350px'}"> 
         <div>
           <label>Departure Airlines: </label> <br>
-          All Airlines: (add toggle) <br>
-          <p-treeSelect [(ngModel)]="selectedAirlines" [options]="filterAirlines" display="chip" [metaKeySelection]="false"
-          selectionMode="checkbox" placeholder="Airlines">
-          </p-treeSelect>
+          <p-multiSelect [options]="filterAirlines" [(ngModel)]="selectedAirlines" [style]="{width: '100%'}"></p-multiSelect>
         </div>
         
       </p-overlayPanel>    

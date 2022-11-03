@@ -347,6 +347,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.selectedArrivalAirports = this.filterArrivalAirports;
       this.selectedDepartAirports = this.filterDepartAirports;
       this.filterAirlines = value.airlines;
+      console.log("filtered airline:", value.airlines);
+
+      this.selectedAirlines = this.filterAirlines;
     });
 
     this.selectedStop = this.stops[1];
