@@ -14,6 +14,8 @@ import { MenuItem } from 'primeng/api';
 import {InputTextModule} from 'primeng/inputtext';
 import {SliderModule} from 'primeng/slider';
 import { Time } from '@angular/common';
+import {RadioButtonModule} from 'primeng/radiobutton';
+
 
 @Component({
   selector: 'results',
@@ -49,19 +51,25 @@ export class ResultsComponent implements OnInit, OnDestroy {
   returnDate: string;
   dates: any;
 
-  stops: string;
-  totalPrice: number;
-  filterAirlines: any[] = [];
-  filterAirports: any[] = [];
+  selectedStop: any = null;
+
+  stops: any[] = [{name: 'Any number of stops', key: 'all'}, {name: 'Nonstop only', key: 'none'}, {name: '1 stop or fewer', key: 'one'}, {name: '2 stops or fewer', key: 'two'}];
+  totalPrice: number[] = [1,10000];
+  filterDepartAirlines: any[] = [];
+  filterArrivalAirlines: any[] = [];
+  filterDepartAirports: any[] = [];
+  filterArrivalAirports: any[] = [];
   maxTravelTime: number;
   maxFlightTime: number;
   departTime: Time;
   arrivalTime: Time;
 
   airports: any[];
+ 
 
   items: MenuItem[];
-    
+
+   
   constructor(private resultsService: ResultsService, private data: DataService, private router: Router,
               private fb: FormBuilder, private logger: NGXLogger) {
   // COPY START
@@ -333,6 +341,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
         this.shouldLoad = true;
       }
     });
+
+    this.selectedStop = this.stops[1];
 
   }
 

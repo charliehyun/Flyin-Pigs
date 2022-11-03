@@ -3,7 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { FormGroup,  FormBuilder,  Validators, FormControl } from '@angular/forms';
 import { DataService } from "../data.service";
 import { FlightSchema } from '../flightSchema';
 import { LoginSignupService } from './login-signup.service';
@@ -157,6 +157,27 @@ export class LoginSignupComponent {
         }
 
         // TODO: check if satisfies password reqs
+        // 1 lowercase
+        // 1 uppercase
+        // 1 number
+        // 1 special character
+        // 8 min length
+        const regex: RegExp = /\d+/g;
+        if(!this.passS.match(regex)) {
+            const x = document.getElementById('passS');
+            x?.classList.add('ng-invalid')
+            x?.classList.add('ng-dirty')
+        }
+
+        if(this.passS.length < 8){
+            const x = document.getElementById('passS');
+            x?.classList.add('ng-invalid')
+            x?.classList.add('ng-dirty')
+        }
+        //const control = new FormControl(this.passS, Validators.minLength(8));
+        //console.log(control.errors);
+
+
         // if satisfies, then call signupUser to check if email exists and to add to DB
 
         let credentialsInput: LoginSchema = {
