@@ -29,6 +29,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import {ToastModule} from 'primeng/toast';
+import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
 import {TreeSelectModule} from 'primeng/treeselect';
 import { SliderModule } from 'primeng/slider';
@@ -66,6 +67,7 @@ import {RadioButtonModule} from 'primeng/radiobutton';
     DividerModule,
     ScrollTopModule,
     ToastModule,
+    PanelModule,
     ToolbarModule,
     TreeSelectModule,
     SliderModule,

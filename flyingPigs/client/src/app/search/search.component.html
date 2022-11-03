@@ -13,7 +13,13 @@
         <h4>Departure</h4>
         <!-- Address -->
         <span>
-          <label for="daddress">Address:</label>
+          <label for="daddress">
+            Starting Address
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="Where are you leaving from? Input an address or a general location." 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <input 
             pInputText 
             type="text" 
@@ -25,7 +31,6 @@
             [options]="options" 
             (onAddressChange)="AddressChange1($event)" 
             [(ngModel)]="departAdd"
-            pTooltip="Where are you leaving from? Input an address or a general location." 
             tooltipPosition="right" 
             tooltipEvent="focus"
           >
@@ -34,14 +39,19 @@
 
         <!-- Transportation method -->
         <span>
-          <label for="dTransportType">Mode of Transport:</label>
+          <label for="dTransportType">
+            Mode of Transport
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How will you be getting to the departure airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <p-dropdown 
             id="dTransportType" 
             [options]="dTransportType" 
             [(ngModel)]="selectedDTransport" 
             placeholder="Select a Mode of Transport" 
             optionLabel="name"
-            pTooltip="How will you be getting to the departure airport?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
           ></p-dropdown>
@@ -50,13 +60,18 @@
 
         <!-- Transport Hours Before Flight -->
         <span>
-          <label for="drivingStartHours">Maximum {{selectedDTransport.code}} time:</label>
+          <label for="drivingStartHours">
+            Maximum approximate {{selectedDTransport.code}} time
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How long are you willing to travel to get to the departure airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <p-dropdown 
             id="drivingStartHours" 
             [options]="hours" 
             [(ngModel)]="maxTimeStart" 
             optionLabel="name"
-            pTooltip="How long are you willing to travel to get to the departure airport?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
           ></p-dropdown>
@@ -67,7 +82,13 @@
         <h4>Arrival</h4>
         <!-- Address -->
         <span>
-          <label for="aaddress">Address:</label>
+          <label for="aaddress">
+            Destination Address
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="Where are you traveling to?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <input 
             pInputText 
             type="text" 
@@ -79,7 +100,6 @@
             [options]="options" 
             (onAddressChange)="AddressChange2($event)" 
             [(ngModel)]="arriveAdd"
-            pTooltip="Where are you traveling to?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
           >
@@ -88,14 +108,19 @@
 
         <!-- Transportation method -->
         <span>
-          <label for="aTransportType">Mode of Transport:</label>
+          <label for="aTransportType">
+            Mode of Transport
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How will you be getting to your destination from the airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <p-dropdown 
             id="aTransportType" 
             [options]="aTransportType" 
             [(ngModel)]="selectedATransport" 
             placeholder="Select a Mode of Transport" 
             optionLabel="name"
-            pTooltip="How will you be getting to your destination from the airport?" 
             tooltipPosition="right"
             tooltipEvent="focus"
           ></p-dropdown>
@@ -104,12 +129,17 @@
 
         <!-- Transport Hours After Flight -->
         <span>
-          <label for="drivingEndHours">Maximum {{selectedATransport.code}} time:</label>
+          <label for="drivingEndHours">
+            Maximum approximate {{selectedATransport.code}} time
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How long are you willing to travel to get to your destination from the airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <p-dropdown 
             [options]="hours" 
             [(ngModel)]="maxTimeEnd" 
             optionLabel="name" 
-            pTooltip="How long are you willing to travel to get to your destination from the airport?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
           ></p-dropdown>
@@ -121,7 +151,7 @@
       <br><hr><br>
       <!-- One way/Round trip -->
       One Way 
-      <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" style="vertical-align: middle;"></p-inputSwitch>
+      <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" [style]="{'vertical-align':'middle'}"></p-inputSwitch>
       Round Trip &nbsp;
 
       <!-- Passenger # and selection Overlay -->
