@@ -209,7 +209,7 @@ mongoRouter.post("/submitForgotPassword", (req, res) =>
                 from: 'flyinpigs407@gmail.com',
                 to: req.body.email,
                 subject: `Password Reset Link`,
-                text: `click the link below to change your password:\n\nhttp://localhost:4200/reset/${token}`,
+                text: `click the link below to change your password:\n\nhttp://localhost:4200/reset-password/${token}`,
             };
                 
             transporter.sendMail(mailOptions, function(error, info){
