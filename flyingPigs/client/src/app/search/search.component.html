@@ -54,7 +54,15 @@
             optionLabel="name"
             tooltipPosition="right" 
             tooltipEvent="focus"
-          ></p-dropdown>
+          >
+            <ng-template let-transport pTemplate="dTransportType">
+              <div class="flex align-items-center">
+                <fa-icon *ngIf="transport.name == 'Car'"[icon]="car"></fa-icon>
+                <fa-icon *ngIf="transport.name == 'Public Transit'"[icon]="bus"></fa-icon>
+                <span>{{transport.name}}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </span>
         <br>
 
@@ -74,7 +82,8 @@
             optionLabel="name"
             tooltipPosition="right" 
             tooltipEvent="focus"
-          ></p-dropdown>
+          >
+          </p-dropdown>
         </span>
       </div>
       <p-divider layout="vertical"></p-divider>
@@ -108,6 +117,7 @@
 
         <!-- Transportation method -->
         <span>
+          
           <label for="aTransportType">
             Mode of Transport
             <i class="pi pi-question-circle" style="white-space: pre-line" 
@@ -123,9 +133,21 @@
             optionLabel="name"
             tooltipPosition="right"
             tooltipEvent="focus"
-          ></p-dropdown>
+            dropdown
+          >
+            <ng-template let-transport pTemplate="aTransportType">
+              <div class="flex align-items-center">
+                <fa-icon *ngIf="transport.name == 'Car'"[icon]="car"></fa-icon>
+                <fa-icon *ngIf="transport.name == 'Public Transit'"[icon]="bus"></fa-icon>
+                <span>{{transport.name}}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
+          
+          
         </span>
         <br>
+        
 
         <!-- Transport Hours After Flight -->
         <span>

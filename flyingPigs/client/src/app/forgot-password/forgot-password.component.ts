@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { DataService } from "../data.service";
+import { ForgotPasswordSchema } from '../forgotPasswordSchema';
 
 @Component({
   selector: 'forgot-password',
@@ -12,14 +13,17 @@ import { DataService } from "../data.service";
 export class ForgotPasswordComponent {
   subscription!: Subscription;
   email: string;
+  service: any;
 
   constructor(private data: DataService, private router: Router) {
 
   }
 
   //backend calls
+  
+  results$: Observable<boolean> = new Observable();
+  async forgotPassword() {
 
-  forgotPassword() {
     this.resetValidity();
     let route = true;
     // input validation
@@ -29,7 +33,12 @@ export class ForgotPasswordComponent {
 
     // if valid email in database, send link to email
     // have alert that says, "if email exists, then a reset email link will be sent to you"
+    let forgotPassEmail: ForgotPasswordSchema = {email: this.email}
+    this.results$ = this.service.loginUser(forgotPassEmail);
 
+    this.results$.subscribe(value =>
+      console.log(value)
+    )
     if(route) {
       
       //this.data.changeMessage(this.email)

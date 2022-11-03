@@ -77,6 +77,7 @@ import { MenuModule } from 'primeng/menu';
     RadioButtonModule,
     MultiSelectModule,
     MenuModule,
+    FontAwesomeModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
