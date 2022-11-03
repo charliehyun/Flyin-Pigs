@@ -296,7 +296,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
   // COPY END
   // DIFFERENT FROM SEARCH
-  results$: Observable<ResultInfoSchema[]> = new Observable();
+  results$: Observable<ResultInfoSchema> = new Observable();
   trips:TripSchema[];
   filteredTrips:TripSchema[];
   ngOnInit(): void {
@@ -320,8 +320,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
     this.results$ = this.resultsService.searchAirports(this.search);
     this.results$.subscribe(value => {
-      this.trips = value["trips"];
-      this.filteredTrips = value["trips"];
+      this.trips = value.trips;
+      this.filteredTrips = value.trips;
     });
 
   }

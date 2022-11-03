@@ -8,17 +8,17 @@ import { FlightSchema, ResultInfoSchema, StopOverFlightSchema, TripSchema} from 
 })
 export class ResultsService {
     private url = 'http://localhost:5200';
-    private resultInfo$: Subject<ResultInfoSchema[]> = new Subject();
+    private resultInfo$: Subject<ResultInfoSchema> = new Subject();
     constructor(private httpClient: HttpClient) { }
 
     sendSearch(inputObject:SearchSchema) {
-        this.httpClient.post<ResultInfoSchema[]>(`${this.url}/airports/search`, inputObject)
+        this.httpClient.post<ResultInfoSchema>(`${this.url}/airports/search`, inputObject)
             .subscribe(result => {
                 this.resultInfo$.next(result);
             });
     }
 
-    searchAirports(inputObject:SearchSchema): Subject<ResultInfoSchema[]> {
+    searchAirports(inputObject:SearchSchema): Subject<ResultInfoSchema> {
         this.sendSearch(inputObject);
         return this.resultInfo$;
     }
