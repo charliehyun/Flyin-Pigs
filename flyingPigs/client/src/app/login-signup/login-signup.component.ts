@@ -1,11 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
-import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
-import { FormGroup,  FormBuilder,  Validators, FormControl } from '@angular/forms';
-import { DataService } from "../data.service";
-import { FlightSchema } from '../flightSchema';
 import { LoginSignupService } from './login-signup.service';
 import { LoginSchema } from '../loginSchema';
 import {MessageService} from 'primeng/api';
@@ -16,7 +11,6 @@ import { PrimeNGConfig } from 'primeng/api';
   templateUrl: './login-signup.component.html',
   styleUrls: ['./login-signup.component.scss'],
   providers: [MessageService]
-//   styleUrls: ['../app.component.scss']
 })
 
 export class LoginSignupComponent {
@@ -32,12 +26,12 @@ export class LoginSignupComponent {
 
     passHide: boolean;  // show/hide password text
 
-    currentUser: string = "";
+    currentUser: string = "";   // current logged in user
 
     constructor(private messageService: MessageService, private primengConfig: PrimeNGConfig, private loginSignupService: LoginSignupService, private router: Router) {
-        this.passHide = true
-        this.displayLogin = false
-        this.displaySignup = false
+        this.displayLogin = false;
+        this.displaySignup = false;
+        this.passHide = true;
     }
 
     ngOnInit() {
@@ -45,24 +39,10 @@ export class LoginSignupComponent {
         this.primengConfig.ripple = true;
     }
 
-    showSuccessL() {
+    // show toast based on success/error
+    showMessage(severity, summary, detail) {
         this.messageService.clear();
-        this.messageService.add({severity:'success', summary: 'Success', detail: 'Successfully logged in.'});
-    }
-
-    showSuccessS() {
-        this.messageService.clear();
-        this.messageService.add({severity:'success', summary: 'Success', detail: 'Successfully signed up. Log in to get started.'});
-    }
-
-    showErrorL() {
-        this.messageService.clear();
-        this.messageService.add({severity:'error', summary: 'Error', detail: 'Unable to log in. Invalid email or password.'});
-    }
-
-    showErrorS() {
-        this.messageService.clear();
-        this.messageService.add({severity:'error', summary: 'Error', detail: 'Unable to sign up. Invalid emial or password.'});
+        this.messageService.add({severity: severity, summary: summary, detail: detail});
     }
 
     // login button clicked, show modal
@@ -127,9 +107,9 @@ export class LoginSignupComponent {
                 this.displayLogin = false;
                 this.currentUser = this.emailL;
                 sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
-                this.showSuccessL();
+                this.showMessage('success', 'Success', 'Successfully logged in.');
             } else {
-                this.showErrorL();
+                this.showMessage('error', 'Error', 'Unable to log in. Invalid email or password.');
             }
         });
     }
@@ -138,63 +118,66 @@ export class LoginSignupComponent {
     handleSignup() {
         this.resetValidity()
         // check if all fields are populated
+        let invalid = false;
         if(!this.emailS) {
             const x = document.getElementById('emailS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
+            invalid = true
         }
         if(!this.passS) {
             const x = document.getElementById('passS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
+            invalid = true
         }
 
         // check if password and confirm password match
-        if(!this.confPassS ||this.passS != this.confPassS) {
+        if(!this.confPassS) {
             const x = document.getElementById('confPassS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
+            invalid = true
         }
 
-        // TODO: check if satisfies password reqs
-        // 1 lowercase
-        // 1 uppercase
-        // 1 number
-        // 1 special character
-        // 8 min length
-        const regex: RegExp = /\d+/g;
-        if(!this.passS.match(regex)) {
-            const x = document.getElementById('passS');
+        if(invalid) {
+            this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
+            return;
+        }
+
+        if(this.passS != this.confPassS) {
+            const x = document.getElementById('confPassS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
+            this.showMessage('error', 'Error', 'Passwords do not match');
+            return;
         }
 
-        if(this.passS.length < 8){
-            const x = document.getElementById('passS');
-            x?.classList.add('ng-invalid')
-            x?.classList.add('ng-dirty')
-        }
-        //const control = new FormControl(this.passS, Validators.minLength(8));
-        //console.log(control.errors);
-
-
-        // if satisfies, then call signupUser to check if email exists and to add to DB
-
-        let credentialsInput: LoginSchema = {
-            email: this.emailS,
-            password: this.passS
-        }
-
-        this.results$ = this.loginSignupService.signupUser(credentialsInput);
-
-        this.results$.subscribe(value => {
-            if(value){
-                this.displaySignup = false
-                this.showSuccessS();
-            } else {
-                this.showErrorS();
+        // check if satisfies password reqs
+        // 1 lowercase, 1 uppercase, 1 number, 1 special character, 8 min length
+        if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(this.passS)) {
+            // if satisfies, then call signupUser to check if email exists and to add to DB
+            let credentialsInput: LoginSchema = {
+                email: this.emailS,
+                password: this.passS
             }
-        });
+
+            this.results$ = this.loginSignupService.signupUser(credentialsInput);
+
+            this.results$.subscribe(value => {
+                if(value){
+                    this.displaySignup = false
+                    this.showMessage('success', 'Success', 'Successfully signed up. Log in to get started.');
+                } else {
+                    this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
+                }
+            });
+        } else {
+            const x = document.getElementById('passS');
+            x?.classList.add('ng-invalid')
+            x?.classList.add('ng-dirty')
+            this.showMessage('error', 'Error', 'Password does not satisfy all requirements.');
+        }
 
     }
 

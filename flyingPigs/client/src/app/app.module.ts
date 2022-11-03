@@ -26,7 +26,6 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DividerModule } from "primeng/divider";
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import {ToastModule} from 'primeng/toast';
 import { PanelModule } from 'primeng/panel';
@@ -43,8 +42,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
     SearchComponent,
     ResultsComponent,
     LoginSignupComponent,
-    ForgotPasswordComponent,
-    ScrollToTopComponent
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
