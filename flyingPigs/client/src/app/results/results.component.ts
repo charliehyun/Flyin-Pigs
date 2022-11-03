@@ -61,8 +61,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   selectedDepartAirports: any[];
   filterArrivalAirports: string[];
   selectedArrivalAirports: any[];
-  maxTravelTime: number = 24;
-  maxFlightTime: number = 10;
+  maxTravelTime: number;
+  maxFlightTime: number;
   departTime: Time;
   arrivalTime: Time;
 
@@ -393,7 +393,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
     let newTripArr:TripSchema[] = [];
     let chosenStops:number;
 
-    this.logger.info("Filtering data...");
     //converted selected stops into a number
     switch(this.selectedStop)
     {
@@ -410,6 +409,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
     this.trips.forEach(trip =>
     {
+      this.logger.info("Filtering data...");
       //get total trip time
       let totalTripTime:number = trip.totalDepTime
       if (trip.totalRetTime)
@@ -424,23 +424,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
 
       //convert string to Time to object
-      //convert string to Time to object of time
-      let departTimeStrings = trip.departingFlight.departureTime.split("T").slice(-1)[0].split(":");
-      let departTimeString = departTimeStrings[0] + ":" +  departTimeStrings[1];
-      let arriveTimeStrings = trip.departingFlight.arrivalTime.split("T").slice(-1)[0].split(":");
-      let arriveTimeString = arriveTimeStrings[0] + ":" + arriveTimeStrings[1];
 
-      let userDepartTime:string;
-      let userArriveTime:string;
-      this.departTime ? userDepartTime = this.departTime.toString() : userDepartTime = "23:59";
-      this.arrivalTime ? userArriveTime = this.arrivalTime.toString() : userArriveTime = "23:59";
       if (trip.departingFlight.numberOfStops <= chosenStops &&
           trip.flightPrice <= this.totalPrice[1] &&
           trip.flightPrice >= this.totalPrice[0] &&
           totalTripTime <= (this.maxTravelTime * 3600) &&
-          totalFlightTime <= (this.maxFlightTime * 3600) &&
-          departTimeString <= userDepartTime &&
-          arriveTimeString <= userArriveTime
+          totalFlightTime <= (this.maxFlightTime * 3600)
           )
       {
         newTripArr.push(trip);
