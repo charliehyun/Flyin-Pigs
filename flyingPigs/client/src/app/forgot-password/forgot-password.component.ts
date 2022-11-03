@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { DataService } from "../data.service";
+import { ForgotPasswordSchema } from '../forgotPasswordSchema';
 
 @Component({
   selector: 'forgot-password',
@@ -12,6 +13,7 @@ import { DataService } from "../data.service";
 export class ForgotPasswordComponent {
   subscription!: Subscription;
   email: string;
+  service: any;
 
   constructor(private data: DataService, private router: Router) {
 
