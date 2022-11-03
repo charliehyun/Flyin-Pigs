@@ -6,10 +6,10 @@
     float:left;
     padding-left:10px;
 }
+
 .pass2{
     float:right;
     padding-right:10px;
-
 }
 
 .pass3{
@@ -19,13 +19,35 @@
 }
 
 .pass4{
-  float:left;
-  padding-right:10px;
+    float:left;
+    padding-right:10px;
 }
+  
 .pass5{
-  float:right;
-  padding-left:10px;
+    float:right;
+    padding-left:10px;
+  
+}
 
+body{
+    overflow-y:scroll;
+}
+
+:host ::ng-deep .p-panel {
+    background: lightgray;
+    .p-panel-header {
+        background: lightgray;
+        cursor:pointer;
+    }
+    .p-panel-content {
+        background: white;
+        border-radius: 5px;
+        padding: 20px;
+    }
+}
+
+.loadMore {
+    text-align: center;  
 }
 
 :host ::ng-deep .custom-scrolltop {
@@ -42,14 +64,9 @@
       font-size: 1rem;
       color: var(--primary-color-text);
     }
-  }
+}
 
 //   :host ::ng-deep .p-slider {
 //     width: 20px;
 // }
 
-// :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-//     position: -webkit-sticky;
-//     position: sticky;
-//     top: 5rem;
-// }

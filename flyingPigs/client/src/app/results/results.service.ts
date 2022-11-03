@@ -23,4 +23,10 @@ export class ResultsService {
         return this.trips$;
     }
 
+    // clearAirports(): Subject<TripSchema[]> {
+    //     this.trips$ = new Subject();
+    //     return this.trips$;
+    // }
+
+    
 }

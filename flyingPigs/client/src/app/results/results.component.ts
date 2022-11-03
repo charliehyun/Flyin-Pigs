@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import {filter, first, flatMap, map, Observable, Subject, Subscription, take, tap} from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { ResultsService} from "../results/results.service";
@@ -20,7 +20,8 @@ import {RadioButtonModule} from 'primeng/radiobutton';
 @Component({
   selector: 'results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss']
+  styleUrls: ['./results.component.scss'],
+  // encapsulation: ViewEncapsulation.None
 })
 
 export class ResultsComponent implements OnInit, OnDestroy {
@@ -176,6 +177,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
+    // this.results$ = this.resultsService.clearAirports();
     this.resetValidity();
 
     let departureCoord;
@@ -268,7 +270,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
       sessionStorage.setItem('searchParams', JSON.stringify(this.search));
       this.data.changeMessage(this.search)
-      this.router.navigate(['results'])
+      // this.router.navigate(['results'])
+      this.ngOnInit();
     } else {
       alert("Error: Some fields are invalid or empty. Please fix them and try again.")
     }
@@ -307,6 +310,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
   results$: Observable<TripSchema[]> = new Observable();
   trips:TripSchema[];
   filteredTrips:TripSchema[];
+  displayTrips:TripSchema[];
+  loaded: number = 10;
+  shouldLoad:boolean = false;
   ngOnInit(): void {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
 
@@ -329,11 +335,25 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.results$ = this.resultsService.searchAirports(this.search);
     this.results$.subscribe(value => {
       this.trips = value;
-      this.filteredTrips = value;
+      this.filteredTrips = value
+      this.displayTrips = value.slice(0,this.loaded);
+      if(this.filteredTrips.length > this.loaded) {
+        this.shouldLoad = true;
+      }
     });
 
     this.selectedStop = this.stops[1];
 
+  }
+
+  loadMore() {
+    this.loaded += 10
+    this.displayTrips = this.filteredTrips.slice(0,this.loaded);
+    if(this.filteredTrips.length > this.loaded) {
+      this.shouldLoad = true;
+    } else {
+      this.shouldLoad = false;
+    }
   }
 
   updateDuration() {
@@ -405,6 +425,14 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
     });
     this.filteredTrips = newTripArr;
+    this.loaded = 10;
+    this.displayTrips = this.filteredTrips.slice(0,this.loaded);
+    if(this.filteredTrips.length > this.loaded) {
+      this.shouldLoad = true;
+    } else {
+      this.shouldLoad = false;
+    }
+    this.logger.info("Filtering data...");
   }
 
   resetFilter() {
