@@ -142,3 +142,13 @@ mongoRouter.post("/signup", async (req, res) => {
     }
 
 });
+
+mongoRouter.post("/forgotPassword", async (req, res) => {
+    let cred = await Credentials.findOne({email: req.body.email});
+    // if email exists in DB, check if true or not
+    if(cred) {
+        res.status(200).send(true)
+    } else {
+        res.status(200).send(false)
+    }
+});
