@@ -225,20 +225,12 @@
 </p-accordion> -->
 </p-panel>
 
-<p-toolbar class="toolbar" >
-  <div class="p-toolbar-group-left"> 
-      <!--
-        <i class="p-toolbar-separator pi pi-bars mr-2" style="vertical-align: middle"></i>
-        <p-dropdown [options]="numStops" [(ngModel)]="selectedStops" placeholder="Dropdown" optionLabel="stops"></p-dropdown>
-        <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input type="text" pInputText [(ngModel)]="stops" placeholder="Stops">         
-      </span>
-      -->
-
+<p-card [style]="{'height': '150px'}">
+  <h5>Filters</h5>
+  <div [style]="{float: 'left'}"> 
       <!-- Layover overlay-->
-      <button pButton pRipple type="button" (click)="op4.toggle($event)"  label="Stops"></button>
-      <p-overlayPanel #op4 [showCloseIcon]="true" (onHide)="updateStops()"> 
+      <button pButton pRipple type="button" (click)="op4.toggle($event)" class="p-button-outlined" label="Stops"></button>
+      <p-overlayPanel #op4 [showCloseIcon]="true"> 
         <div *ngFor="let stop of stops" class="p-field-checkbox">
           <p-radioButton [inputId]="stop.key" name="stop" [value]="stop" [(ngModel)]="selectedStop"></p-radioButton>
           <label [for]="stop.key">{{stop.name}}</label>
@@ -246,8 +238,8 @@
       </p-overlayPanel>
 
       <!--Price overlay-->
-      <button pButton pRipple type="button" (click)="op1.toggle($event)"  label="Price"></button>
-      <p-overlayPanel #op1 [showCloseIcon]="true" [style]="{width: '300px'}" (onHide)="updateTotalPrice()"> 
+      <button pButton pRipple type="button" (click)="op1.toggle($event)" class="p-button-outlined" label="Price"></button>
+      <p-overlayPanel #op1 [showCloseIcon]="true" [style]="{width: '300px'}"> 
         <div>
           <div class="pass4">
             $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[0]"/>
@@ -268,15 +260,15 @@
       </p-overlayPanel>
 
       <!-- Duration overlay-->
-      <button pButton pRipple type="button" (click)="op2.toggle($event)"  label="Duration"></button>
-      <p-overlayPanel #op2 [showCloseIcon]="true" [style]="{width: '400px'}" (onHide)="updateDuration()"> 
+      <button pButton pRipple type="button" (click)="op2.toggle($event)" class="p-button-outlined" label="Duration"></button>
+      <p-overlayPanel #op2 [showCloseIcon]="true" [style]="{width: '380px'}"> 
         <div>
-          <label>Max Total Travel Time (hr):</label>
+          <label class="pass3">Max Total Travel Time (hr):</label>
           <div class="pass2">
             <input type="text" size="5" pInputText [(ngModel)]="maxTravelTime"/>
           </div>
           <br><br><br>
-          <label>Max Flight Duration (hr):</label>
+          <label class="pass3">Max Flight Duration (hr):</label>
           <div class="pass2">
             <input type="text" size="5" pInputText [(ngModel)]="maxFlightTime"/>
           </div>
@@ -284,70 +276,61 @@
       </p-overlayPanel>
       
       <!--Times overlay-->
-      <button pButton pRipple type="button" (click)="op3.toggle($event)"  label="Times"></button>
-      <p-overlayPanel #op3 [showCloseIcon]="true" (onHide)="updateTravelTimes()"> 
+      <button pButton pRipple type="button" (click)="op3.toggle($event)" class="p-button-outlined" label="Times"></button>
+      <p-overlayPanel #op3 [showCloseIcon]="true"> 
         <div>
           <label class="pass3">Depart by: </label>
           <div class="pass2">
-            <input type="text" size="5" pInputText [(ngModel)]="departTime"/>
+            <input type="time" size="5" min="00:00" max="24:00" value="12:00" pInputText [(ngModel)]="departTime"/>
           </div>
-        </div>
-        <div>
-          <p-slider [(ngModel)]="departTime"></p-slider>
         </div>
         
+        <br>
         <div>
+          <br><br>
           <label class="pass3">Arrive by: </label>
           <div class="pass2">
-            <input type="text" size="5" pInputText [(ngModel)]="arrivalTime"/>
+            <input type="time" size="5" min="00:00" max="24:00" value="0:00"pInputText [(ngModel)]="arrivalTime"/>
           </div>
-        </div><br><br>
-        <div>
-          <p-slider [(ngModel)]="arrivalTime"></p-slider>
         </div>
       </p-overlayPanel>
 
       <!--Airport overlay-->
-      <button pButton pRipple type="button" (click)="op5.toggle($event)"  label="Airports"></button>
-      <p-overlayPanel #op5 [showCloseIcon]="true" (onHide)="updateTotalPrice()"> 
+      <button pButton pRipple type="button" (click)="op5.toggle($event)" class="p-button-outlined" label="Airports"></button>
+      <p-overlayPanel #op5 [showCloseIcon]="true" [style]="{width: '380px'}"> 
         <div>
           <label>Departure Airports: </label> <br>
           All Airports: (add toggle) <br>
-          <p-treeSelect [(ngModel)]="filterDepartAirports" [options]="numStops" display="chip" [metaKeySelection]="false"
-          selectionMode="checkbox" >
-          </p-treeSelect>
+          <p-multiSelect [options]="filterDepartAirports" [(ngModel)]="selectedDepartAirports"></p-multiSelect>
         </div>
         <div>
           <label>Arrival Airports: </label> <br>
           All Airports: (add toggle) <br>
-          <p-treeSelect [(ngModel)]="filterArrivalAirports" [options]="numStops" display="chip" [metaKeySelection]="false"
-          selectionMode="checkbox">
-          </p-treeSelect>
+          <p-multiSelect [options]="filterArrivalAirports" [(ngModel)]="selectedArrivalAirports"></p-multiSelect>
+
         </div>
       </p-overlayPanel>
 
       <!--Airline overlay-->
-      <button pButton pRipple type="button" (click)="op6.toggle($event)"  label="Airlines"></button>
-      <p-overlayPanel #op6 [showCloseIcon]="true" (onHide)="updateTotalPrice()"> 
+      <button pButton pRipple type="button" (click)="op6.toggle($event)" class="p-button-outlined" label="Airlines"></button>
+      <p-overlayPanel #op6 [showCloseIcon]="true"> 
         <div>
           <label>Departure Airlines: </label> <br>
           All Airlines: (add toggle) <br>
-          <p-treeSelect [(ngModel)]="filterDepartAirlines" [options]="numStops" display="chip" [metaKeySelection]="false"
+          <p-treeSelect [(ngModel)]="selectedAirlines" [options]="filterAirlines" display="chip" [metaKeySelection]="false"
           selectionMode="checkbox" placeholder="Airlines">
           </p-treeSelect>
         </div>
         
-      </p-overlayPanel>
-
-      <p-treeSelect [(ngModel)]="filterDepartAirlines" [options]="numStops" display="chip" [metaKeySelection]="false"
-        selectionMode="checkbox" placeholder="Airlines">
-      </p-treeSelect>
-
-      
-      
+      </p-overlayPanel>    
   </div>
-  
-</p-toolbar>
+  <div [style]="{float: 'right'}">
+    <button pButton pRipple type="button" class="p-button-outlined p-button-secondary" label="Clear Filters" (click)="resetFilter()"></button> 
+    <button pButton pRipple type="button" label="Filter" (click)="filterResults()"></button> 
+  </div>
+</p-card>
+
+
 
 <!-- RESULTS -->
 <div>
