@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
 import {ScrollTopModule} from 'primeng/scrolltop';
-import { FlightSchema, TripSchema } from '../flightSchema';
+import { FlightSchema, ResultInfoSchema, TripSchema } from '../flightSchema';
 import {NGXLogger} from "ngx-logger";
 import {ToolbarModule} from 'primeng/toolbar';
 import { MenuItem } from 'primeng/api';
@@ -55,10 +55,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   stops: any[] = [{name: 'Any number of stops', key: 'all'}, {name: 'Nonstop only', key: 'none'}, {name: '1 stop or fewer', key: 'one'}, {name: '2 stops or fewer', key: 'two'}];
   totalPrice: number[] = [1,10000];
-  filterDepartAirlines: any[] = [];
-  filterArrivalAirlines: any[] = [];
-  filterDepartAirports: any[] = [];
-  filterArrivalAirports: any[] = [];
+  filterAirlines: any[];
+  selectedAirlines: any[];
+  filterDepartAirports: any[];
+  selectedDepartAirports: any[];
+  filterArrivalAirports: string[];
+  selectedArrivalAirports: any[];
   maxTravelTime: number;
   maxFlightTime: number;
   departTime: Time;
@@ -100,12 +102,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: '6 hr', sec: 21600},
       {name: '7 hr', sec: 25200}
     ];
-    this.numStops = [
-      {name: '0', code: '0'},
-      {name: '1', code: '1'},
-      {name: '2', code: '2'},
-      {name: '3', code: '3'}
-    ];
+    // this.numStops = [
+    //   {name: '0', code: '0'},
+    //   {name: '1', code: '1'},
+    //   {name: '2', code: '2'},
+    //   {name: '3', code: '3'}
+    // ];
   }
 
   // Google autocomplete stuff
@@ -307,7 +309,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
   // COPY END
   // DIFFERENT FROM SEARCH
-  results$: Observable<TripSchema[]> = new Observable();
+  results$: Observable<ResultInfoSchema> = new Observable();
   trips:TripSchema[];
   filteredTrips:TripSchema[];
   displayTrips:TripSchema[];
@@ -334,15 +336,21 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
     this.results$ = this.resultsService.searchAirports(this.search);
     this.results$.subscribe(value => {
-      this.trips = value;
-      this.filteredTrips = value
-      this.displayTrips = value.slice(0,this.loaded);
+      this.trips = value.trips;
+      this.filteredTrips = value.trips;
+      this.displayTrips = value.trips.slice(0,this.loaded);
       if(this.filteredTrips.length > this.loaded) {
         this.shouldLoad = true;
       }
+      this.filterDepartAirports = value.depAirlines; //need to change names later
+      this.filterArrivalAirports = value.arrAirlines; //need to change names later
+      this.selectedArrivalAirports = this.filterArrivalAirports;
+      this.selectedDepartAirports = this.filterDepartAirports;
+      this.filterAirlines = value.airlines;
     });
 
     this.selectedStop = this.stops[1];
+    
 
   }
 
