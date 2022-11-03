@@ -1,19 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
-//import { SearchService } from "./search.service";
-//import { AirportSchema } from "../airportSchema";
-import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
-import {FlightSchema} from "../flightSchema";
-import {Message} from 'primeng/api';
-import { FormsModule } from '@angular/forms';
-import { LoginSchema } from '../loginSchema';
-import {MessageService} from 'primeng/api';
-import { PrimeNGConfig } from 'primeng/api';
-// import {Client} from "@googlemaps/google-maps-services-js";
 
 @Component({
   selector: 'reset-password',
@@ -21,23 +9,17 @@ import { PrimeNGConfig } from 'primeng/api';
   styleUrls: ['./reset-password.component.scss']
 })
 
-export class ResetPasswordComponent implements OnInit, OnDestroy {
+export class ResetPasswordComponent {
   subscription!: Subscription;
-  newPass: string = '';
+  email: string;
 
-  passHide: boolean;  // show/hide password text
+  constructor() {
 
-  constructor(private data: DataService, private router: Router, private fb: FormBuilder) {
-  // COPY START
-    this.createForm();
-    this.passHide = true
   }
 
   //backend calls
 
-  
-  results$: Observable<boolean> = new Observable();
-  async resetPassword() {
+  forgotPassword() {
     this.resetValidity();
     let route = true;
     // input validation
@@ -47,12 +29,13 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
     // if valid email in database, send link to email
     // have alert that says, "if email exists, then a reset email link will be sent to you"
-    
+
     if(route) {
       
       //this.data.changeMessage(this.email)
       //this.router.navigate(['results'])
       alert("Password has been reset!")
+
     }
   }
   
@@ -64,11 +47,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       el.classList.add('ng-pristine')
     })
   }
-    
-  createForm() {
-    
-  }
-  // COPY END
+
 
   passShowHide() {
     this.passHide = !this.passHide
@@ -80,5 +59,6 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
 
 }

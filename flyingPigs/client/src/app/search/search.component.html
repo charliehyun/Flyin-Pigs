@@ -180,8 +180,8 @@
       <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></button>
       <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
         <div>
-          <label for="adult" class="pass1">Adults</label>
-          <div class="pass2">
+          <label for="adult" class="overlay1">Adults</label>
+          <div class="overlay2">
             <p-inputNumber 
               [(ngModel)]="adultPass" 
               inputId="adult" 
@@ -194,8 +194,8 @@
             ></p-inputNumber>
           </div>
           <br><br><br>
-          <label for="child" class="pass1">Children &nbsp;</label>
-          <div class="pass2">
+          <label for="child" class="overlay1">Children &nbsp;</label>
+          <div class="overlay2">
             <p-inputNumber 
               [(ngModel)]="childPass" 
               inputId="child" 
@@ -208,8 +208,8 @@
             ></p-inputNumber>
           </div>
           <br><br><br>
-          <label for="infant" class="pass1">Infants</label>
-          <div class="pass2">
+          <label for="infant" class="overlay1">Infants</label>
+          <div class="overlay2">
             <p-inputNumber 
               [(ngModel)]="infantPass" 
               inputId="infant" 

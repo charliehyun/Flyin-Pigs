@@ -3,13 +3,9 @@ import { Observable, Subscription } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
-import {FlightSchema} from "../flightSchema";
-import {Message} from 'primeng/api';
 import {NGXLogger} from "ngx-logger";
 import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
-import {ScrollTopModule} from 'primeng/scrolltop';
 
 @Component({
   selector: 'search',
@@ -36,18 +32,19 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
   subscription!: Subscription;  // subscription to send search from search to results
-  date: any;
-  maxDate: any;
-  departDate: string;
-  returnDate: string;
-  dates: any;
+  date: any;  // current date
+  maxDate: any; // max selectable date
+  departDate: string; // selected departure date
+  returnDate: string; // selected return date (in the case of round trip)
+
+  departAdd= "";  // departure address input
+  arriveAdd= "";  // arrival address input
 
   //icons
   car = faCar;
   bus = faBus;
 
-  constructor(private data: DataService, private router: Router, private fb: FormBuilder, private logger: NGXLogger) {
-  // COPY START
+  constructor(private data: DataService, private router: Router, private logger: NGXLogger) {
     this.classes = [
       {name: 'Economy', code: 'ECONOMY'},
       {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
@@ -77,9 +74,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     ];
   }
 
+  // COPY START
+
   // Google autocomplete stuff
-  departAdd= "";
-  arriveAdd= "";
   options:Options = new Options({
     componentRestrictions:{
       country:"US"}
@@ -155,8 +152,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       x?.classList.add('ng-invalid')
       x?.classList.add('ng-dirty')
       route = false
-    } 
-    else {
+    } else {
       const x = document.getElementById('departDate');
       var departDateObj = new Date(this.departDate);
       if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
@@ -172,8 +168,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         x?.classList.add('ng-dirty')
         route = false
       }
-    }
-    else {
+    } else {
       const x = document.getElementById('returnDate');
       var returnDateObj = new Date(this.returnDate);
       if(returnDateObj < new Date(this.departDate) || returnDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
@@ -229,6 +224,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
   
   resetValidity() {
+    // reset validity of all input boxes
     const elements: Element[] = Array.from(document.getElementsByTagName("input"));
     elements.forEach((el: Element) => {
       el.classList.remove('ng-invalid')
@@ -247,10 +243,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     var geocoder = new google.maps.Geocoder();
     await geocoder.geocode({ 'address': address}).then(response => {
       coord = response.results[0].geometry.location;
-      // console.log(response);
     }).catch(e => {
       coord = null;
-      // console.log(e);
     });
     return coord;
   }
@@ -258,23 +252,6 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   // DIFFERENT FROM RESULTS
   ngOnInit() {
-    // this.search = JSON.parse(sessionStorage.getItem('searchParams') || "");
-    // if(this.search) {
-    //   this.selectedClass = this.search.selectedClass;
-    //   this.isRoundTrip = this.search.isRoundTrip;
-    //   this.adultPass = this.search.adultPass;
-    //   this.childPass = this.search.childPass;
-    //   this.infantPass = this.search.infantPass;
-    //   this.totalPass = this.search.totalPass;
-    //   this.departDate = this.search.departDate;
-    //   this.returnDate = this.search.returnDate;
-    //   this.departAdd = this.search.departAdd;
-    //   this.arriveAdd = this.search.arriveAdd;
-    //   this.selectedDTransport = this.search.selectedDTransport;
-    //   this.selectedATransport = this.search.selectedATransport;
-    //   this.maxTimeStart = this.search.maxTimeStart;
-    //   this.maxTimeEnd = this.search.maxTimeEnd;
-    // }
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
     this.date = new Date().toISOString().split("T")[0];
     this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
