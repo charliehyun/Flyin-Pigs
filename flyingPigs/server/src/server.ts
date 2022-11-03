@@ -8,7 +8,6 @@ dotenv.config();
 
 var day:Date = new Date();
 var logString = '../logs/log-' + day.getMonth() + '-' + day.getDate() + '.log';
-console.log()
 const { ATLAS_URI } = process.env;
 
 if (!ATLAS_URI) {
@@ -20,10 +19,10 @@ connectToDatabase(ATLAS_URI)
     .then(() => {
         log4js.configure({
             appenders: {
-                file: { type: 'file', filename: logString }
+                file: { type: 'file', filename: logString, layout: {type:"pattern", pattern: "[%f{1} %d line %l]: %m"} }
             },
             categories: {
-                default: { appenders: ['file'], level: 'debug' }
+                default: { appenders: ['file'], level: 'debug', enableCallStack: true }
             }
         });
         let logger = log4js.getLogger();
