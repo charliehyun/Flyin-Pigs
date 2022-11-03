@@ -8,9 +8,13 @@ import log4js from "log4js";
 import { TravelMode } from "@googlemaps/google-maps-services-js";
 import { Trip, ResultInfo, sortTrips, removeDuplicates } from "./flight";
 import { ObjectId } from "mongodb";
+import { mongo } from "mongoose";
+const crypto = require('crypto');
 var logger = log4js.getLogger();
 var Credentials = require("./credentials");
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+
 
 mongoRouter.get("/", async (_req, res) => {
     try {
@@ -143,4 +147,111 @@ mongoRouter.post("/signup", async (req, res) => {
         res.status(200).send(false);
     }
 
+});
+
+
+mongoRouter.get('/reset/', (req, res, next) => {
+    Credentials.findOne({resetPasswordToken: req.query.resetPasswordToken}).then((user) => {
+        if (user == null) {
+            res.status(200).send({
+                message: 'invalid-link',
+            });
+            // console.error('password reset link is invalid or has expired');
+            // res.status(403).send({message: 'password reset link is invalid or has expired'});
+        } else {
+            if(user.resetPasswordExpires > Date.now()) {
+                res.status(200).send({
+                    username: user.email,
+                    message: 'valid-link',
+                });
+            }
+            else {
+                res.status(200).send({
+                    message: 'invalid-link',
+                });
+                // console.error('password reset link is invalid or has expired');
+                // res.status(403).send({message: 'password reset link is invalid or has expired'});
+            }
+
+        }
+    });
+});
+
+mongoRouter.post("/submitForgotPassword", (req, res) =>
+{
+    Credentials.findOne({email: req.body.email}).then((user) => {
+
+        if(user) {
+            console.log('found user forgot password');
+            //generate a unique hash token
+            const token = crypto.randomBytes(20).toString('hex');
+
+            //update the user with the token and set it to expire in 10 minutes
+
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 600000;
+            user.save()
+                .then(user => res.json(user))
+                .catch(err => console.log(err));
+
+
+            var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                //     //put credentials into an .env file later and include it in .gitignore
+                // user: `${process.env.EMAIL_ADDRESSS}`,
+                // pass: `${process.env.EMAIL_PASSWORD}`,
+                auth: {
+                    user: 'flyinpigs407@gmail.com',
+                    pass: 'gseexbubldnyjdvu'
+                }
+            });
+                
+            var mailOptions = {
+                from: 'flyinpigs407@gmail.com',
+                to: req.body.email,
+                subject: `Password Reset Link`,
+                text: `click the link below to change your password:\n\nhttp://localhost:4200/reset/${token}`,
+            };
+                
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+            // const transporter = nodemailer.createTransport({
+            //     service: 'gmail',
+
+            //     //put credentials into an .env file later and include it in .gitignore
+            //     // user: `${process.env.EMAIL_ADDRESSS}`,
+            //     // pass: `${process.env.EMAIL_PASSWORD}`,
+            //     auth: {
+            //         user: "flyinpigs407@gmail.com",
+            //         pass: "BrickHouse407",
+            //     }
+            // });
+
+            // const mailOptions = {
+            //     from: `flyinpigs407@gmail.com`,
+            //     to: req.body.email,
+            //     subject: `Password Reset Link`,
+            //     text: `click the link below to change your password:\n\nhttp://localhost:3000/reset/${token}`,
+            // };
+
+            // transporter.sendMail(mailOptions, (err, response) => {
+            //     if(err) {
+            //         //error
+            //     }
+            //     else {
+            //         //sent
+            //         console.log("email sent");
+            //     }
+            // });
+        }
+        else {
+            return res.status(403).json({email: "Email doesn't exist."});
+        }
+    })
+    
 });

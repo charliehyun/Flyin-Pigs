@@ -10,6 +10,9 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
 import {FlightSchema} from "../flightSchema";
 import {Message} from 'primeng/api';
+import { ForgotPasswordService } from './forgot-password.service';
+import {NGXLogger} from "ngx-logger";
+
 // import {Client} from "@googlemaps/google-maps-services-js";
 @Component({
   selector: 'forgot-password',
@@ -22,18 +25,18 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   email: string = '';
 
 
-  constructor(private data: DataService, private router: Router, private fb: FormBuilder) {
+  constructor(private data: DataService, private router: Router, private forgotPasswordService: ForgotPasswordService, private fb: FormBuilder, private logger: NGXLogger) {
   // COPY START
     this.createForm();
   }
 
   //backend calls
 
-  
-
-  forgotPassword() {
+  async handleForgotPassword() {
+    this.logger.info("forgot password component email:", this.email);
     this.resetValidity();
-    let route = true;
+    this.forgotPasswordService.sendEmail(this.email);
+    // let route = true;
     // input validation
     // TODO: check if email is in database
     // if valid, create search object and route to results
@@ -41,13 +44,11 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
     // if valid email in database, send link to email
     // have alert that says, "if email exists, then a reset email link will be sent to you"
-
-    if(route) {
-      
+    // if(route) {
       //this.data.changeMessage(this.email)
       //this.router.navigate(['results'])
-      alert("Email has been sent if you have an existing account with us!")
-    }
+    //   alert("Email has been sent if you have an existing account with us!")
+    // }
   }
   
   resetValidity() {

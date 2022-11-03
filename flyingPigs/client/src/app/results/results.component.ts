@@ -54,7 +54,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   selectedStop: any = null;
 
   stops: any[] = [{name: 'Any number of stops', key: 'all'}, {name: 'Nonstop only', key: 'none'}, {name: '1 stop or fewer', key: 'one'}, {name: '2 stops or fewer', key: 'two'}];
-  totalPrice: number[] = [1,10000];
+  totalPrice: number[] = [];
   filterAirlines: any[];
   selectedAirlines: any[];
   filterDepartAirports: any[];
@@ -65,6 +65,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   maxFlightTime: number;
   departTime: Time;
   arrivalTime: Time;
+  minPrice: number;
+  maxPrice: number;
 
   airports: any[];
  
@@ -347,14 +349,15 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.selectedArrivalAirports = this.filterArrivalAirports;
       this.selectedDepartAirports = this.filterDepartAirports;
       this.filterAirlines = value.airlines;
+      this.maxPrice = value.maxPrice || 0;
+      this.minPrice = value.minPrice || 0;
+      this.totalPrice = [this.minPrice, this.maxPrice];
       console.log("filtered airline:", value.airlines);
 
       this.selectedAirlines = this.filterAirlines;
     });
 
-    this.selectedStop = this.stops[1];
-    
-
+    this.selectedStop = this.stops[0];
   }
 
   loadMore() {
