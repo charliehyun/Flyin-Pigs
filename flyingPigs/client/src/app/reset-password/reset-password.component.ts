@@ -9,30 +9,35 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
 import {FlightSchema} from "../flightSchema";
 import {Message} from 'primeng/api';
-import { ForgotPasswordService } from './forgot-password.service';
-import { ForgotPasswordSchema } from '../forgotPasswordSchema';
+import { FormsModule } from '@angular/forms';
+import { LoginSchema } from '../loginSchema';
+import {MessageService} from 'primeng/api';
+import { PrimeNGConfig } from 'primeng/api';
 // import {Client} from "@googlemaps/google-maps-services-js";
+
 @Component({
-  selector: 'forgot-password',
-  templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.scss']
+  selector: 'reset-password',
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.scss']
 })
 
-export class ForgotPasswordComponent implements OnInit, OnDestroy {
+export class ResetPasswordComponent implements OnInit, OnDestroy {
   subscription!: Subscription;
-  email: string = '';
+  newPass: string;
 
+  passHide: boolean;  // show/hide password text
 
-  constructor(private data: DataService, private router: Router, private fb: FormBuilder, private service: ForgotPasswordService ) {
+  constructor(private data: DataService, private router: Router, private fb: FormBuilder) {
   // COPY START
     this.createForm();
+    this.passHide = true
   }
 
   //backend calls
 
   
   results$: Observable<boolean> = new Observable();
-  async forgotPassword() {
+  async resetPassword() {
     this.resetValidity();
     let route = true;
     // input validation
@@ -42,17 +47,12 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
     // if valid email in database, send link to email
     // have alert that says, "if email exists, then a reset email link will be sent to you"
-    let forgotPassEmail: ForgotPasswordSchema = {email: this.email}
-    this.results$ = this.service.loginUser(forgotPassEmail);
-
-    this.results$.subscribe(value =>
-      console.log(value)
-    )
+    
     if(route) {
       
       //this.data.changeMessage(this.email)
       //this.router.navigate(['results'])
-      alert("Email has been sent if you have an existing account with us!")
+      alert("Password has been reset!")
     }
   }
   
@@ -70,7 +70,9 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   }
   // COPY END
 
-  // DIFFERENT FROM RESULTS
+  passShowHide() {
+    this.passHide = !this.passHide
+}
   ngOnInit() {
     
   }

@@ -33,8 +33,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
   selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
-  selectedStops: DropdownOption = {name: '1', code: '1'};
-  numStops: DropdownOption[];
 
   adultPass: number = 1;  // number of adult passengers
   childPass: number = 0;  // number of child passengers
@@ -154,7 +152,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.arriveAdd = "";
     this.maxTimeStart = {name: '3 hr', sec: 10800};
     this.maxTimeEnd = {name: '1 hr', sec: 3600};
-    this.selectedStops = {name: '0', code: '0'};
   }
 
   search: SearchSchema = {
