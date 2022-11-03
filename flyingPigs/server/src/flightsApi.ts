@@ -25,7 +25,7 @@ export class flightsApi {
     timeToAirportA:number = -1;
     timeToAirportB:number = -1;
     logger:log4js.Logger;
-    airlines: string[];
+    stackedAirlines: string[];
 
     constructor(departure:string, arrival:string, departureDate:string, arrivalDate:string,
     adults:number, children:number, infants:number, cabin:string, oneway:boolean, timeToAirportA:number, timeToAirportB:number)
@@ -112,9 +112,11 @@ export class flightsApi {
             }
             else {
                 let departingFlight = this.parseItinerary(flight.itineraries[0]);
+                // this.stackedAirlines.push(departingFlight.airlines);
                 let returningFlight = null;
                 if(!flight.oneWay && flight.itineraries.length > 1) {
                     returningFlight = this.parseItinerary(flight.itineraries[1]);
+                    // this.stackedAirlines.push(returningFlight.airlines);
                 }
                 let newTrip = new Trip(this.timeToAirportA, this.timeToAirportB, parseFloat(flight.price.total), departingFlight, returningFlight);
                 returnTripObjects.push(newTrip);

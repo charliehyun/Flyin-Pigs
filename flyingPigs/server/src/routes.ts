@@ -37,7 +37,7 @@ mongoRouter.post("/search", async (req, res) => {
             maxPrice: 0,
             trips: [],
         };
-        // let stackedAirlines: string[][] = [];
+        let airlinesDuplicates: string[] = [];
 
         let myDepFinder = new airportFinder();
         let depPrefilter = await myDepFinder.findAirportsInRange(searchParams.departCoord.lat, searchParams.departCoord.lng, searchParams.maxTimeStart.sec, searchParams.selectedDTransport.code);        
@@ -56,12 +56,14 @@ mongoRouter.post("/search", async (req, res) => {
                 let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate, 
                     searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
                     depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
+                // stackedAirlines.concat(myFlightApi.stackedAirlines);
                 // stackedAirlines.push(myFlightApi.airlines);
                 trips.push(myFlightApi.queryApi());
                 // let tripsThree = trips.slice(0,3);
                 // tripsThree.forEach((element: Trip) => tripList.push(element));
             }
         }
+        
         tripList = await Promise.all(trips)
         tripList = tripList.flat();
         // let myFlightApi = new flightsApi(depAirportArray[6].IATA, arrAirportArray[0].IATA, searchParams.departDate, searchParams.returnDate, searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip);
@@ -71,11 +73,18 @@ mongoRouter.post("/search", async (req, res) => {
         // let flightsTen = await myFlightApi.queryApi()
         // console.log(flightsTen.slice(0,10));
         // res.status(200).send(flightsTen.slice(0,10));
-        logger.info(tripList);
         resultInfo.trips = sortTrips(tripList, "flightPrice");
         resultInfo.minPrice = resultInfo.trips[0].flightPrice;
         resultInfo.maxPrice = resultInfo.trips[tripList.length - 1].flightPrice;
-        // resultInfo.airlines = removeDuplicates(stackedAirlines.flat());
+        
+        tripList.forEach(function(trip, index) {
+            airlinesDuplicates.concat(trip.departingFlight.airlines);
+            if(trip.returningFlight) {
+                airlinesDuplicates.concat(trip.returningFlight.airlines);
+            }
+        });
+        resultInfo.airlines = removeDuplicates(airlinesDuplicates);
+        logger.info(resultInfo);
         res.status(200).send(resultInfo);
 
     } catch (error) {
