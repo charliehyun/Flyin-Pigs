@@ -78,13 +78,15 @@ mongoRouter.post("/search", async (req, res) => {
         resultInfo.maxPrice = resultInfo.trips[tripList.length - 1].flightPrice;
         
         tripList.forEach(function(trip, index) {
-            airlinesDuplicates.concat(trip.departingFlight.airlines);
+            logger.info("airlines for one trip", trip.departingFlight.airlines);
+            airlinesDuplicates = airlinesDuplicates.concat(trip.departingFlight.airlines);
             if(trip.returningFlight) {
-                airlinesDuplicates.concat(trip.returningFlight.airlines);
+                airlinesDuplicates = airlinesDuplicates.concat(trip.returningFlight.airlines);
             }
         });
         resultInfo.airlines = removeDuplicates(airlinesDuplicates);
-        logger.info(resultInfo);
+        logger.info("all airlines: ", resultInfo.airlines);
+        logger.info("resultInfo: ", resultInfo);
         res.status(200).send(resultInfo);
 
     } catch (error) {
