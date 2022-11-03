@@ -50,7 +50,7 @@ export class ResetPasswordComponent {
 
 
   passShowHide() {
-    this.passHide = !this.passHide
+    //this.passHide = !this.passHide
 }
   ngOnInit() {
     
