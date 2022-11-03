@@ -37,7 +37,7 @@ mongoRouter.post("/search", async (req, res) => {
             maxPrice: 0,
             trips: [],
         };
-        let stackedAirlines: string[][] = [];
+        // let stackedAirlines: string[][] = [];
 
         let myDepFinder = new airportFinder();
         let depPrefilter = await myDepFinder.findAirportsInRange(searchParams.departCoord.lat, searchParams.departCoord.lng, searchParams.maxTimeStart.sec, searchParams.selectedDTransport.code);        
@@ -56,7 +56,7 @@ mongoRouter.post("/search", async (req, res) => {
                 let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate, 
                     searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
                     depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
-                stackedAirlines.push(myFlightApi.airlines);
+                // stackedAirlines.push(myFlightApi.airlines);
                 trips.push(myFlightApi.queryApi());
                 // let tripsThree = trips.slice(0,3);
                 // tripsThree.forEach((element: Trip) => tripList.push(element));
@@ -75,7 +75,7 @@ mongoRouter.post("/search", async (req, res) => {
         resultInfo.trips = sortTrips(tripList, "flightPrice");
         resultInfo.minPrice = resultInfo.trips[0].flightPrice;
         resultInfo.maxPrice = resultInfo.trips[tripList.length - 1].flightPrice;
-        resultInfo.airlines = removeDuplicates(stackedAirlines.flat());
+        // resultInfo.airlines = removeDuplicates(stackedAirlines.flat());
         res.status(200).send(resultInfo);
 
     } catch (error) {

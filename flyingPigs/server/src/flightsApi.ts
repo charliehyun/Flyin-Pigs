@@ -135,10 +135,10 @@ export class flightsApi {
             let stopOver = new stopOverFlight(curr.carrierCode, curr.departure.iataCode, curr.arrival.iataCode, this.calculateStopover(next.arrival.at, curr.departure.at), curr.departure.at, next.arrival.at);
             newFlight.addStopOver(stopOver);
             newFlight.addAirline(curr.carrierCode);
-            this.airlines.push(curr.carrierCode);
+            // this.airlines.push(curr.carrierCode);
             if(i == segments.length - 2) {
                 newFlight.addAirline(next.carrierCode);
-                this.airlines.push(next.carrierCode);
+                // this.airlines.push(next.carrierCode);
             }
         }
         return newFlight;
