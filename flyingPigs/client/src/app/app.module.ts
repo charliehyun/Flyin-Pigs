@@ -3,9 +3,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 import { SearchComponent } from './search/search.component';
 import { ResultsComponent } from './results/results.component';
 import { LoginSignupComponent } from './login-signup/login-signup.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -22,7 +26,6 @@ import { CardModule } from 'primeng/card';
 import {TableModule} from 'primeng/table';
 import {DialogModule} from 'primeng/dialog';
 import {TooltipModule} from 'primeng/tooltip';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DividerModule } from "primeng/divider";
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
@@ -42,7 +45,8 @@ import {MultiSelectModule} from 'primeng/multiselect';
     SearchComponent,
     ResultsComponent,
     LoginSignupComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
