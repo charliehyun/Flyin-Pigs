@@ -18,6 +18,35 @@
     padding-top: 20px;
 }
 
+.pass4{
+  float:left;
+  padding-right:10px;
+}
+.pass5{
+  float:right;
+  padding-left:10px;
+
+}
+
+:host ::ng-deep .custom-scrolltop {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+  
+    &:hover {
+      background-color: var(--primary-color);
+    }
+  
+    .p-scrolltop-icon {
+      font-size: 1rem;
+      color: var(--primary-color-text);
+    }
+  }
+
+//   :host ::ng-deep .p-slider {
+//     width: 20px;
+// }
 
 // :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
 //     position: -webkit-sticky;

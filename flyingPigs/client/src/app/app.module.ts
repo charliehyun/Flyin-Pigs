@@ -32,6 +32,7 @@ import {ToastModule} from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import {TreeSelectModule} from 'primeng/treeselect';
 import { SliderModule } from 'primeng/slider';
+import {RadioButtonModule} from 'primeng/radiobutton';
 
 
 @NgModule({
@@ -68,6 +69,7 @@ import { SliderModule } from 'primeng/slider';
     ToolbarModule,
     TreeSelectModule,
     SliderModule,
+    RadioButtonModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
