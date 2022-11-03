@@ -302,6 +302,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
   results$: Observable<TripSchema[]> = new Observable();
   trips:TripSchema[];
   filteredTrips:TripSchema[];
+  displayTrips:TripSchema[];
+  loaded: number = 10;
+  shouldLoad:boolean = false;
   ngOnInit(): void {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
 
@@ -324,9 +327,23 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.results$ = this.resultsService.searchAirports(this.search);
     this.results$.subscribe(value => {
       this.trips = value;
-      this.filteredTrips = value;
+      this.filteredTrips = value
+      this.displayTrips = value.slice(0,this.loaded);
+      if(this.filteredTrips.length > this.loaded) {
+        this.shouldLoad = true;
+      }
     });
 
+  }
+
+  loadMore() {
+    this.loaded += 10
+    this.displayTrips = this.filteredTrips.slice(0,this.loaded);
+    if(this.filteredTrips.length > this.loaded) {
+      this.shouldLoad = true;
+    } else {
+      this.shouldLoad = false;
+    }
   }
 
   updateDuration() {
@@ -361,6 +378,13 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
     });
     this.filteredTrips = newTripArr;
+    this.loaded = 10;
+    this.displayTrips = this.filteredTrips.slice(0,this.loaded);
+    if(this.filteredTrips.length > this.loaded) {
+      this.shouldLoad = true;
+    } else {
+      this.shouldLoad = false;
+    }
     this.logger.info("Filtering data...");
   }
 

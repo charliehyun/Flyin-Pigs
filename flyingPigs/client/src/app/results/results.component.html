@@ -1,7 +1,7 @@
 <img src="favicon.ico" alt="Flyin' Pigs" routerLink="/search" width="100px" [style]="{cursor:'pointer'}">
 <h2>Flights</h2>
 <!-- SEARCH -->
-<p-panel header="Search Parameters" toggler="header" [toggleable]="true" expandIcon="pi pi-plus-circle" collapseIcon="pi pi-minus-circle" [collapsed]="true" style="font-size: 2px">
+<p-panel header="Search Parameters" toggler="header" [toggleable]="true" expandIcon="pi pi-plus-circle" collapseIcon="pi pi-minus-circle" [collapsed]="true">
 <!-- <p-accordion [multiple]="true">
   <p-accordionTab header="Search Parameters" [selected]="true" > -->
     <!-- COPY START -->
@@ -149,7 +149,7 @@
         <br><hr><br>
         <!-- One way/Round trip -->
         One Way 
-        <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" style="vertical-align: middle;"></p-inputSwitch>
+        <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" [style]="{'vertical-align':'middle'}"></p-inputSwitch>
         Round Trip &nbsp;
 
         <!-- Passenger # and selection Overlay -->
@@ -318,14 +318,14 @@
 </div>
 
 <!-- No flights -->
-<div *ngIf="(results$ | async)?.length == 0">
+<div *ngIf="filteredTrips?.length == 0">
     <p-card [style]="{'background':'#f4cccc'}">
         No flights match your search:(
     </p-card>
 </div>
 
 <!-- Table -->
-<p-table [value] = "filteredTrips" dataKey="name" responsiveLayout="scroll">
+<p-table [value] = "displayTrips" dataKey="name" responsiveLayout="scroll">
     <!-- Column names -->
     <ng-template pTemplate="header">
         <tr>
@@ -369,7 +369,7 @@
                 <div class="p-3">
                     <p-card header="Stop Overs">
                         <tr *ngFor="let stops of trip.departingFlight.stopOvers">
-                          <td>Airline:{{stops.airline}}, </td>  
+                          <td>Airline:{{stops.airline}}, </td>
                           <td>Departure Airport:{{stops.depAirportCode}}, </td>
                           <td>Arrival Airport:{{stops.arrAirportCode}}, </td>
                           <td>Stop Over Duration:{{stops.stopOverDuration}}, </td>
@@ -381,11 +381,13 @@
             </td>
         </tr>
     </ng-template>
-    <button pButton pRipple type="button" label="Load More"></button>
 </p-table>
+<div class="loadMore" *ngIf="shouldLoad">
+  <button pButton pRipple type="button"  label="Load 10 More" (click)="loadMore()" ></button>
+</div>
 
 <!-- Loading -->
-<i class="pi pi-spin pi-spinner" *ngIf="!(results$ | async)" style="font-size: 2rem; display: flex; align-items: center; justify-content: center;" ></i>
+<i class="pi pi-spin pi-spinner" *ngIf="!filteredTrips" style="font-size: 2rem; display: flex; align-items: center; justify-content: center;" ></i>
 
 
 <app-scroll-to-top></app-scroll-to-top>
