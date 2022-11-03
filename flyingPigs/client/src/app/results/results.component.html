@@ -240,14 +240,14 @@
 
       <!-- Duration overlay-->
       <button pButton pRipple type="button" (click)="op2.toggle($event)"  label="Duration"></button>
-      <p-overlayPanel #op2 [showCloseIcon]="true" [style]="{width: '400px'}" (onHide)="updateDuration()"> 
+      <p-overlayPanel #op2 [showCloseIcon]="true" [style]="{width: '380px'}" (onHide)="updateDuration()"> 
         <div>
-          <label>Max Total Travel Time (hr):</label>
+          <label class="pass3">Max Total Travel Time (hr):</label>
           <div class="pass2">
             <input type="text" size="5" pInputText [(ngModel)]="maxTravelTime"/>
           </div>
           <br><br><br>
-          <label>Max Flight Duration (hr):</label>
+          <label class="pass3">Max Flight Duration (hr):</label>
           <div class="pass2">
             <input type="text" size="5" pInputText [(ngModel)]="maxFlightTime"/>
           </div>
@@ -260,21 +260,17 @@
         <div>
           <label class="pass3">Depart by: </label>
           <div class="pass2">
-            <input type="text" size="5" pInputText [(ngModel)]="departTime"/>
+            <input type="time" size="5" min="00:00" max="24:00" value="12:00" pInputText [(ngModel)]="departTime"/>
           </div>
-        </div>
-        <div>
-          <p-slider [(ngModel)]="departTime"></p-slider>
         </div>
         
+        <br>
         <div>
+          <br><br>
           <label class="pass3">Arrive by: </label>
           <div class="pass2">
-            <input type="text" size="5" pInputText [(ngModel)]="arrivalTime"/>
+            <input type="time" size="5" min="00:00" max="24:00" value="0:00"pInputText [(ngModel)]="arrivalTime"/>
           </div>
-        </div><br><br>
-        <div>
-          <p-slider [(ngModel)]="arrivalTime"></p-slider>
         </div>
       </p-overlayPanel>
 
@@ -310,12 +306,10 @@
         
       </p-overlayPanel>
 
-      <p-treeSelect [(ngModel)]="filterDepartAirlines" [options]="numStops" display="chip" [metaKeySelection]="false"
-        selectionMode="checkbox" placeholder="Airlines">
-      </p-treeSelect>
-
-      
-      
+       
+  </div>
+  <div class="p-toolbar-group-right">
+    <button pButton pRipple type="button" label="Filter" (click)="filterResults()"></button> 
   </div>
   
 </p-toolbar>
