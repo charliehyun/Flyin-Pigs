@@ -44,10 +44,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
   departAdd= "";  // departure address input
   arriveAdd= "";  // arrival address input
 
+  totalPrice: number[] = [];
   // FILTER VARS
-  selectedStop: any = null;
   stops: any[];
-  totalPrice: number[] = [1,10000];
+  selectedStop: any = null;
   filterAirlines: any[];
   selectedAirlines: any[];
   filterDepartAirports: any[];
@@ -58,6 +58,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
   maxFlightTime: number = 10;
   departTime: Time;
   arrivalTime: Time;
+  minPrice: number;
+  maxPrice: number;
+
   airports: any[];
    
   constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger) {
@@ -313,6 +316,11 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.selectedArrivalAirports = this.filterArrivalAirports;
       this.selectedDepartAirports = this.filterDepartAirports;
       this.filterAirlines = value.airlines;
+      this.maxPrice = value.maxPrice || 0;
+      this.minPrice = value.minPrice || 0;
+      this.totalPrice = [this.minPrice, this.maxPrice];
+      console.log("filtered airline:", value.airlines);
+
       this.selectedAirlines = this.filterAirlines;
     });
   }

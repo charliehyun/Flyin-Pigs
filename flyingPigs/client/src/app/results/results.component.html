@@ -246,7 +246,7 @@
           </div>
           <br><br>
           <div>
-            <p-slider [min]="0" [(ngModel)]="totalPrice" [range]="true" [max]="10000" [min]="1" [style]="{width: '250px'}"></p-slider>
+            <p-slider [min]="minPrice" [(ngModel)]="totalPrice" [range]="true" [max]="maxPrice" [style]="{width: '250px'}"></p-slider>
           </div>
         </div>
       </p-overlayPanel>
@@ -289,14 +289,13 @@
       <button pButton pRipple type="button" (click)="op5.toggle($event)" class="p-button-outlined" label="Airports"></button>
       <p-overlayPanel #op5 [showCloseIcon]="true" [style]="{width: '350px'}"> 
         <div>
-          <label>Departure Airports:</label> 
-          <br>
-          <p-multiSelect [options]="filterDepartAirports" [(ngModel)]="selectedDepartAirports" [style]="{width: '100%'}"></p-multiSelect>
+          <label>Departure Airports: </label> <br>
+          <p-multiSelect [options]="filterDepartAirports" [(ngModel)]="selectedDepartAirports" display="chip" [style]="{width: '100%'}"></p-multiSelect>
         </div>
         <div>
-          <label>Arrival Airports:</label> 
-          <br>
-          <p-multiSelect [options]="filterArrivalAirports" [(ngModel)]="selectedArrivalAirports" [style]="{width: '100%'}"></p-multiSelect>
+          <label>Arrival Airports: </label> <br>
+          <p-multiSelect [options]="filterArrivalAirports" [(ngModel)]="selectedArrivalAirports" display="chip" [style]="{width: '100%'}"></p-multiSelect>
+
         </div>
       </p-overlayPanel>
 
@@ -305,7 +304,7 @@
       <p-overlayPanel #op6 [showCloseIcon]="true" [style]="{width: '350px'}"> 
         <div>
           <label>Departure Airlines: </label> <br>
-          <p-multiSelect [options]="filterAirlines" [(ngModel)]="selectedAirlines" [style]="{width: '100%'}"></p-multiSelect>
+          <p-multiSelect [options]="filterAirlines" [(ngModel)]="selectedAirlines" display="chip" [style]="{width: '100%'}"></p-multiSelect>
         </div>
       </p-overlayPanel>    
   </div>
