@@ -41,8 +41,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   arriveAdd= "";  // arrival address input
 
   //icons
-  faCar = faCar;
-  faBus = faBus;
+  car = faCar;
+  bus = faBus;
 
   constructor(private data: DataService, private router: Router, private logger: NGXLogger) {
     this.classes = [

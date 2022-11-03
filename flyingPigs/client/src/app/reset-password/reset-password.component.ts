@@ -34,7 +34,8 @@ export class ResetPasswordComponent {
       
       //this.data.changeMessage(this.email)
       //this.router.navigate(['results'])
-      alert("Email has been sent if you have an existing account with us!")
+      alert("Password has been reset!")
+
     }
   }
   
@@ -46,5 +47,18 @@ export class ResetPasswordComponent {
       el.classList.add('ng-pristine')
     })
   }
+
+
+  passShowHide() {
+    this.passHide = !this.passHide
+}
+  ngOnInit() {
+    
+  }
+  
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
 
 }

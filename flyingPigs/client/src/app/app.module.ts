@@ -76,6 +76,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
     SliderModule,
     RadioButtonModule,
     MultiSelectModule,
+    FontAwesomeModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,

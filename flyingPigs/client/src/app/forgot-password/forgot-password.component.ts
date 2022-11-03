@@ -18,8 +18,10 @@ export class ForgotPasswordComponent {
   }
 
   //backend calls
+  
+  results$: Observable<boolean> = new Observable();
+  async forgotPassword() {
 
-  forgotPassword() {
     this.resetValidity();
     let route = true;
     // input validation
@@ -29,7 +31,12 @@ export class ForgotPasswordComponent {
 
     // if valid email in database, send link to email
     // have alert that says, "if email exists, then a reset email link will be sent to you"
+    let forgotPassEmail: ForgotPasswordSchema = {email: this.email}
+    this.results$ = this.service.loginUser(forgotPassEmail);
 
+    this.results$.subscribe(value =>
+      console.log(value)
+    )
     if(route) {
       
       //this.data.changeMessage(this.email)
