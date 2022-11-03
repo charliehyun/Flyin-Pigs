@@ -3,7 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { LoginSignupService } from './login-signup.service';
 import { LoginSchema } from '../loginSchema';
-import {MessageService} from 'primeng/api';
+import {MessageService, MenuItem} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
@@ -28,10 +28,18 @@ export class LoginSignupComponent {
 
     currentUser: string = "";   // current logged in user
 
+    userOptionsMenu: MenuItem[];
+
     constructor(private messageService: MessageService, private primengConfig: PrimeNGConfig, private loginSignupService: LoginSignupService, private router: Router) {
         this.displayLogin = false;
         this.displaySignup = false;
         this.passHide = true;
+        this.userOptionsMenu = [{
+            items: [{
+                label: 'Logout',
+                icon: 'pi pi-user-minus'
+            }]
+        }]
     }
 
     ngOnInit() {
@@ -178,7 +186,6 @@ export class LoginSignupComponent {
             x?.classList.add('ng-dirty')
             this.showMessage('error', 'Error', 'Password does not satisfy all requirements.');
         }
-
     }
 
     handlePassword() {
