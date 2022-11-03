@@ -30,6 +30,10 @@ export class LoginSignupComponent {
 
     userOptionsMenu: MenuItem[];
 
+    loginResults$: Observable<boolean> = new Observable();
+    signupResults$: Observable<boolean> = new Observable();
+
+
     constructor(private messageService: MessageService, private primengConfig: PrimeNGConfig, private loginSignupService: LoginSignupService, private router: Router) {
         this.displayLogin = false;
         this.displaySignup = false;
@@ -87,7 +91,6 @@ export class LoginSignupComponent {
     }
 
     // handle login attempt. account validation
-    results$: Observable<boolean> = new Observable();
     async handleLogin() {
         this.resetValidity();
 
@@ -108,14 +111,15 @@ export class LoginSignupComponent {
             password: this.passL
         }
 
-        this.results$ = this.loginSignupService.loginUser(credentialsInput);
+        this.loginResults$ = this.loginSignupService.loginUser(credentialsInput);
 
-        this.results$.subscribe(value => {
-            if(value){
+        this.loginResults$.subscribe(value => {
+            if(value) {
                 this.displayLogin = false;
                 this.currentUser = this.emailL;
                 sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
                 this.showMessage('success', 'Success', 'Successfully logged in.');
+                this.clearFields();
             } else {
                 this.showMessage('error', 'Error', 'Unable to log in. Invalid email or password.');
             }
@@ -170,12 +174,15 @@ export class LoginSignupComponent {
                 password: this.passS
             }
 
-            this.results$ = this.loginSignupService.signupUser(credentialsInput);
+            this.signupResults$ = this.loginSignupService.signupUser(credentialsInput);
 
-            this.results$.subscribe(value => {
-                if(value){
-                    this.displaySignup = false
-                    this.showMessage('success', 'Success', 'Successfully signed up. Log in to get started.');
+            this.signupResults$.subscribe(value => {
+                if(value) {
+                    this.displaySignup = false;
+                    this.currentUser = this.emailS;
+                    sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
+                    this.showMessage('success', 'Success', 'Successfully signed up and logged in!');
+                    this.clearFields();
                 } else {
                     this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
                 }
@@ -190,6 +197,15 @@ export class LoginSignupComponent {
 
     handlePassword() {
         this.router.navigate(['forgot-password'])
+    }
+
+    clearFields() {
+        this.emailL = ""
+        this.passL = ""
+
+        this.emailS = ""
+        this.passS = ""
+        this.confPassS = ""
     }
 
     resetValidity() {
