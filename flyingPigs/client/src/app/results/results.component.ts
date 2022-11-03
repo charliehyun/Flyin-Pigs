@@ -433,15 +433,21 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.departTime ? userDepartTime = this.departTime.toString() : userDepartTime = "23:59";
       this.arrivalTime ? userArriveTime = this.arrivalTime.toString() : userArriveTime = "23:59";
 
-      this.logger.info(userDepartTime, departTimeString, userArriveTime, arriveTimeString);
-      this.logger.info(trip);
+      //determine what airlines are available.
+      let includedAirlines = trip.departingFlight.airlines.every(airline => this.selectedAirlines.includes(airline));
+
       if (trip.departingFlight.numberOfStops <= chosenStops &&
           trip.flightPrice <= this.totalPrice[1] &&
           trip.flightPrice >= this.totalPrice[0] &&
           totalTripTime <= (this.maxTravelTime * 3600) &&
           totalFlightTime <= (this.maxFlightTime * 3600) &&
           departTimeString <= userDepartTime &&
-          arriveTimeString <= userArriveTime
+          arriveTimeString <= userArriveTime &&
+          this.selectedDepartAirports.includes(trip.departingFlight.departureAirport) &&
+          this.selectedArrivalAirports.includes(trip.departingFlight.arrivalAirport) &&
+          includedAirlines
+
+
           )
       {
         newTripArr.push(trip);
@@ -455,12 +461,18 @@ export class ResultsComponent implements OnInit, OnDestroy {
     } else {
       this.shouldLoad = false;
     }
-    this.logger.info("Filtering data...");
   }
 
   resetFilter() {
     this.logger.info("Resetting filter");
+
     this.filteredTrips = this.trips;
+    this.displayTrips = this.filteredTrips.slice(0,this.loaded);
+    if(this.filteredTrips.length > this.loaded) {
+      this.shouldLoad = true;
+    } else {
+      this.shouldLoad = false;
+    }
   }
 
 }
