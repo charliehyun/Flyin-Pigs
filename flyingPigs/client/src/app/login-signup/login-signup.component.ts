@@ -62,7 +62,17 @@ export class LoginSignupComponent {
 
     showErrorS() {
         this.messageService.clear();
-        this.messageService.add({severity:'error', summary: 'Error', detail: 'Unable to sign up. Invalid emial or password.'});
+        this.messageService.add({severity:'error', summary: 'Error', detail: 'Unable to sign up. Invalid email or password.'});
+    }
+
+    showConfErrorS() {
+        this.messageService.clear();
+        this.messageService.add({severity:'error', summary: 'Error', detail: 'Passwords do not match'});
+    }
+
+    showInvalidPass() {
+        this.messageService.clear();
+        this.messageService.add({severity:'error', summary: 'Error', detail: 'Password does not satisfy all requirements.'});
     }
 
     // login button clicked, show modal
@@ -138,63 +148,66 @@ export class LoginSignupComponent {
     handleSignup() {
         this.resetValidity()
         // check if all fields are populated
+        let invalid = false;
         if(!this.emailS) {
             const x = document.getElementById('emailS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
+            invalid = true
         }
         if(!this.passS) {
             const x = document.getElementById('passS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
+            invalid = true
         }
 
         // check if password and confirm password match
-        if(!this.confPassS ||this.passS != this.confPassS) {
+        if(!this.confPassS) {
             const x = document.getElementById('confPassS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
+            invalid = true
         }
 
-        // TODO: check if satisfies password reqs
-        // 1 lowercase
-        // 1 uppercase
-        // 1 number
-        // 1 special character
-        // 8 min length
-        const regex: RegExp = /\d+/g;
-        if(!this.passS.match(regex)) {
-            const x = document.getElementById('passS');
+        if(invalid) {
+            this.showErrorS();
+            return;
+        }
+
+        if(this.passS != this.confPassS) {
+            const x = document.getElementById('confPassS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
+            this.showConfErrorS();
+            return;
         }
 
-        if(this.passS.length < 8){
-            const x = document.getElementById('passS');
-            x?.classList.add('ng-invalid')
-            x?.classList.add('ng-dirty')
-        }
-        //const control = new FormControl(this.passS, Validators.minLength(8));
-        //console.log(control.errors);
-
-
-        // if satisfies, then call signupUser to check if email exists and to add to DB
-
-        let credentialsInput: LoginSchema = {
-            email: this.emailS,
-            password: this.passS
-        }
-
-        this.results$ = this.loginSignupService.signupUser(credentialsInput);
-
-        this.results$.subscribe(value => {
-            if(value){
-                this.displaySignup = false
-                this.showSuccessS();
-            } else {
-                this.showErrorS();
+        // check if satisfies password reqs
+        // 1 lowercase, 1 uppercase, 1 number, 1 special character, 8 min length
+        if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(this.passS)) {
+            // if satisfies, then call signupUser to check if email exists and to add to DB
+            let credentialsInput: LoginSchema = {
+                email: this.emailS,
+                password: this.passS
             }
-        });
+
+            this.results$ = this.loginSignupService.signupUser(credentialsInput);
+
+            this.results$.subscribe(value => {
+                if(value){
+                    this.displaySignup = false
+                    this.showSuccessS();
+                } else {
+                    this.showErrorS();
+                }
+            });
+        } else {
+            const x = document.getElementById('passS');
+            x?.classList.add('ng-invalid')
+            x?.classList.add('ng-dirty')
+            this.showInvalidPass();
+        }
 
     }
 
