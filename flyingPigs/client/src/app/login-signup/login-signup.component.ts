@@ -32,14 +32,16 @@ export class LoginSignupComponent {
 
     passHide: boolean;  // show/hide password text
 
+    currentUser: string = "";
+
     constructor(private messageService: MessageService, private primengConfig: PrimeNGConfig, private loginSignupService: LoginSignupService, private router: Router) {
         this.passHide = true
         this.displayLogin = false
         this.displaySignup = false
-
     }
 
     ngOnInit() {
+        this.currentUser = sessionStorage.getItem('flyinPigsCurrentUser') || "";
         this.primengConfig.ripple = true;
     }
 
@@ -89,6 +91,13 @@ export class LoginSignupComponent {
         this.passHide = !this.passHide
     }
 
+    // handle log out
+    async handleLogOut() {
+        this.resetValidity();
+        this.currentUser = "";
+        sessionStorage.removeItem("flyinPigsCurrentUser");
+    }
+
     // handle login attempt. account validation
     results$: Observable<boolean> = new Observable();
     async handleLogin() {
@@ -115,7 +124,9 @@ export class LoginSignupComponent {
 
         this.results$.subscribe(value => {
             if(value){
-                this.displayLogin = false
+                this.displayLogin = false;
+                this.currentUser = this.emailL;
+                sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
                 this.showSuccessL();
             } else {
                 this.showErrorL();

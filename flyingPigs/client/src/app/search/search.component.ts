@@ -9,6 +9,7 @@ import {FlightSchema} from "../flightSchema";
 import {Message} from 'primeng/api';
 import {NGXLogger} from "ngx-logger";
 import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
+import {ScrollTopModule} from 'primeng/scrolltop';
 
 @Component({
   selector: 'search',
@@ -104,6 +105,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   // reset input boxes to valid, clear inputs, set back to default, and set search object back to default
   handleClear() {
+    sessionStorage.removeItem('searchParams');
     this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
     this.selectedDTransport = {name: 'Car', code: 'driving'};
@@ -127,7 +129,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     adultPass: 1,
     childPass: 0,
     infantPass: 0,
-    totalPass: 0,
+    totalPass: 1,
     departDate: "",
     returnDate: "",
     departAdd: "",
@@ -218,7 +220,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         maxTimeStart: this.maxTimeStart,
         maxTimeEnd: this.maxTimeEnd
       }
-      
+      sessionStorage.setItem('searchParams', JSON.stringify(this.search));
       this.data.changeMessage(this.search)
       this.router.navigate(['results'])
     } else {
@@ -256,6 +258,23 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   // DIFFERENT FROM RESULTS
   ngOnInit() {
+    // this.search = JSON.parse(sessionStorage.getItem('searchParams') || "");
+    // if(this.search) {
+    //   this.selectedClass = this.search.selectedClass;
+    //   this.isRoundTrip = this.search.isRoundTrip;
+    //   this.adultPass = this.search.adultPass;
+    //   this.childPass = this.search.childPass;
+    //   this.infantPass = this.search.infantPass;
+    //   this.totalPass = this.search.totalPass;
+    //   this.departDate = this.search.departDate;
+    //   this.returnDate = this.search.returnDate;
+    //   this.departAdd = this.search.departAdd;
+    //   this.arriveAdd = this.search.arriveAdd;
+    //   this.selectedDTransport = this.search.selectedDTransport;
+    //   this.selectedATransport = this.search.selectedATransport;
+    //   this.maxTimeStart = this.search.maxTimeStart;
+    //   this.maxTimeEnd = this.search.maxTimeEnd;
+    // }
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
     this.date = new Date().toISOString().split("T")[0];
     this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];

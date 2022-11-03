@@ -59,6 +59,8 @@ export class Trip {
     timeToAirportA: number;
     timeToAirportB: number;
     flightPrice:number;
+    totalDepTime: number;
+    totalRetTime?: number;
 
     constructor(timeToAirportA: number, timeToAirportB: number, flightPrice:number, departingFlight: Flight, returningFlight: Flight) {
         this.timeToAirportA = timeToAirportA;
@@ -67,6 +69,8 @@ export class Trip {
         this.departingFlight = departingFlight;
         if(returningFlight) {
             this.returningFlight = returningFlight;
+            this.totalRetTime = timeToAirportA + timeToAirportB + returningFlight.flightTime;
         }
+        this.totalDepTime = timeToAirportA + timeToAirportB + departingFlight.flightTime;
     }
 }

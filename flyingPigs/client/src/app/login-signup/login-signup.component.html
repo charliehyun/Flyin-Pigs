@@ -1,6 +1,6 @@
 <p-toast position="top-left"></p-toast>
 
-<button pButton type="button" class="p-button-sm" (click)="showLogin()" label="Log In"></button>
+<button *ngIf="!currentUser" pButton type="button" class="p-button-sm" (click)="showLogin()" label="Log In"></button>
 <p-dialog header="Log In" [(visible)]="displayLogin" [modal]="true" [style]="{width: '450px'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <h6>Email</h6>
     <input pInputText type="email" id="emailL" [(ngModel)]="emailL">
@@ -19,7 +19,7 @@
     </ng-template>
 </p-dialog>
 
-<button pButton type="button" class="p-button-sm p-button-secondary" (click)="showSignup()" label="Sign Up"></button>
+<button *ngIf="!currentUser" pButton type="button" class="p-button-sm p-button-secondary" (click)="showSignup()" label="Sign Up"></button>
 <p-dialog header="Sign Up" [(visible)]="displaySignup" [modal]="true" [style]="{width: '450px'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <h6>Email</h6>
     <input pInputText type="email" id="emailS" [(ngModel)]="emailS">
@@ -53,3 +53,5 @@
         <button pButton type="button" (click)="handleSignup()" class="p-button-sm" label="Sign Up"></button>
     </ng-template>
 </p-dialog>
+
+<button *ngIf="currentUser" pButton type="button" (click)="handleLogOut()" class="p-button-sm" label="Log Out"></button>
