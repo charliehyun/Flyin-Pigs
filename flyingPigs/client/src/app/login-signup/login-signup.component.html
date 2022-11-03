@@ -38,8 +38,7 @@
         <i class="pi pi-eye-slash" *ngIf="passHide" (click)="passShowHide()"></i>
         <i class="pi pi-eye" *ngIf="!passHide" (click)="passShowHide()"></i>
     </h6>
-    <input pInputText [type]="passHide ? 'password' : 'text'" id="passS" [(ngModel)]="passS">
-
+    <input pInputText [type]="passHide ? 'password' : 'text'" id="passS"  [(ngModel)]="passS">
     <h6>
         <br>
         Confirm Password
