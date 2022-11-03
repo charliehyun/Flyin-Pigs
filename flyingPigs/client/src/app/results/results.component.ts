@@ -330,28 +330,11 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.results$.subscribe(value => {
       this.trips = value;
       this.filteredTrips = value;
+      this.filterDepartAirports = value.depAirlines;
     });
 
     this.selectedStop = this.stops[1];
 
-  }
-
-  updateDuration() {
-    this.maxFlightTime = this.maxFlightTime;
-    this.maxTravelTime = this.maxTravelTime;
-  }
-
-  updateTotalPrice() {
-    this.totalPrice = this.totalPrice;
-  }
-
-  updateStops() {
-    this.stops = this.stops;
-  }
-
-  updateTravelTimes() {
-    this.departTime = this.departTime;
-    this.arrivalTime = this.arrivalTime;
   }
 
   ngOnDestroy() {
