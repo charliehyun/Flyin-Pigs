@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'results', component: ResultsComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'reset-password', component: ResetPasswordComponent }
+  { path: 'reset-password/:token', component: ResetPasswordComponent },
 ];
 
 @NgModule({
