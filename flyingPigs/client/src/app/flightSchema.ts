@@ -11,6 +11,7 @@ export interface FlightSchema {
     // timeToAirport:number;
     // timeFromAirport:number;
 }
+
 export interface StopOverFlightSchema {
     airline:string;
     depAirportCode:string;

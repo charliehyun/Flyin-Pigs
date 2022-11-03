@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {Observable, Subject, tap, lastValueFrom, take} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import { SearchSchema } from '../searchSchema';
-import { FlightSchema, StopOverFlightSchema, TripSchema, ResultInfoSchema} from '../flightSchema';
+import { ResultInfoSchema} from '../flightSchema';
 @Injectable({
     providedIn: 'root'
 })
@@ -27,6 +27,4 @@ export class ResultsService {
     //     this.trips$ = new Subject();
     //     return this.trips$;
     // }
-
-    
 }

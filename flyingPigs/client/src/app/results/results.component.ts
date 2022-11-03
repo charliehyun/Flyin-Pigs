@@ -4,27 +4,20 @@ import { Options } from 'ngx-google-places-autocomplete/objects/options/options'
 import { ResultsService} from "../results/results.service";
 import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
-import {ScrollTopModule} from 'primeng/scrolltop';
-import { FlightSchema, ResultInfoSchema, TripSchema } from '../flightSchema';
+import { ResultInfoSchema, TripSchema } from '../flightSchema';
 import {NGXLogger} from "ngx-logger";
-import {ToolbarModule} from 'primeng/toolbar';
 import { MenuItem } from 'primeng/api';
-import {InputTextModule} from 'primeng/inputtext';
-import {SliderModule} from 'primeng/slider';
 import { Time } from '@angular/common';
-import {RadioButtonModule} from 'primeng/radiobutton';
-
 
 @Component({
   selector: 'results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss'],
-  // encapsulation: ViewEncapsulation.None
+  styleUrls: ['./results.component.scss']
 })
 
 export class ResultsComponent implements OnInit, OnDestroy {
+  // SEARCH INPUT VARS
   classes: DropdownOption[];  // Flight class options
   selectedClass: DropdownOption = {name: 'Economy', code: 'ECONOMY'}; // Selected flight class
   dTransportType: DropdownOption[]; // Transportation to airport options
@@ -33,8 +26,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
   selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
-  selectedStops: DropdownOption = {name: '1', code: '1'};
-  numStops: DropdownOption[];
 
   adultPass: number = 1;  // number of adult passengers
   childPass: number = 0;  // number of child passengers
@@ -44,39 +35,35 @@ export class ResultsComponent implements OnInit, OnDestroy {
   maxTimeEnd: DropdownOption = {name: '1 hr', sec: 3600}; //default end driving hours
 
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
-  subscription!: Subscription;
-  date: any;
-  maxDate: any;
-  departDate: string;
-  returnDate: string;
-  dates: any;
+  subscription!: Subscription;  // subscription to send search from search to results
+  date: any;  // current date
+  maxDate: any; // max selectable date
+  departDate: string; // selected departure date
+  returnDate: string; // selected return date (in the case of round trip)
 
-  selectedStop: any = null;
+  departAdd= "";  // departure address input
+  arriveAdd= "";  // arrival address input
 
-  stops: any[] = [{name: 'Any number of stops', key: 'all'}, {name: 'Nonstop only', key: 'none'}, {name: '1 stop or fewer', key: 'one'}, {name: '2 stops or fewer', key: 'two'}];
   totalPrice: number[] = [];
+  // FILTER VARS
+  stops: any[];
+  selectedStop: any = null;
   filterAirlines: any[];
   selectedAirlines: any[];
   filterDepartAirports: any[];
   selectedDepartAirports: any[];
   filterArrivalAirports: string[];
   selectedArrivalAirports: any[];
-  maxTravelTime: number;
-  maxFlightTime: number;
+  maxTravelTime: number = 24;
+  maxFlightTime: number = 10;
   departTime: Time;
   arrivalTime: Time;
   minPrice: number;
   maxPrice: number;
 
   airports: any[];
- 
-
-  items: MenuItem[];
-
    
-  constructor(private resultsService: ResultsService, private data: DataService, private router: Router,
-              private fb: FormBuilder, private logger: NGXLogger) {
-  // COPY START
+  constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger) {
     this.classes = [
       {name: 'Economy', code: 'ECONOMY'},
       {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
@@ -104,17 +91,19 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: '6 hr', sec: 21600},
       {name: '7 hr', sec: 25200}
     ];
-    // this.numStops = [
-    //   {name: '0', code: '0'},
-    //   {name: '1', code: '1'},
-    //   {name: '2', code: '2'},
-    //   {name: '3', code: '3'}
-    // ];
+    this.stops = [
+      {name: 'Any number of stops', key: 'all'},
+      {name: 'Nonstop only', key: 'none'},
+      {name: '1 stop or fewer', key: 'one'},
+      {name: '2 stops or fewer', key: 'two'}
+    ];
+
+    this.selectedStop = this.stops[0];
   }
 
+  // COPY START
+
   // Google autocomplete stuff
-  departAdd= "";
-  arriveAdd= "";
   options:Options = new Options({
     componentRestrictions:{
       country:"US"}
@@ -156,7 +145,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.arriveAdd = "";
     this.maxTimeStart = {name: '3 hr', sec: 10800};
     this.maxTimeEnd = {name: '1 hr', sec: 3600};
-    this.selectedStops = {name: '0', code: '0'};
   }
 
   search: SearchSchema = {
@@ -176,29 +164,13 @@ export class ResultsComponent implements OnInit, OnDestroy {
     selectedATransport: {name: 'Car', code: 'driving'},
     maxTimeStart: {name: '3 hr', sec: 10800},
     maxTimeEnd: {name: '1 hr', sec: 3600}
-    
   }
 
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
-    // this.results$ = this.resultsService.clearAirports();
     this.resetValidity();
-
-    let departureCoord;
-    let arrivalCoord
-    let prevSearch = JSON.parse(sessionStorage.getItem('searchParams') || "");
-    if(!prevSearch || prevSearch.departAdd != this.departAdd){
-      departureCoord = await this.geocode(this.departAdd);
-    }
-    else {
-      departureCoord = prevSearch.departCoord;
-    }
-    if(!prevSearch || prevSearch.arriveAdd != this.arriveAdd){
-      arrivalCoord = await this.geocode(this.arriveAdd);
-    }
-    else {
-      arrivalCoord = prevSearch.arriveCoord;
-    }
+    let departureCoord = await this.geocode(this.departAdd);
+    let arrivalCoord = await this.geocode(this.arriveAdd);
 
     let route = true;
     // input validation
@@ -207,8 +179,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       x?.classList.add('ng-invalid')
       x?.classList.add('ng-dirty')
       route = false
-    } 
-    else {
+    } else {
       const x = document.getElementById('departDate');
       var departDateObj = new Date(this.departDate);
       if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
@@ -224,8 +195,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
         x?.classList.add('ng-dirty')
         route = false
       }
-    }
-    else {
+    } else {
       const x = document.getElementById('returnDate');
       var returnDateObj = new Date(this.returnDate);
       if(returnDateObj < new Date(this.departDate) || returnDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
@@ -274,14 +244,13 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
       sessionStorage.setItem('searchParams', JSON.stringify(this.search));
       this.data.changeMessage(this.search)
-      // this.router.navigate(['results'])
-      this.ngOnInit();
     } else {
       alert("Error: Some fields are invalid or empty. Please fix them and try again.")
     }
   }
-
+  
   resetValidity() {
+    // reset validity of all input boxes
     const elements: Element[] = Array.from(document.getElementsByTagName("input"));
     elements.forEach((el: Element) => {
       el.classList.remove('ng-invalid')
@@ -296,28 +265,25 @@ export class ResultsComponent implements OnInit, OnDestroy {
   If an error occurs, returns a null. 
   */
   async geocode(address) {
-    // this.logger.info("GEOCODING");
-    console.log("GEOCODING");
     var coord;
     var geocoder = new google.maps.Geocoder();
     await geocoder.geocode({ 'address': address}).then(response => {
       coord = response.results[0].geometry.location;
-      // console.log(response);
     }).catch(e => {
       coord = null;
-      // console.log(e);
     });
     return coord;
   }
   // COPY END
   // DIFFERENT FROM SEARCH
-  results$: Observable<ResultInfoSchema> = new Observable();
-  trips:TripSchema[];
-  filteredTrips:TripSchema[];
-  displayTrips:TripSchema[];
-  loaded: number = 10;
-  shouldLoad:boolean = false;
+  results$: Observable<ResultInfoSchema> = new Observable();  // original results returned from backend
+  trips:TripSchema[]; // original results returned from backend but not async:)
+  filteredTrips:TripSchema[]; // filtered results
+  displayTrips:TripSchema[];  // results that are displayed on frontend (splice of filteredTrips)
+  loaded: number = 10;  // number of results to show
+  shouldLoad:boolean = false; // if it is possible to load more
   ngOnInit(): void {
+    // grab search info from search page and assign to input vars
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
 
     this.search = JSON.parse(sessionStorage.getItem('searchParams') || "");
@@ -336,6 +302,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.maxTimeStart = this.search.maxTimeStart;
     this.maxTimeEnd = this.search.maxTimeEnd;
 
+    // get trip results
     this.results$ = this.resultsService.searchAirports(this.search);
     this.results$.subscribe(value => {
       this.trips = value.trips;
@@ -356,8 +323,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
       this.selectedAirlines = this.filterAirlines;
     });
+  }
 
-    this.selectedStop = this.stops[0];
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   loadMore() {
@@ -370,35 +339,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateDuration() {
-    this.maxFlightTime = this.maxFlightTime;
-    this.maxTravelTime = this.maxTravelTime;
-  }
-
-  updateTotalPrice() {
-    this.totalPrice = this.totalPrice;
-  }
-
-  updateStops() {
-    this.stops = this.stops;
-  }
-
-  updateTravelTimes() {
-    this.departTime = this.departTime;
-    this.arrivalTime = this.arrivalTime;
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
   filterResults() {
     let newTripArr:TripSchema[] = [];
     let chosenStops:number;
-
+    this.logger.info("Filtering data...");
     //converted selected stops into a number
-    switch(this.selectedStop)
-    {
+    switch(this.selectedStop.key) {
       case("none"): chosenStops = 0;
       break;
       case("all"): chosenStops = Number.MAX_SAFE_INTEGER;
@@ -409,30 +355,42 @@ export class ResultsComponent implements OnInit, OnDestroy {
       break;
     }
 
-
-    this.trips.forEach(trip =>
-    {
-      this.logger.info("Filtering data...");
+    this.trips.forEach(trip => {
       //get total trip time
       let totalTripTime:number = trip.totalDepTime
-      if (trip.totalRetTime)
-      {
+      if (trip.totalRetTime) {
         totalTripTime += trip.totalRetTime;
       }
       //get total flight time
       let totalFlightTime:number = trip.departingFlight.flightTime;
-      if (trip.returningFlight)
-      {
+      if (trip.returningFlight) {
         totalFlightTime += trip.returningFlight.flightTime;
       }
 
       //convert string to Time to object
+      let departTimeStrings = trip.departingFlight.departureTime.split("T").slice(-1)[0].split(":");
+      let departTimeString = departTimeStrings[0] + ":" +  departTimeStrings[1];
+      let arriveTimeStrings = trip.departingFlight.arrivalTime.split("T").slice(-1)[0].split(":");
+      let arriveTimeString = arriveTimeStrings[0] + ":" + arriveTimeStrings[1];
+
+      let userDepartTime:string;
+      let userArriveTime:string;
+      this.departTime ? userDepartTime = this.departTime.toString() : userDepartTime = "23:59";
+      this.arrivalTime ? userArriveTime = this.arrivalTime.toString() : userArriveTime = "23:59";
+
+      //determine what airlines are available.
+      let includedAirlines = trip.departingFlight.airlines.every(airline => this.selectedAirlines.includes(airline));
 
       if (trip.departingFlight.numberOfStops <= chosenStops &&
           trip.flightPrice <= this.totalPrice[1] &&
           trip.flightPrice >= this.totalPrice[0] &&
           totalTripTime <= (this.maxTravelTime * 3600) &&
-          totalFlightTime <= (this.maxFlightTime * 3600)
+          totalFlightTime <= (this.maxFlightTime * 3600) &&
+          departTimeString <= userDepartTime &&
+          arriveTimeString <= userArriveTime &&
+          this.selectedDepartAirports.includes(trip.departingFlight.departureAirport) &&
+          this.selectedArrivalAirports.includes(trip.departingFlight.arrivalAirport) &&
+          includedAirlines
           )
       {
         newTripArr.push(trip);
@@ -446,12 +404,18 @@ export class ResultsComponent implements OnInit, OnDestroy {
     } else {
       this.shouldLoad = false;
     }
-    this.logger.info("Filtering data...");
   }
 
   resetFilter() {
     this.logger.info("Resetting filter");
+
     this.filteredTrips = this.trips;
+    this.displayTrips = this.filteredTrips.slice(0,this.loaded);
+    if(this.filteredTrips.length > this.loaded) {
+      this.shouldLoad = true;
+    } else {
+      this.shouldLoad = false;
+    }
   }
 
 }

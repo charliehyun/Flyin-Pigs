@@ -149,7 +149,6 @@ mongoRouter.post("/signup", async (req, res) => {
 
 });
 
-
 mongoRouter.get('/reset/', (req, res, next) => {
     Credentials.findOne({resetPasswordToken: req.query.resetPasswordToken}).then((user) => {
         if (user == null) {

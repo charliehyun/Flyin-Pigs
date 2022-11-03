@@ -2,233 +2,230 @@
 <h2>Flights</h2>
 <!-- SEARCH -->
 <p-panel header="Search Parameters" toggler="header" [toggleable]="true" expandIcon="pi pi-plus-circle" collapseIcon="pi pi-minus-circle" [collapsed]="true">
-<!-- <p-accordion [multiple]="true">
-  <p-accordionTab header="Search Parameters" [selected]="true" > -->
-    <!-- COPY START -->
+  <!-- COPY START -->
+  <div>
+    <div class="p-grid p-nogutter">
+      <div class="p-col">
+        <h4>Departure</h4>
+        <!-- Address -->
+        <span>
+          <label for="daddress">
+            Starting Address
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="Where are you leaving from? Input an address or a general location." 
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <input 
+            pInputText 
+            type="text" 
+            id="daddress" 
+            name="daddress" 
+            size="35" 
+            required 
+            ngx-google-places-autocomplete 
+            [options]="options" 
+            (onAddressChange)="AddressChange1($event)" 
+            [(ngModel)]="departAdd"
+            tooltipPosition="right" 
+            tooltipEvent="focus"
+          >
+        </span>
+        <br>
+
+        <!-- Transportation method -->
+        <span>
+          <label for="dTransportType">
+            Mode of Transport
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How will you be getting to the departure airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-dropdown 
+            id="dTransportType" 
+            [options]="dTransportType" 
+            [(ngModel)]="selectedDTransport" 
+            placeholder="Select a Mode of Transport" 
+            optionLabel="name"
+            tooltipPosition="right" 
+            tooltipEvent="focus"
+          ></p-dropdown>
+        </span>
+        <br>
+
+        <!-- Transport Hours Before Flight -->
+        <span>
+          <label for="drivingStartHours">
+            Maximum approximate {{selectedDTransport.code}} time
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How long are you willing to travel to get to the departure airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-dropdown 
+            id="drivingStartHours" 
+            [options]="hours" 
+            [(ngModel)]="maxTimeStart" 
+            optionLabel="name"
+            tooltipPosition="right" 
+            tooltipEvent="focus"
+          ></p-dropdown>
+        </span>
+      </div>
+      <p-divider layout="vertical"></p-divider>
+      <div class="p-col">
+        <h4>Arrival</h4>
+        <!-- Address -->
+        <span>
+          <label for="aaddress">
+            Destination Address
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="Where are you traveling to?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <input 
+            pInputText 
+            type="text" 
+            id="aaddress" 
+            name="aaddress" 
+            size="35" 
+            required 
+            ngx-google-places-autocomplete 
+            [options]="options" 
+            (onAddressChange)="AddressChange2($event)" 
+            [(ngModel)]="arriveAdd"
+            tooltipPosition="right" 
+            tooltipEvent="focus"
+          >
+        </span>
+        <br>
+
+        <!-- Transportation method -->
+        <span>
+          <label for="aTransportType">
+            Mode of Transport
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How will you be getting to your destination from the airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-dropdown 
+            id="aTransportType" 
+            [options]="aTransportType" 
+            [(ngModel)]="selectedATransport" 
+            placeholder="Select a Mode of Transport" 
+            optionLabel="name"
+            tooltipPosition="right"
+            tooltipEvent="focus"
+          ></p-dropdown>
+        </span>
+        <br>
+
+        <!-- Transport Hours After Flight -->
+        <span>
+          <label for="drivingEndHours">
+            Maximum approximate {{selectedATransport.code}} time
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How long are you willing to travel to get to your destination from the airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-dropdown 
+            [options]="hours" 
+            [(ngModel)]="maxTimeEnd" 
+            optionLabel="name" 
+            tooltipPosition="right" 
+            tooltipEvent="focus"
+          ></p-dropdown>
+        </span>
+      </div>
+    </div>
+
     <div>
-      <div class="p-grid p-nogutter">
-        <div class="p-col">
-          <h4>Departure</h4>
-          <!-- Address -->
-          <span>
-            <label for="daddress">
-              Starting Address
-              <i class="pi pi-question-circle" style="white-space: pre-line" 
-                pTooltip="Where are you leaving from? Input an address or a general location." 
-                tooltipPosition="top"
-              ></i>
-            </label>
-            <input 
-              pInputText 
-              type="text" 
-              id="daddress" 
-              name="daddress" 
-              size="35" 
-              required 
-              ngx-google-places-autocomplete 
-              [options]="options" 
-              (onAddressChange)="AddressChange1($event)" 
-              [(ngModel)]="departAdd"
-              tooltipPosition="right" 
-              tooltipEvent="focus"
-            >
-          </span>
-          <br>
+      <br><hr><br>
+      <!-- One way/Round trip -->
+      One Way 
+      <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" [style]="{'vertical-align':'middle'}"></p-inputSwitch>
+      Round Trip &nbsp;
 
-          <!-- Transportation method -->
-          <span>
-            <label for="dTransportType">
-              Mode of Transport
-              <i class="pi pi-question-circle" style="white-space: pre-line" 
-                pTooltip="How will you be getting to the departure airport?" 
-                tooltipPosition="top"
-              ></i>
-            </label>
-            <p-dropdown 
-              id="dTransportType" 
-              [options]="dTransportType" 
-              [(ngModel)]="selectedDTransport" 
-              placeholder="Select a Mode of Transport" 
-              optionLabel="name"
-              tooltipPosition="right" 
-              tooltipEvent="focus"
-            ></p-dropdown>
-          </span>
-          <br>
-
-          <!-- Transport Hours Before Flight -->
-          <span>
-            <label for="drivingStartHours">
-              Maximum approximate {{selectedDTransport.code}} time
-              <i class="pi pi-question-circle" style="white-space: pre-line" 
-                pTooltip="How long are you willing to travel to get to the departure airport?" 
-                tooltipPosition="top"
-              ></i>
-            </label>
-            <p-dropdown 
-              id="drivingStartHours" 
-              [options]="hours" 
-              [(ngModel)]="maxTimeStart" 
-              optionLabel="name"
-              tooltipPosition="right" 
-              tooltipEvent="focus"
-            ></p-dropdown>
-          </span>
-        </div>
-        <p-divider layout="vertical"></p-divider>
-        <div class="p-col">
-          <h4>Arrival</h4>
-          <!-- Address -->
-          <span>
-            <label for="aaddress">
-              Destination Address
-              <i class="pi pi-question-circle" style="white-space: pre-line" 
-                pTooltip="Where are you traveling to?" 
-                tooltipPosition="top"
-              ></i>
-            </label>
-            <input 
-              pInputText 
-              type="text" 
-              id="aaddress" 
-              name="aaddress" 
-              size="35" 
-              required 
-              ngx-google-places-autocomplete 
-              [options]="options" 
-              (onAddressChange)="AddressChange2($event)" 
-              [(ngModel)]="arriveAdd"
-              tooltipPosition="right" 
-              tooltipEvent="focus"
-            >
-          </span>
-          <br>
-
-          <!-- Transportation method -->
-          <span>
-            <label for="aTransportType">
-              Mode of Transport
-              <i class="pi pi-question-circle" style="white-space: pre-line" 
-                pTooltip="How will you be getting to your destination from the airport?" 
-                tooltipPosition="top"
-              ></i>
-            </label>
-            <p-dropdown 
-              id="aTransportType" 
-              [options]="aTransportType" 
-              [(ngModel)]="selectedATransport" 
-              placeholder="Select a Mode of Transport" 
-              optionLabel="name"
-              tooltipPosition="right"
-              tooltipEvent="focus"
-            ></p-dropdown>
-          </span>
-          <br>
-
-          <!-- Transport Hours After Flight -->
-          <span>
-            <label for="drivingEndHours">
-              Maximum approximate {{selectedATransport.code}} time
-              <i class="pi pi-question-circle" style="white-space: pre-line" 
-                pTooltip="How long are you willing to travel to get to your destination from the airport?" 
-                tooltipPosition="top"
-              ></i>
-            </label>
-            <p-dropdown 
-              [options]="hours" 
-              [(ngModel)]="maxTimeEnd" 
-              optionLabel="name" 
-              tooltipPosition="right" 
-              tooltipEvent="focus"
-            ></p-dropdown>
-          </span>
-        </div>
-      </div>
-
-      <div>
-        <br><hr><br>
-        <!-- One way/Round trip -->
-        One Way 
-        <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" [style]="{'vertical-align':'middle'}"></p-inputSwitch>
-        Round Trip &nbsp;
-
-        <!-- Passenger # and selection Overlay -->
-        <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></button>
-        <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
-          <div>
-            <label for="adult" class="pass1">Adults</label>
-            <div class="pass2">
-              <p-inputNumber 
-                [(ngModel)]="adultPass" 
-                inputId="adult" 
-                [showButtons]="true" 
-                buttonLayout="horizontal" 
-                incrementButtonIcon="pi pi-plus" 
-                decrementButtonIcon="pi pi-minus" 
-                [min]=0 
-                [size]=1
-              ></p-inputNumber>
-            </div>
-            <br><br><br>
-            <label for="child" class="pass1">Children</label>
-            <div class="pass2">
-              <p-inputNumber 
-                [(ngModel)]="childPass" 
-                inputId="child" 
-                [showButtons]="true" 
-                buttonLayout="horizontal" 
-                incrementButtonIcon="pi pi-plus" 
-                decrementButtonIcon="pi pi-minus" 
-                [min]=0 
-                [size]=1
-              ></p-inputNumber>
-            </div>
-            <br><br><br>
-            <label for="infant" class="pass1">Infants</label>
-            <div class="pass2">
-              <p-inputNumber 
-                [(ngModel)]="infantPass" 
-                inputId="infant" 
-                [showButtons]="true" 
-                buttonLayout="horizontal" 
-                incrementButtonIcon="pi pi-plus" 
-                decrementButtonIcon="pi pi-minus" 
-                [min]=0 
-                [size]=1
-              ></p-inputNumber>
-            </div>
-            <br><br><br>
-            <button pButton pRipple type="button" (click)="updatePassengers(); op.hide()">
-              <i class="pi pi-check"></i>
-            </button>
+      <!-- Passenger # and selection overlay -->
+      <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></button>
+      <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
+        <div>
+          <label for="adult" class="overlay1">Adults</label>
+          <div class="overlay2">
+            <p-inputNumber 
+              [(ngModel)]="adultPass" 
+              inputId="adult" 
+              [showButtons]="true" 
+              buttonLayout="horizontal" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus" 
+              [min]=0 
+              [size]=1
+            ></p-inputNumber>
           </div>
-        </p-overlayPanel>
-              
-        <!-- Class -->
-        <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
-        
-        <!-- Dates -->
-        <label for="departDate">Departure Date: </label>
-        <input pInputText type="date" [(ngModel)]="departDate" id="departDate" name="departDate" min="{{this.date}}" required>
-        <label for="returnDate" *ngIf="isRoundTrip">Return Date: </label>
-        <input pInputText type="date" [(ngModel)]="returnDate" id="returnDate" name="returnDate" min="{{this.departDate}}" *ngIf="isRoundTrip">
-      </div>
+          <br><br><br>
+          <label for="child" class="overlay1">Children &nbsp;</label>
+          <div class="overlay2">
+            <p-inputNumber 
+              [(ngModel)]="childPass" 
+              inputId="child" 
+              [showButtons]="true" 
+              buttonLayout="horizontal" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus" 
+              [min]=0 
+              [size]=1
+            ></p-inputNumber>
+          </div>
+          <br><br><br>
+          <label for="infant" class="overlay1">Infants</label>
+          <div class="overlay2">
+            <p-inputNumber 
+              [(ngModel)]="infantPass" 
+              inputId="infant" 
+              [showButtons]="true" 
+              buttonLayout="horizontal" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus" 
+              [min]=0 
+              [size]=1
+            ></p-inputNumber>
+          </div>
+          <br><br><br>
+          <button pButton pRipple type="button" (click)="updatePassengers(); op.hide()">
+            <i class="pi pi-check"></i>
+          </button>
+        </div>
+      </p-overlayPanel>
+            
+      <!-- Class -->
+      <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
       
+      <!-- Dates -->
+      <label for="departDate">Departure Date: </label>
+      <input pInputText type="date" [(ngModel)]="departDate" id="departDate" name="departDate" min="{{this.date}}" required>
+      <label for="returnDate" *ngIf="isRoundTrip">Return Date: </label>
+      <input pInputText type="date" [(ngModel)]="returnDate" id="returnDate" name="returnDate" min="{{this.departDate}}" *ngIf="isRoundTrip">
     </div>
-    <div align="center">
-      <!-- Clear/Search -->
-      <button pButton pRipple type="button" (click)="handleClear()" label="Clear Search" class="p-button-outlined p-button-secondary"></button>
-      <button pButton pRipple type="button" (click)="handleSearch()" label="Search"></button>
-    </div>
-    <!-- COPY END -->
-  <!-- </p-accordionTab>
-</p-accordion> -->
+    
+  </div>
+  <div align="center">
+    <!-- Clear/Search -->
+    <button pButton pRipple type="button" (click)="handleClear()" label="Clear Search" class="p-button-outlined p-button-secondary"></button>
+    <button pButton pRipple type="button" (click)="handleSearch()" label="Search"></button>
+  </div>
+  <!-- COPY END -->
 </p-panel>
 
+<!-- FILTER -->
 <p-card [style]="{'height': '150px'}">
   <h5>Filters</h5>
   <div [style]="{float: 'left'}"> 
-      <!-- Layover overlay-->
+      <!-- Layover -->
       <button pButton pRipple type="button" (click)="op4.toggle($event)" class="p-button-outlined" label="Stops"></button>
       <p-overlayPanel #op4 [showCloseIcon]="true"> 
         <div *ngFor="let stop of stops" class="p-field-checkbox">
@@ -237,65 +234,58 @@
         </div>
       </p-overlayPanel>
 
-      <!--Price overlay-->
+      <!-- Price -->
       <button pButton pRipple type="button" (click)="op1.toggle($event)" class="p-button-outlined" label="Price"></button>
       <p-overlayPanel #op1 [showCloseIcon]="true" [style]="{width: '300px'}"> 
         <div>
-          <div class="pass4">
+          <div class="overlay1">
             $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[0]"/>
           </div>
-          <div class="pass5">
+          <div class="overlay2">
             $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[1]"/>
           </div>
-          
           <br><br>
           <div>
             <p-slider [min]="minPrice" [(ngModel)]="totalPrice" [range]="true" [max]="maxPrice" [style]="{width: '250px'}"></p-slider>
           </div>
-          
-          
-          
-          
         </div>
       </p-overlayPanel>
 
-      <!-- Duration overlay-->
+      <!-- Duration -->
       <button pButton pRipple type="button" (click)="op2.toggle($event)" class="p-button-outlined" label="Duration"></button>
       <p-overlayPanel #op2 [showCloseIcon]="true" [style]="{width: '380px'}"> 
         <div>
-          <label class="pass3">Max Total Travel Time (hr):</label>
-          <div class="pass2">
+          <label class="overlay3">Max Total Travel Time (hr):</label>
+          <div class="overlay2">
             <input type="text" size="5" pInputText [(ngModel)]="maxTravelTime"/>
           </div>
           <br><br><br>
-          <label class="pass3">Max Flight Duration (hr):</label>
-          <div class="pass2">
+          <label class="overlay3">Max Flight Duration (hr):</label>
+          <div class="overlay2">
             <input type="text" size="5" pInputText [(ngModel)]="maxFlightTime"/>
           </div>
         </div>
       </p-overlayPanel>
       
-      <!--Times overlay-->
+      <!-- Times -->
       <button pButton pRipple type="button" (click)="op3.toggle($event)" class="p-button-outlined" label="Times"></button>
       <p-overlayPanel #op3 [showCloseIcon]="true"> 
         <div>
-          <label class="pass3">Depart by: </label>
-          <div class="pass2">
+          <label class="overlay3">Depart by:</label>
+          <div class="overlay2">
             <input type="time" size="5" min="00:00" max="24:00" value="12:00" pInputText [(ngModel)]="departTime"/>
           </div>
         </div>
-        
-        <br>
         <div>
-          <br><br>
-          <label class="pass3">Arrive by: </label>
-          <div class="pass2">
+          <br><br><br>
+          <label class="overlay3">Arrive by:</label>
+          <div class="overlay2">
             <input type="time" size="5" min="00:00" max="24:00" value="0:00"pInputText [(ngModel)]="arrivalTime"/>
           </div>
         </div>
       </p-overlayPanel>
 
-      <!--Airport overlay-->
+      <!-- Airports -->
       <button pButton pRipple type="button" (click)="op5.toggle($event)" class="p-button-outlined" label="Airports"></button>
       <p-overlayPanel #op5 [showCloseIcon]="true" [style]="{width: '350px'}"> 
         <div>
@@ -309,14 +299,13 @@
         </div>
       </p-overlayPanel>
 
-      <!--Airline overlay-->
+      <!-- Airlines -->
       <button pButton pRipple type="button" (click)="op6.toggle($event)" class="p-button-outlined" label="Airlines"></button>
       <p-overlayPanel #op6 [showCloseIcon]="true" [style]="{width: '350px'}"> 
         <div>
           <label>Departure Airlines: </label> <br>
           <p-multiSelect [options]="filterAirlines" [(ngModel)]="selectedAirlines" display="chip" [style]="{width: '100%'}"></p-multiSelect>
         </div>
-        
       </p-overlayPanel>    
   </div>
   <div [style]="{float: 'right'}">
@@ -325,18 +314,9 @@
   </div>
 </p-card>
 
-
-
 <!-- RESULTS -->
 <div>
     <h4>Results</h4>
-</div>
-
-<!-- No flights -->
-<div *ngIf="filteredTrips?.length == 0">
-    <p-card [style]="{'background':'#f4cccc'}">
-        No flights match your search:(
-    </p-card>
 </div>
 
 <!-- Table -->
@@ -404,11 +384,16 @@
 <!-- Loading -->
 <i class="pi pi-spin pi-spinner" *ngIf="!filteredTrips" style="font-size: 2rem; display: flex; align-items: center; justify-content: center;" ></i>
 
-
+<!-- No flights -->
+<div *ngIf="filteredTrips?.length == 0">
+  <p-card [style]="{'background':'#f4cccc'}">
+      No flights match your search:(
+  </p-card>
+</div>
 
 <p-scrollTop 
   icon="pi pi-arrow-up" 
   width="2px"
   height="2px"
   styleClass="custom-scrolltop"
-  ></p-scrollTop>
+></p-scrollTop>

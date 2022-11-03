@@ -1,12 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
-//import { SearchService } from "./search.service";
-//import { AirportSchema } from "../airportSchema";
-import { SearchSchema, DropdownOption } from '../searchSchema';
-import { ForgotPasswordSchema } from '../forgotPasswordSchema';
 import { Router } from '@angular/router';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
 import {FlightSchema} from "../flightSchema";
 import {Message} from 'primeng/api';
@@ -20,20 +14,20 @@ import {NGXLogger} from "ngx-logger";
   styleUrls: ['./forgot-password.component.scss']
 })
 
-export class ForgotPasswordComponent implements OnInit, OnDestroy {
+export class ForgotPasswordComponent {
   subscription!: Subscription;
-  email: string = '';
+  email: string;
+  service: any;
 
+  constructor(private data: DataService, private router: Router, private forgotPasswordService: ForgotPasswordService, private logger: NGXLogger) {
 
-  constructor(private data: DataService, private router: Router, private forgotPasswordService: ForgotPasswordService, private fb: FormBuilder, private logger: NGXLogger) {
-  // COPY START
-    this.createForm();
   }
-
   //backend calls
-
+  
+  results$: Observable<boolean> = new Observable();
   async handleForgotPassword() {
     this.logger.info("forgot password component email:", this.email);
+
     this.resetValidity();
     this.forgotPasswordService.sendEmail(this.email);
     // let route = true;
@@ -45,8 +39,8 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     // if valid email in database, send link to email
     // have alert that says, "if email exists, then a reset email link will be sent to you"
     // if(route) {
-      //this.data.changeMessage(this.email)
-      //this.router.navigate(['results'])
+    //this.data.changeMessage(this.email)
+    //this.router.navigate(['results'])
     //   alert("Email has been sent if you have an existing account with us!")
     // }
   }
@@ -58,20 +52,6 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       el.classList.remove('ng-dirty')
       el.classList.add('ng-pristine')
     })
-  }
-    
-  createForm() {
-    
-  }
-  // COPY END
-
-  // DIFFERENT FROM RESULTS
-  ngOnInit() {
-    
-  }
-  
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
 }

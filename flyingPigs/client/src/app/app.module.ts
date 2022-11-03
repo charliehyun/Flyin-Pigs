@@ -3,9 +3,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 import { SearchComponent } from './search/search.component';
 import { ResultsComponent } from './results/results.component';
 import { LoginSignupComponent } from './login-signup/login-signup.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -22,11 +26,9 @@ import { CardModule } from 'primeng/card';
 import {TableModule} from 'primeng/table';
 import {DialogModule} from 'primeng/dialog';
 import {TooltipModule} from 'primeng/tooltip';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DividerModule } from "primeng/divider";
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { ScrollToTopComponent } from './scroll-to-top/scroll-to-top.component';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import {ToastModule} from 'primeng/toast';
 import { PanelModule } from 'primeng/panel';
@@ -44,7 +46,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
     ResultsComponent,
     LoginSignupComponent,
     ForgotPasswordComponent,
-    ScrollToTopComponent
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -74,6 +76,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
     SliderModule,
     RadioButtonModule,
     MultiSelectModule,
+    FontAwesomeModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
