@@ -37,6 +37,7 @@ import {TreeSelectModule} from 'primeng/treeselect';
 import { SliderModule } from 'primeng/slider';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {MultiSelectModule} from 'primeng/multiselect';
+import {ImageModule} from 'primeng/image';
 
 
 @NgModule({
@@ -77,6 +78,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
     RadioButtonModule,
     MultiSelectModule,
     FontAwesomeModule,
+    ImageModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
