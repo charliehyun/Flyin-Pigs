@@ -269,14 +269,14 @@
       <p-overlayPanel #op1 [showCloseIcon]="true" [style]="{width: '300px'}"> 
         <div>
           <div class="overlay1">
-            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[0]"/>
+            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[0]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
           </div>
           <div class="overlay2">
-            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[1]"/>
+            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[1]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
           </div>
           <br><br>
           <div>
-            <p-slider [min]="minPrice" [(ngModel)]="totalPrice" [range]="true" [max]="maxPrice" [style]="{width: '250px'}"></p-slider>
+            <p-slider [(ngModel)]="totalPrice" [range]="true" [min]="minPrice" [max]="maxPrice" [style]="{width: '250px'}"></p-slider>
           </div>
         </div>
       </p-overlayPanel>
@@ -325,7 +325,6 @@
         <div>
           <label>Arrival Airports: </label> <br>
           <p-multiSelect [options]="filterArrivalAirports" [(ngModel)]="selectedArrivalAirports" display="chip" [style]="{width: '100%'}"></p-multiSelect>
-
         </div>
       </p-overlayPanel>
 
