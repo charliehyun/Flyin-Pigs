@@ -23,26 +23,6 @@ export class ResetPasswordComponent {
 
   //backend calls
 
-  resetPassword() {
-    this.resetValidity();
-    let route = true;
-    // input validation
-    // TODO: check if email is in database
-    // if valid, create search object and route to results
-    // else, alert
-
-    // if valid email in database, send link to email
-    // have alert that says, "if email exists, then a reset email link will be sent to you"
-
-    if(route) {
-      
-      //this.data.changeMessage(this.email)
-      //this.router.navigate(['results'])
-      alert("Password has been reset!")
-
-    }
-  }
-
   // handle change password attempt. input validation
   results$: Observable<boolean> = new Observable();
   handleResetPassword() {
@@ -50,6 +30,7 @@ export class ResetPasswordComponent {
     // check if all fields are populated
     let invalid = false;
     
+    // check if password is empty
     if(!this.newPass) {
         const x = document.getElementById('newPass');
         x?.classList.add('ng-invalid')
@@ -57,7 +38,7 @@ export class ResetPasswordComponent {
         invalid = true
     }
 
-    // check if password and confirm password match
+    // check if confirm password is empty
     if(!this.confNewPass) {
         const x = document.getElementById('confNewPass');
         x?.classList.add('ng-invalid')
@@ -66,11 +47,12 @@ export class ResetPasswordComponent {
     }
 
     if(invalid) {
-        // this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
+        this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
         alert("Error!")
         return;
     }
 
+    //check if password matches confirmed password
     if(this.newPass != this.confNewPass) {
         const x = document.getElementById('confNewPass');
         x?.classList.add('ng-invalid')
@@ -80,13 +62,13 @@ export class ResetPasswordComponent {
         return;
     }
 
-    // check if satisfies password reqs
+    // check if satisfies password reqs, and if so, reset password in database
     // 1 lowercase, 1 uppercase, 1 number, 1 special character, 8 min length
     if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(this.newPass)) {
         // if satisfies, then change password in database
         
 
-        // this.results$ = this.loginSignupService.signupUser(credentialsInput);
+        //  this.results$ = this.ResetPasswordService.signupUser(credentialsInput);
 
         // this.results$.subscribe(value => {
         //     if(value){
@@ -97,6 +79,7 @@ export class ResetPasswordComponent {
         //     }
         // });
         this.showMessage('success', 'Success', 'Successfully changed password! Log in to get started.');
+        alert("Password has been reset!")
     } else {
         const x = document.getElementById('passS');
         x?.classList.add('ng-invalid')
