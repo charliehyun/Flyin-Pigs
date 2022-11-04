@@ -14,17 +14,15 @@ export class ResetPasswordService {
 
     constructor(private httpClient: HttpClient) { }
 
+    sendReset(tok: string, newPassword: string) {
+        this.httpClient.post<boolean>(`${this.url}/airports/resetPassword`, {token: tok, password: newPassword})
+            .subscribe(success => {
+                this.resetPasswordSuccess$.next(success);
+            });
+    }
 
-    // sendSignup(inputObject:LoginSchema) {
-    //     this.httpClient.post<boolean>(`${this.url}/airports/signup`, inputObject)
-    //         .subscribe(success => {
-    //             this.signupSuccess$.next(success);
-    //         });
-    // }
-
-    // signupUser(inputObject:LoginSchema): Subject<boolean> {
-    //     this.sendSignup(inputObject);
-    //     return this.signupSuccess$;
-    // }
-
+    resetPassword(token: string, newPassword: string): Subject<boolean> {
+        this.sendReset(token, newPassword);
+        return this.resetPasswordSuccess$;
+    }
 }
