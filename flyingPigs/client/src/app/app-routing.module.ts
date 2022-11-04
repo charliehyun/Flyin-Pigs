@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, ActivatedRoute, ParamMap } from '@angular/router';
 import { SearchComponent } from './search/search.component';
 import { ResultsComponent } from './results/results.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'results', component: ResultsComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'reset-password/:token', component: ResetPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
 ];
 
 @NgModule({

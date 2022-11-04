@@ -38,6 +38,8 @@ import { SliderModule } from 'primeng/slider';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { MenuModule } from 'primeng/menu';
+import {ImageModule} from 'primeng/image';
+
 
 @NgModule({
   declarations: [
@@ -78,6 +80,7 @@ import { MenuModule } from 'primeng/menu';
     MultiSelectModule,
     MenuModule,
     FontAwesomeModule,
+    ImageModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
