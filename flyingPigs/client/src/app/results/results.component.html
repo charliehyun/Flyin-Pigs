@@ -342,7 +342,25 @@
     <!-- Row content -->
     <ng-template pTemplate="body" let-trip let-expanded="expanded">
         <tr>
-            <td>{{trip.departingFlight.airlines}}</td>
+            <td style="text-align:center">
+              <span *ngIf="trip.departingFlight.airlines.length > 1">
+                <img src="assets/images/generic-logo.png" width="60">
+              </span>
+              <span *ngIf="trip.departingFlight.airlines.length == 1">
+                <img *ngIf="trip.departingFlight.airlines == 'AA'" src="assets/images/aa-logo.png" width="60">
+                <img *ngIf="trip.departingFlight.airlines == 'AS'" src="assets/images/alaska-logo.png" width="60">
+                <img *ngIf="trip.departingFlight.airlines == 'B6'" src="assets/images/jetblue-logo.png" width="60">
+                <img *ngIf="trip.departingFlight.airlines == 'DL'" src="assets/images/delta-logo.png" width="60">
+                <img *ngIf="trip.departingFlight.airlines == 'F9'" src="assets/images/frontier-logo.png" width="60"> 
+                <img *ngIf="trip.departingFlight.airlines == 'HA'" src="assets/images/hawaiian-logo.png" width="60"> 
+                <img *ngIf="trip.departingFlight.airlines == 'NK'" src="assets/images/spirit-logo.png" width="60"> 
+                <img *ngIf="trip.departingFlight.airlines == 'UA'" src="assets/images/united-logo.jpg" width="60"> 
+                <img *ngIf="trip.departingFlight.airlines == 'WN'" src="assets/images/southwest-logo.png" width="60"> 
+                <img *ngIf="!airlineTags.includes(trip.departingFlight.airlines[0])" src="assets/images/generic-logo.png" width="60">
+              </span>
+              <br>
+              {{trip.departingFlight.airlines}}
+            </td>
             <td>{{trip.timeToAirportA}}</td> 
             <td>{{trip.departingFlight.departureAirport}}</td>
             <td>{{trip.departingFlight.departureTime}}</td>

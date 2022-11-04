@@ -59,6 +59,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   departTime: Time;
   arrivalTime: Time;
   airports: any[];
+  airlineTags: string[] = ['AA', 'AS', 'B6', 'DL', 'F9', 'HA', 'NK', 'UA', 'WN'];
    
   constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger) {
     this.classes = [
