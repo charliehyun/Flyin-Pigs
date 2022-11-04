@@ -170,8 +170,23 @@ export class ResultsComponent implements OnInit, OnDestroy {
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
     this.resetValidity();
-    let departureCoord = await this.geocode(this.departAdd);
-    let arrivalCoord = await this.geocode(this.arriveAdd);
+    // let departureCoord = await this.geocode(this.departAdd);
+    // let arrivalCoord = await this.geocode(this.arriveAdd);
+    let departureCoord;
+    let arrivalCoord
+    let prevSearch = JSON.parse(sessionStorage.getItem('searchParams') || "");
+    if(!prevSearch || prevSearch.departAdd != this.departAdd){
+      departureCoord = await this.geocode(this.departAdd);
+    }
+    else {
+      departureCoord = prevSearch.departCoord;
+    }
+    if(!prevSearch || prevSearch.arriveAdd != this.arriveAdd){
+      arrivalCoord = await this.geocode(this.arriveAdd);
+    }
+    else {
+      arrivalCoord = prevSearch.arriveCoord;
+    }
 
     let route = true;
     // input validation
