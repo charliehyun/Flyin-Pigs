@@ -1,7 +1,7 @@
 <p-toast position="top-left"></p-toast>
 
 <!-- Log in -->
-<button *ngIf="!currentUser" pButton type="button" class="p-button-sm" (click)="showLogin()" label="Log In"></button>
+<button *ngIf="!loggedIn" pButton type="button" class="p-button-sm" (click)="showLogin()" label="Log In"></button>
 <p-dialog header="Log In" [(visible)]="displayLogin" [modal]="true" [style]="{width: '450px'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <h6>Email</h6>
     <input pInputText type="email" id="emailL" [(ngModel)]="emailL">
@@ -21,7 +21,7 @@
 </p-dialog>
 
 <!-- Sign up -->
-<button *ngIf="!currentUser" pButton type="button" class="p-button-sm p-button-secondary" (click)="showSignup()" label="Sign Up"></button>
+<button *ngIf="!loggedIn" pButton type="button" class="p-button-sm p-button-secondary" (click)="showSignup()" label="Sign Up"></button>
 <p-dialog header="Sign Up" [(visible)]="displaySignup" [modal]="true" [style]="{width: '450px'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <h6>Email</h6>
     <input pInputText type="email" id="emailS" [(ngModel)]="emailS">
@@ -57,5 +57,5 @@
 
 <!-- Show if logged in -->
 <!-- <p-menu #menu [popup]="true" [model]="userOptionsMenu"></p-menu> -->
-<button *ngIf="currentUser" pButton type="button" icon="pi pi-user" class="p-button-rounded p-button-secondary"></button>
-<button *ngIf="currentUser" pButton type="button" (click)="handleLogOut()" class="p-button-sm" label="Log Out"></button>
+<button *ngIf="loggedIn" pButton type="button" icon="pi pi-user" class="p-button-rounded p-button-secondary"></button>
+<button *ngIf="loggedIn" pButton type="button" (click)="handleLogOut()" class="p-button-sm" label="Log Out"></button>

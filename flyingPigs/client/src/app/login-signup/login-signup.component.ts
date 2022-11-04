@@ -27,6 +27,7 @@ export class LoginSignupComponent {
     passHide: boolean;  // show/hide password text
 
     currentUser: string = "";   // current logged in user
+    loggedIn: boolean;
 
     userOptionsMenu: MenuItem[];
 
@@ -44,6 +45,7 @@ export class LoginSignupComponent {
                 icon: 'pi pi-user-minus'
             }]
         }]
+        this.loggedIn = false;
     }
 
     ngOnInit() {
@@ -87,6 +89,7 @@ export class LoginSignupComponent {
     async handleLogOut() {
         this.resetValidity();
         this.currentUser = "";
+        this.loggedIn = false;
         sessionStorage.removeItem("flyinPigsCurrentUser");
     }
 
@@ -117,6 +120,7 @@ export class LoginSignupComponent {
             if(value) {
                 this.displayLogin = false;
                 this.currentUser = this.emailL;
+                this.loggedIn = true;
                 sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
                 this.showMessage('success', 'Success', 'Successfully logged in.');
                 this.clearFields();
@@ -180,6 +184,7 @@ export class LoginSignupComponent {
                 if(value) {
                     this.displaySignup = false;
                     this.currentUser = this.emailS;
+                    this.loggedIn = true;
                     sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
                     this.showMessage('success', 'Success', 'Successfully signed up and logged in!');
                     this.clearFields();
@@ -206,6 +211,8 @@ export class LoginSignupComponent {
         this.emailS = ""
         this.passS = ""
         this.confPassS = ""
+
+        this.passHide = true
     }
 
     resetValidity() {
