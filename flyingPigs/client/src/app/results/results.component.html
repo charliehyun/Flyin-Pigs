@@ -52,8 +52,8 @@
           >
             <ng-template pTemplate="selectedItem">
               <div *ngIf="selectedDTransport">
-                <fa-icon *ngIf="selectedATransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
-                <fa-icon *ngIf="selectedATransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+                <fa-icon *ngIf="selectedDTransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+                <fa-icon *ngIf="selectedDTransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
                 {{selectedDTransport.name}}
               </div>
             </ng-template>
@@ -375,7 +375,7 @@
               <span *ngIf="trip.departingFlight.airlines.length > 1">
                 <img src="assets/images/generic-logo.png" width="60">
               </span>
-              <span *ngIf="trip.departingFlight.airlines.length == 1">
+              <span *ngIf="trip.departingFlight.airlines.length < 2">
                 <img *ngIf="trip.departingFlight.airlines == 'AA'" src="assets/images/aa-logo.png" width="60">
                 <img *ngIf="trip.departingFlight.airlines == 'AS'" src="assets/images/alaska-logo.png" width="60">
                 <img *ngIf="trip.departingFlight.airlines == 'B6'" src="assets/images/jetblue-logo.png" width="60">

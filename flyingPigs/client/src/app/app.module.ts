@@ -84,7 +84,7 @@ import {ImageModule} from 'primeng/image';
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
-      serverLogLevel: NgxLoggerLevel.ERROR,
+      serverLogLevel: NgxLoggerLevel.DEBUG,
       disableConsoleLogging: false
     })
   ],
