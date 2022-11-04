@@ -3,6 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { DataService } from "../data.service";
 import {MessageService} from 'primeng/api';
+import { ResetPasswordService } from './reset-password.service';
 
 @Component({
   selector: 'reset-password',
@@ -17,15 +18,15 @@ export class ResetPasswordComponent {
   confNewPass: string;
   passHide: boolean;  // show/hide password text
 
-  constructor(private messageService: MessageService) {
-
+  constructor(private messageService: MessageService, private forgotPasswordService: ResetPasswordService) {
+    this.passHide = true;
   }
 
   //backend calls
 
   // handle change password attempt. input validation
   results$: Observable<boolean> = new Observable();
-  handleResetPassword() {
+  async handleResetPassword() {
     this.resetValidity()
     // check if all fields are populated
     let invalid = false;
@@ -65,6 +66,11 @@ export class ResetPasswordComponent {
     // check if satisfies password reqs, and if so, reset password in database
     // 1 lowercase, 1 uppercase, 1 number, 1 special character, 8 min length
     if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(this.newPass)) {
+      let params = new URLSearchParams(location.search);
+      let token = params.get('token') || "";
+      console.log("TOKEN: ", token);
+      this.forgotPasswordService.resetPassword(token, this.newPass);
+
         // if satisfies, then change password in database
         
 

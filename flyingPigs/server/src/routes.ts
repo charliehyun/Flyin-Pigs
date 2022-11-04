@@ -149,22 +149,49 @@ mongoRouter.post("/signup", async (req, res) => {
 
 });
 
-mongoRouter.get('/reset/', (req, res, next) => {
-    Credentials.findOne({resetPasswordToken: req.query.resetPasswordToken}).then((user) => {
-        if (user == null) {
+mongoRouter.post('/resetPassword', (req, res) => {
+    console.log("INSIDE RESET PASSWORD ROUTE");
+    console.log("reset password req: ", req);
+    Credentials.findOne({resetPasswordToken: req.body.token}).then((user) => {
+        if (!user) {
             res.status(200).send({
                 message: 'invalid-link',
             });
             // console.error('password reset link is invalid or has expired');
             // res.status(403).send({message: 'password reset link is invalid or has expired'});
         } else {
+            console.log("USER", user);
+            console.log("FOUND RESET PASSWORD USER");
+            console.log("type of resetPasswordExpires", typeof user.resetPasswordExpires);
+            console.log("resetPasswordExpires", user.resetPasswordExpires);
             if(user.resetPasswordExpires > Date.now()) {
-                res.status(200).send({
-                    username: user.email,
-                    message: 'valid-link',
+                console.log("Valid reset link, time token is valid");
+                const saltRounds = 10;
+
+                user.resetPasswordToken = -1;
+                user.resetPasswordExpires = -1;
+                bcrypt.genSalt(saltRounds, function(err, salt) {
+                    bcrypt.hash(req.body.password, salt, function(err, hash) {
+                        user.password = hash;
+                        user.save();
+                        if(!err) {
+                            res.status(200).send(true);
+                        } else {
+                            res.status(200).send(false);
+                        }
+                    });
                 });
+                // user.save()
+                //     .then(user => res.json(user))
+                //     .catch(err => console.log(err));
+
+                // res.status(200).send({
+                //     username: user.email,
+                //     message: 'valid-link',
+                // });
             }
             else {
+                console.log("RESET PASSWORD LINK EXPIRED");
                 res.status(200).send({
                     message: 'invalid-link',
                 });
@@ -178,6 +205,7 @@ mongoRouter.get('/reset/', (req, res, next) => {
 
 mongoRouter.post("/submitForgotPassword", (req, res) =>
 {
+    console.log("SUBMIT FORGOT PASSWORD REQ: ", req);
     Credentials.findOne({email: req.body.email}).then((user) => {
 
         if(user) {
@@ -209,7 +237,7 @@ mongoRouter.post("/submitForgotPassword", (req, res) =>
                 from: 'flyinpigs407@gmail.com',
                 to: req.body.email,
                 subject: `Password Reset Link`,
-                text: `click the link below to change your password:\n\nhttp://localhost:4200/reset-password/${token}`,
+                text: `click the link below to change your password:\n\nhttp://localhost:4200/reset-password?token=${token}`,
             };
                 
             transporter.sendMail(mailOptions, function(error, info){
