@@ -56,4 +56,6 @@
 </p-dialog>
 
 <!-- Show if logged in -->
+<!-- <p-menu #menu [popup]="true" [model]="userOptionsMenu"></p-menu> -->
+<button *ngIf="currentUser" pButton type="button" icon="pi pi-user" class="p-button-rounded p-button-secondary"></button>
 <button *ngIf="currentUser" pButton type="button" (click)="handleLogOut()" class="p-button-sm" label="Log Out"></button>
