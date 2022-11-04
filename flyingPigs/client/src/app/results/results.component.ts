@@ -277,6 +277,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   If an error occurs, returns a null. 
   */
   async geocode(address) {
+    console.log("GEOCODING");
     var coord;
     var geocoder = new google.maps.Geocoder();
     await geocoder.geocode({ 'address': address}).then(response => {
@@ -331,8 +332,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.maxPrice = value.maxPrice || 0;
       this.minPrice = value.minPrice || 0;
       this.totalPrice = [this.minPrice, this.maxPrice];
-      console.log("filtered airline:", value.airlines);
-
       this.selectedAirlines = this.filterAirlines;
     });
   }
