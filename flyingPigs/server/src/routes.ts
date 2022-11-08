@@ -56,7 +56,9 @@ mongoRouter.post("/search", async (req, res) => {
         for(let i = 0; i < depAirportArray.length; i++) {
             resultInfo.depAirlines.push(depAirportArray[i].IATA);
             for(let j = 0; j < arrAirportArray.length; j++) {
-                resultInfo.arrAirlines.push(arrAirportArray[j].IATA);
+                if(i == 0) {
+                    resultInfo.arrAirlines.push(arrAirportArray[j].IATA);
+                }
                 let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate, 
                     searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
                     depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
@@ -90,6 +92,8 @@ mongoRouter.post("/search", async (req, res) => {
         });
         resultInfo.airlines = removeDuplicates(airlinesDuplicates);
         logger.info("all airlines: ", resultInfo.airlines);
+        logger.info("resultInfo.depAirlines: ", resultInfo.depAirlines);
+        logger.info("resultInfo.arrAirlines: ", resultInfo.arrAirlines);
         logger.info("resultInfo: ", resultInfo);
         res.status(200).send(resultInfo);
 

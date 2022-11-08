@@ -46,11 +46,24 @@
             id="dTransportType" 
             [options]="dTransportType" 
             [(ngModel)]="selectedDTransport" 
-            placeholder="Select a Mode of Transport" 
             optionLabel="name"
             tooltipPosition="right" 
             tooltipEvent="focus"
-          ></p-dropdown>
+          >
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedDTransport">
+                <fa-icon *ngIf="selectedDTransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+                <fa-icon *ngIf="selectedDTransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+                {{selectedDTransport.name}}
+              </div>
+            </ng-template>
+            <ng-template let-transport pTemplate="dTransportType">
+              <div class="flex align-items-center">
+                <fa-icon [icon]="['fas', transport.icon]"></fa-icon>
+                <span>{{transport.name}}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </span>
         <br>
 
@@ -70,10 +83,13 @@
             optionLabel="name"
             tooltipPosition="right" 
             tooltipEvent="focus"
-          ></p-dropdown>
+          >
+          </p-dropdown>
         </span>
       </div>
+
       <p-divider layout="vertical"></p-divider>
+
       <div class="p-col">
         <h4>Arrival</h4>
         <!-- Address -->
@@ -115,14 +131,28 @@
             id="aTransportType" 
             [options]="aTransportType" 
             [(ngModel)]="selectedATransport" 
-            placeholder="Select a Mode of Transport" 
             optionLabel="name"
             tooltipPosition="right"
             tooltipEvent="focus"
-          ></p-dropdown>
+            dropdown
+          >
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedATransport">
+                <fa-icon *ngIf="selectedATransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+                <fa-icon *ngIf="selectedATransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+                {{selectedATransport.name}}
+              </div>
+            </ng-template>
+            <ng-template let-transport pTemplate="item">
+              <div class="flex align-items-center">
+                <fa-icon [icon]="['fas', transport.icon]"></fa-icon>
+                <span>{{transport.name}}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </span>
         <br>
-
+      
         <!-- Transport Hours After Flight -->
         <span>
           <label for="drivingEndHours">
@@ -150,7 +180,7 @@
       <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" [style]="{'vertical-align':'middle'}"></p-inputSwitch>
       Round Trip &nbsp;
 
-      <!-- Passenger # and selection overlay -->
+      <!-- Passenger # and selection Overlay -->
       <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></button>
       <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
         <div>
@@ -239,14 +269,14 @@
       <p-overlayPanel #op1 [showCloseIcon]="true" [style]="{width: '300px'}"> 
         <div>
           <div class="overlay1">
-            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[0]"/>
+            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[0]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
           </div>
           <div class="overlay2">
-            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[1]"/>
+            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[1]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
           </div>
           <br><br>
           <div>
-            <p-slider [min]="minPrice" [(ngModel)]="totalPrice" [range]="true" [max]="maxPrice" [style]="{width: '250px'}"></p-slider>
+            <p-slider [(ngModel)]="totalPrice" [range]="true" [min]="minPrice" [max]="maxPrice" [style]="{width: '250px'}"></p-slider>
           </div>
         </div>
       </p-overlayPanel>
@@ -295,7 +325,6 @@
         <div>
           <label>Arrival Airports: </label> <br>
           <p-multiSelect [options]="filterArrivalAirports" [(ngModel)]="selectedArrivalAirports" display="chip" [style]="{width: '100%'}"></p-multiSelect>
-
         </div>
       </p-overlayPanel>
 
@@ -345,7 +374,7 @@
               <span *ngIf="trip.departingFlight.airlines.length > 1">
                 <img src="assets/images/generic-logo.png" width="60">
               </span>
-              <span *ngIf="trip.departingFlight.airlines.length == 1">
+              <span *ngIf="trip.departingFlight.airlines.length < 2">
                 <img *ngIf="trip.departingFlight.airlines == 'AA'" src="assets/images/aa-logo.png" width="60">
                 <img *ngIf="trip.departingFlight.airlines == 'AS'" src="assets/images/alaska-logo.png" width="60">
                 <img *ngIf="trip.departingFlight.airlines == 'B6'" src="assets/images/jetblue-logo.png" width="60">

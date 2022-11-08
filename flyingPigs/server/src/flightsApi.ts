@@ -62,7 +62,7 @@ export class flightsApi {
                 infants: this.infantPassengers,
                 travelClass: this.cabinClass,
                 currencyCode: 'USD',
-                max: 10,
+                max: 30,
             }).then((response: { data: any; }) => {
                 returnTripObjects = this.parseApi(response.data)
             }).catch((error: any) => logger.warn("api error: ", error.code));
@@ -85,7 +85,7 @@ export class flightsApi {
                 infants: this.infantPassengers,
                 travelClass: this.cabinClass,
                 currencyCode: 'USD',
-                max: 10,
+                max: 30,
             }).then((response: { data: any; }) => {
                 returnTripObjects = this.parseApi(response.data)
             }).catch((error: any) => logger.warn("api error: ", error.code));

@@ -8,6 +8,8 @@ import { DataService } from "../data.service";
 import { ResultInfoSchema, TripSchema } from '../flightSchema';
 import {NGXLogger} from "ngx-logger";
 import { MenuItem } from 'primeng/api';
+import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
+import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import { Time } from '@angular/common';
 
 @Component({
@@ -22,8 +24,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   selectedClass: DropdownOption = {name: 'Economy', code: 'ECONOMY'}; // Selected flight class
   dTransportType: DropdownOption[]; // Transportation to airport options
   aTransportType: DropdownOption[]; // Transportation from airport options
-  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
-  selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
+  selectedATransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -44,8 +46,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
   departAdd= "";  // departure address input
   arriveAdd= "";  // arrival address input
 
-  totalPrice: number[] = [];
+  //icons
+  driving = faCar;
+  transit = faBus;
+
   // FILTER VARS
+  totalPrice: number[] = [];
   stops: any[];
   selectedStop: any = null;
   filterAirlines: any[];
@@ -64,7 +70,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   airports: any[];
   airlineTags: string[] = ['AA', 'AS', 'B6', 'DL', 'F9', 'HA', 'NK', 'UA', 'WN'];
    
-  constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger) {
+  constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger, library: FaIconLibrary) {
     this.classes = [
       {name: 'Economy', code: 'ECONOMY'},
       {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
@@ -72,14 +78,14 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: 'First', code: 'FIRST'}
     ];
     this.dTransportType = [
-      {name: 'Car', code: 'driving'},
-      {name: 'Public Transit', code: 'transit'},
+      {name: 'Car', code: 'driving', icon: 'car'},
+      {name: 'Public Transit', code: 'transit', icon:'bus'},
       // {name: 'Bike', code: 'Biking'},
       // {name: 'Walk', code: 'Walking'}
     ];
     this.aTransportType = [
-      {name: 'Car', code: 'driving'},
-      {name: 'Public Transit', code: 'transit'},
+      {name: 'Car', code: 'driving', icon: 'car'},
+      {name: 'Public Transit', code: 'transit', icon:'bus'},
       // {name: 'Bike', code: 'Biking'},
       // {name: 'Walk', code: 'Walking'}
     ];
@@ -98,6 +104,11 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: '1 stop or fewer', key: 'one'},
       {name: '2 stops or fewer', key: 'two'}
     ];
+
+    library.addIcons(
+      faCar,
+      faBus
+    );
 
     this.selectedStop = this.stops[0];
   }
@@ -133,8 +144,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem('searchParams');
     this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
-    this.selectedDTransport = {name: 'Car', code: 'driving'};
-    this.selectedATransport = {name: 'Car', code: 'driving'};
+    this.selectedDTransport = {name: 'Car', code: 'driving', icon: 'car'};
+    this.selectedATransport = {name: 'Car', code: 'driving', icon: 'car'};
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
@@ -161,8 +172,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
     departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     arriveAdd: "",
     arriveCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
-    selectedDTransport: {name: 'Car', code: 'driving'},
-    selectedATransport: {name: 'Car', code: 'driving'},
+    selectedDTransport: {name: 'Car', code: 'driving', icon: 'car'},
+    selectedATransport: {name: 'Car', code: 'driving', icon: 'car'},
     maxTimeStart: {name: '3 hr', sec: 10800},
     maxTimeEnd: {name: '1 hr', sec: 3600}
   }
@@ -170,8 +181,23 @@ export class ResultsComponent implements OnInit, OnDestroy {
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
     this.resetValidity();
-    let departureCoord = await this.geocode(this.departAdd);
-    let arrivalCoord = await this.geocode(this.arriveAdd);
+    // let departureCoord = await this.geocode(this.departAdd);
+    // let arrivalCoord = await this.geocode(this.arriveAdd);
+    let departureCoord;
+    let arrivalCoord
+    let prevSearch = JSON.parse(sessionStorage.getItem('searchParams') || "");
+    if(!prevSearch || prevSearch.departAdd != this.departAdd){
+      departureCoord = await this.geocode(this.departAdd);
+    }
+    else {
+      departureCoord = prevSearch.departCoord;
+    }
+    if(!prevSearch || prevSearch.arriveAdd != this.arriveAdd){
+      arrivalCoord = await this.geocode(this.arriveAdd);
+    }
+    else {
+      arrivalCoord = prevSearch.arriveCoord;
+    }
 
     let route = true;
     // input validation
@@ -266,6 +292,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   If an error occurs, returns a null. 
   */
   async geocode(address) {
+    console.log("GEOCODING");
     var coord;
     var geocoder = new google.maps.Geocoder();
     await geocoder.geocode({ 'address': address}).then(response => {
@@ -320,8 +347,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.maxPrice = value.maxPrice || 0;
       this.minPrice = value.minPrice || 0;
       this.totalPrice = [this.minPrice, this.maxPrice];
-      console.log("filtered airline:", value.airlines);
-
       this.selectedAirlines = this.filterAirlines;
     });
   }
