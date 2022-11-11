@@ -24,8 +24,6 @@ export class LoginSignupComponent {
     displayLogin: boolean;  // show login modal
     displaySignup: boolean; // show signup modal
 
-    passHide: boolean;  // show/hide password text
-
     currentUser: string = "";   // current logged in user
     loggedIn: boolean;
 
@@ -38,7 +36,6 @@ export class LoginSignupComponent {
     constructor(private messageService: MessageService, private primengConfig: PrimeNGConfig, private loginSignupService: LoginSignupService, private router: Router) {
         this.displayLogin = false;
         this.displaySignup = false;
-        this.passHide = true;
         this.userOptionsMenu = [{
             items: [{
                 label: 'Logout',
@@ -81,11 +78,6 @@ export class LoginSignupComponent {
             this.displayLogin = true
             this.displaySignup = false
         }
-    }
-
-    // show/hide password text
-    passShowHide() {
-        this.passHide = !this.passHide
     }
 
     // handle log out
@@ -214,8 +206,6 @@ export class LoginSignupComponent {
         this.emailS = ""
         this.passS = ""
         this.confPassS = ""
-
-        this.passHide = true
     }
 
     resetValidity() {

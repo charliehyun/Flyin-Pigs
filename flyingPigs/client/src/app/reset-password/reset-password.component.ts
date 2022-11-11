@@ -16,10 +16,8 @@ export class ResetPasswordComponent {
   subscription!: Subscription;
   newPass: string;
   confNewPass: string;
-  passHide: boolean;  // show/hide password text
 
   constructor(private messageService: MessageService, private forgotPasswordService: ResetPasswordService, private router: Router) {
-    this.passHide = true;
   }
 
   //backend calls
@@ -109,11 +107,8 @@ export class ResetPasswordComponent {
   showMessage(severity, summary, detail) {
     this.messageService.clear();
     this.messageService.add({severity: severity, summary: summary, detail: detail});
-}
+  }
 
-  passShowHide() {
-    this.passHide = !this.passHide
-}
   ngOnInit() {
     
   }
@@ -122,21 +117,5 @@ export class ResetPasswordComponent {
     this.subscription.unsubscribe();
   }
 
-  //footer handlers
-  goToSearch() {
-    this.router.navigate(['search'])
-  }
-
-  goToFAQ() {
-  this.router.navigate(['faq'])
-  }
-
-  goToFeedback() {
-  this.router.navigate(['feedback'])
-  }
-
-  goToGithub() {
-      window.location.href = "https://github.com/jyeh00/Flyin-Pigs"
-  }
 
 }

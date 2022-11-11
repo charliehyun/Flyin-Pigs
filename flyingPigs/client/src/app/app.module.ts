@@ -41,6 +41,7 @@ import {RadioButtonModule} from 'primeng/radiobutton';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { MenuModule } from 'primeng/menu';
 import {ImageModule} from 'primeng/image';
+import {PasswordModule} from 'primeng/password';
 
 
 @NgModule({
@@ -85,6 +86,7 @@ import {ImageModule} from 'primeng/image';
     MenuModule,
     FontAwesomeModule,
     ImageModule,
+    PasswordModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,

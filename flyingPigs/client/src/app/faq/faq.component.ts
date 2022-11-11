@@ -13,25 +13,6 @@ import { Router } from '@angular/router';
     constructor( private router: Router) {
   
     }
-
-    //footer handlers
-    goToSearch() {
-        this.router.navigate(['search'])
-    }
-    
-    goToFAQ() {
-      this.router.navigate(['faq'])
-    }
-    
-    goToFeedback() {
-      this.router.navigate(['feedback'])
-    }
-    
-    goToGithub() {
-        window.location.href = "https://github.com/jyeh00/Flyin-Pigs"
-    }
-    
-
   }
 
    
