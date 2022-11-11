@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import {MessageService} from 'primeng/api';
 import { ResetPasswordService } from './reset-password.service';
 
@@ -11,7 +11,6 @@ import { ResetPasswordService } from './reset-password.service';
 })
 
 export class ResetPasswordComponent {
-  subscription!: Subscription;
   newPass: string;
   confNewPass: string;
 
@@ -62,7 +61,13 @@ export class ResetPasswordComponent {
       let params = new URLSearchParams(location.search);
       let token = params.get('token') || "";
       console.log("TOKEN: ", token);
-      this.forgotPasswordService.resetPassword(token, this.newPass);
+      this.forgotPasswordService.resetPassword(token, this.newPass).subscribe(value => {
+        if(value) {
+          this.showMessage('success', 'Success', 'Successfully changed password!');
+        } else {
+          this.showMessage('error', 'Error', 'Unable to update password. Invalid or expired token.');
+        }
+      });
 
         // if satisfies, then change password in database
         
@@ -77,7 +82,6 @@ export class ResetPasswordComponent {
         //         this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
         //     }
         // });
-        this.showMessage('success', 'Success', 'Successfully changed password!');
     } else {
         const x = document.getElementById('passS');
         x?.classList.add('ng-invalid')
@@ -105,10 +109,5 @@ export class ResetPasswordComponent {
   ngOnInit() {
     
   }
-  
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
 
 }

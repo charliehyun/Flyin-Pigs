@@ -158,9 +158,12 @@ mongoRouter.post('/resetPassword', (req, res) => {
     console.log("reset password req: ", req);
     Credentials.findOne({resetPasswordToken: req.body.token}).then((user) => {
         if (!user) {
-            res.status(200).send({
-                message: 'invalid-link',
-            });
+            // res.status(200).send({
+            //     message: 'invalid-link',
+            // });
+            logger.info("NO USER WITH SPECIFIED TOKEN")
+            res.status(200).send(false);
+
             // console.error('password reset link is invalid or has expired');
             // res.status(403).send({message: 'password reset link is invalid or has expired'});
         } else {
@@ -196,9 +199,12 @@ mongoRouter.post('/resetPassword', (req, res) => {
             }
             else {
                 console.log("RESET PASSWORD LINK EXPIRED");
-                res.status(200).send({
-                    message: 'invalid-link',
-                });
+                // res.status(200).send({
+                //     message: 'invalid-link',
+                // });
+                logger.info("RESET PASSWORD LINK EXPIRED")
+
+                res.status(200).send(false);
                 // console.error('password reset link is invalid or has expired');
                 // res.status(403).send({message: 'password reset link is invalid or has expired'});
             }

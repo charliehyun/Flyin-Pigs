@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import {Message, MessageService} from 'primeng/api';
 import { ForgotPasswordService } from './forgot-password.service';
 import {NGXLogger} from "ngx-logger";
@@ -12,7 +12,6 @@ import {NGXLogger} from "ngx-logger";
 })
 
 export class ForgotPasswordComponent {
-  subscription!: Subscription;
   email: string;
   service: any;
 
