@@ -182,11 +182,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
+
     this.resetValidity();
     // let departureCoord = await this.geocode(this.departAdd);
     // let arrivalCoord = await this.geocode(this.arriveAdd);
     let departureCoord;
-    let arrivalCoord
+    let arrivalCoord;
     let prevSearch = JSON.parse(sessionStorage.getItem('searchParams') || "");
     if(!prevSearch || prevSearch.departAdd != this.departAdd){
       departureCoord = await this.geocode(this.departAdd);
@@ -286,6 +287,11 @@ export class ResultsComponent implements OnInit, OnDestroy {
       el.classList.remove('ng-dirty')
       el.classList.add('ng-pristine')
     })
+
+    // this.trips = [];
+    // this.filteredTrips = [];
+    // this.displayTrips = [];
+    // this.shouldLoad = false;
   }
 
   /*

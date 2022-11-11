@@ -36,6 +36,18 @@ body {
     }
 }
 
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+}
+
+@media screen and (max-width: 64em) {
+    :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+        top: 0px;
+    }
+}
+
 .loadMore {
     text-align: center;  
 }
@@ -57,4 +69,4 @@ body {
 footer {
     text-align: center;
     padding: 3px;
-  }
+}

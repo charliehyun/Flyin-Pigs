@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Router } from '@angular/router';
-import { DataService } from "../data.service";
 import {MessageService} from 'primeng/api';
 import { ResetPasswordService } from './reset-password.service';
 
@@ -17,11 +15,10 @@ export class ResetPasswordComponent {
   newPass: string;
   confNewPass: string;
 
-  constructor(private messageService: MessageService, private forgotPasswordService: ResetPasswordService, private router: Router) {
+  constructor(private messageService: MessageService, private forgotPasswordService: ResetPasswordService) {
   }
 
   //backend calls
-
   // handle change password attempt. input validation
   results$: Observable<boolean> = new Observable();
   async handleResetPassword() {
@@ -46,8 +43,7 @@ export class ResetPasswordComponent {
     }
 
     if(invalid) {
-        this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
-        alert("Error!")
+        this.showMessage('error', 'Error', 'Unable to sign up. Invalid password.');
         return;
     }
 
@@ -57,7 +53,6 @@ export class ResetPasswordComponent {
         x?.classList.add('ng-invalid')
         x?.classList.add('ng-dirty')
         this.showMessage('error', 'Error', 'Passwords do not match');
-        alert("Passwords don't match!")
         return;
     }
 
@@ -82,17 +77,15 @@ export class ResetPasswordComponent {
         //         this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
         //     }
         // });
-        this.showMessage('success', 'Success', 'Successfully changed password! Log in to get started.');
-        alert("Password has been reset!")
+        this.showMessage('success', 'Success', 'Successfully changed password!');
     } else {
         const x = document.getElementById('passS');
         x?.classList.add('ng-invalid')
         x?.classList.add('ng-dirty')
         this.showMessage('error', 'Error', 'Password does not satisfy all requirements.');
-        alert("Password doesn't satisfy all requirements!")
     }
 
-}
+  }
   
   resetValidity() {
     const elements: Element[] = Array.from(document.getElementsByTagName("input"));
