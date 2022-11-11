@@ -70,7 +70,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   airports: any[];
   airlineTags: string[] = ['AA', 'AS', 'B6', 'DL', 'F9', 'HA', 'NK', 'UA', 'WN'];
    
-  constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger, library: FaIconLibrary) {
+  constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
     this.classes = [
       {name: 'Economy', code: 'ECONOMY'},
       {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
@@ -459,6 +459,23 @@ export class ResultsComponent implements OnInit, OnDestroy {
         this.filterAirlines[0] = "Southwest";
       }
     }
+  }
+
+  //footer handlers
+  goToSearch() {
+    this.router.navigate(['search'])
+  }
+
+  goToFAQ() {
+  this.router.navigate(['faq'])
+  }
+
+  goToFeedback() {
+  this.router.navigate(['feedback'])
+  }
+
+  goToGithub() {
+      window.location.href = "https://github.com/jyeh00/Flyin-Pigs"
   }
 
   resetFilter() {
