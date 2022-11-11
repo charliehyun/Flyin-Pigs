@@ -39,6 +39,8 @@ import {RadioButtonModule} from 'primeng/radiobutton';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { MenuModule } from 'primeng/menu';
 import {ImageModule} from 'primeng/image';
+import { FAQComponent } from './faq/faq.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 
 @NgModule({
@@ -48,7 +50,9 @@ import {ImageModule} from 'primeng/image';
     ResultsComponent,
     LoginSignupComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    FAQComponent,
+    FeedbackComponent
   ],
   imports: [
     BrowserModule,

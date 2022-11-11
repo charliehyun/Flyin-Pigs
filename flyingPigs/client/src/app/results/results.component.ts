@@ -54,7 +54,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   totalPrice: number[] = [];
   stops: any[];
   selectedStop: any = null;
-  filterAirlines: any[];
+  filterAirlines: string[];
   selectedAirlines: any[];
   filterDepartAirports: any[];
   selectedDepartAirports: any[];
@@ -70,7 +70,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   airports: any[];
   airlineTags: string[] = ['AA', 'AS', 'B6', 'DL', 'F9', 'HA', 'NK', 'UA', 'WN'];
    
-  constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger, library: FaIconLibrary) {
+  constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
     this.classes = [
       {name: 'Economy', code: 'ECONOMY'},
       {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
@@ -344,6 +344,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.selectedArrivalAirports = this.filterArrivalAirports;
       this.selectedDepartAirports = this.filterDepartAirports;
       this.filterAirlines = value.airlines;
+      this.airlineNames();
       this.maxPrice = value.maxPrice || 0;
       this.minPrice = value.minPrice || 0;
       this.totalPrice = [this.minPrice, this.maxPrice];
@@ -407,6 +408,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
       //determine what airlines are available.
       let includedAirlines = trip.departingFlight.airlines.every(airline => this.selectedAirlines.includes(airline));
 
+      //set airline name from code(?)
+
+
       if (trip.departingFlight.numberOfStops <= chosenStops &&
           trip.flightPrice <= this.totalPrice[1] &&
           trip.flightPrice >= this.totalPrice[0] &&
@@ -430,6 +434,48 @@ export class ResultsComponent implements OnInit, OnDestroy {
     } else {
       this.shouldLoad = false;
     }
+  }
+
+  //setting airline names from code (need to redo)
+  airlineNames() {
+    if (this.filterAirlines.length == 1) {
+      if (this.filterAirlines[0] == "AA") {
+        this.filterAirlines[0] = "American";
+      } else if (this.filterAirlines[0] == "AS") {
+        this.filterAirlines[0] = "Alaska";
+      } else if (this.filterAirlines[0] == "B6") {
+        this.filterAirlines[0] = "JetBlue";
+      } else if (this.filterAirlines[0] == "DL") {
+        this.filterAirlines[0] = "Delta";
+      } else if (this.filterAirlines[0] == "F9") {
+        this.filterAirlines[0] = "Frontier";
+      } else if (this.filterAirlines[0] == "HA") {
+        this.filterAirlines[0] = "Hawaiian";
+      } else if (this.filterAirlines[0] == "NK") {
+        this.filterAirlines[0] = "Spirit";
+      } else if (this.filterAirlines[0] == "UA") {
+        this.filterAirlines[0] = "United";
+      } else if (this.filterAirlines[0] == "WN") {
+        this.filterAirlines[0] = "Southwest";
+      }
+    }
+  }
+
+  //footer handlers
+  goToSearch() {
+    this.router.navigate(['search'])
+  }
+
+  goToFAQ() {
+  this.router.navigate(['faq'])
+  }
+
+  goToFeedback() {
+  this.router.navigate(['feedback'])
+  }
+
+  goToGithub() {
+      window.location.href = "https://github.com/jyeh00/Flyin-Pigs"
   }
 
   resetFilter() {
