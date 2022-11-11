@@ -50,6 +50,9 @@ export class LoginSignupComponent {
 
     ngOnInit() {
         this.currentUser = sessionStorage.getItem('flyinPigsCurrentUser') || "";
+        if(this.currentUser) {
+            this.loggedIn = true;
+        }
         this.primengConfig.ripple = true;
     }
 
