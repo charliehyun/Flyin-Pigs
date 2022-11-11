@@ -18,7 +18,7 @@ export class ResetPasswordComponent {
   confNewPass: string;
   passHide: boolean;  // show/hide password text
 
-  constructor(private messageService: MessageService, private forgotPasswordService: ResetPasswordService) {
+  constructor(private messageService: MessageService, private forgotPasswordService: ResetPasswordService, private router: Router) {
     this.passHide = true;
   }
 
@@ -122,5 +122,21 @@ export class ResetPasswordComponent {
     this.subscription.unsubscribe();
   }
 
+  //footer handlers
+  goToSearch() {
+    this.router.navigate(['search'])
+  }
+
+  goToFAQ() {
+  this.router.navigate(['faq'])
+  }
+
+  goToFeedback() {
+  this.router.navigate(['feedback'])
+  }
+
+  goToGithub() {
+      window.location.href = "https://github.com/jyeh00/Flyin-Pigs"
+  }
 
 }

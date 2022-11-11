@@ -264,6 +264,23 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
   }
   
+  //footer handlers
+  goToSearch() {
+    this.router.navigate(['search'])
+  }
+
+  goToFAQ() {
+  this.router.navigate(['faq'])
+  }
+
+  goToFeedback() {
+  this.router.navigate(['feedback'])
+  }
+
+  goToGithub() {
+    window.location.href = "https://github.com/jyeh00/Flyin-Pigs"
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
