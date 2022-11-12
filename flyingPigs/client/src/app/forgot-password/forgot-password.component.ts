@@ -1,35 +1,49 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { Router } from '@angular/router';
-import { DataService } from "../data.service";
-import {FlightSchema} from "../flightSchema";
-import {Message} from 'primeng/api';
+import { Observable } from 'rxjs';
+import {Message, MessageService} from 'primeng/api';
 import { ForgotPasswordService } from './forgot-password.service';
 import {NGXLogger} from "ngx-logger";
 
-// import {Client} from "@googlemaps/google-maps-services-js";
 @Component({
   selector: 'forgot-password',
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.scss']
+  styleUrls: ['./forgot-password.component.scss'],
+  providers: [MessageService]
 })
 
 export class ForgotPasswordComponent {
-  subscription!: Subscription;
   email: string;
   service: any;
 
-  constructor(private data: DataService, private router: Router, private forgotPasswordService: ForgotPasswordService, private logger: NGXLogger) {
+  constructor(private messageService: MessageService, private forgotPasswordService: ForgotPasswordService, private logger: NGXLogger) {
 
   }
+
+  // show toast based on success/error
+  showMessage(severity, summary, detail) {
+    this.messageService.clear();
+    this.messageService.add({severity: severity, summary: summary, detail: detail});
+  }
+
   //backend calls
-  
   results$: Observable<boolean> = new Observable();
   async handleForgotPassword() {
-    this.logger.info("forgot password component email:", this.email);
+    // this.logger.info("forgot password component email:", this.email);
+
+    if(!this.email) {
+      const x = document.getElementById('email');
+      x?.classList.add('ng-invalid')
+      x?.classList.add('ng-dirty')
+    }
 
     this.resetValidity();
-    this.forgotPasswordService.sendEmail(this.email);
+    this.forgotPasswordService.sendEmail(this.email).subscribe(value => {
+      if(value) {
+        this.showMessage('success', 'Success', 'Successfully sent email');
+      } else {
+        this.showMessage('error', 'Error', 'Unable to send email. Invalid email or no account linked to provided email.');
+      }
+    });
     // let route = true;
     // input validation
     // TODO: check if email is in database
@@ -43,23 +57,6 @@ export class ForgotPasswordComponent {
     //this.router.navigate(['results'])
     //   alert("Email has been sent if you have an existing account with us!")
     // }
-  }
-  
-  //footer handlers
-  goToSearch() {
-    this.router.navigate(['search'])
-  }
-
-  goToFAQ() {
-  this.router.navigate(['faq'])
-  }
-
-  goToFeedback() {
-  this.router.navigate(['feedback'])
-  }
-
-  goToGithub() {
-      window.location.href = "https://github.com/jyeh00/Flyin-Pigs"
   }
 
   resetValidity() {

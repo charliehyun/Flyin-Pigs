@@ -145,6 +145,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     maxTimeEnd: {name: '1 hr', sec: 3600}
   }
 
+  // COPY END
+
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
     this.resetValidity();
@@ -255,30 +257,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
     return coord;
   }
-  // COPY END
 
   // DIFFERENT FROM RESULTS
   ngOnInit() {
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
     this.date = new Date().toISOString().split("T")[0];
     this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
-  }
-  
-  //footer handlers
-  goToSearch() {
-    this.router.navigate(['search'])
-  }
-
-  goToFAQ() {
-  this.router.navigate(['faq'])
-  }
-
-  goToFeedback() {
-  this.router.navigate(['feedback'])
-  }
-
-  goToGithub() {
-    window.location.href = "https://github.com/jyeh00/Flyin-Pigs"
   }
 
   ngOnDestroy() {

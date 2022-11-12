@@ -158,9 +158,12 @@ mongoRouter.post('/resetPassword', (req, res) => {
     console.log("reset password req: ", req);
     Credentials.findOne({resetPasswordToken: req.body.token}).then((user) => {
         if (!user) {
-            res.status(200).send({
-                message: 'invalid-link',
-            });
+            // res.status(200).send({
+            //     message: 'invalid-link',
+            // });
+            logger.info("NO USER WITH SPECIFIED TOKEN")
+            res.status(200).send(false);
+
             // console.error('password reset link is invalid or has expired');
             // res.status(403).send({message: 'password reset link is invalid or has expired'});
         } else {
@@ -196,9 +199,12 @@ mongoRouter.post('/resetPassword', (req, res) => {
             }
             else {
                 console.log("RESET PASSWORD LINK EXPIRED");
-                res.status(200).send({
-                    message: 'invalid-link',
-                });
+                // res.status(200).send({
+                //     message: 'invalid-link',
+                // });
+                logger.info("RESET PASSWORD LINK EXPIRED")
+
+                res.status(200).send(false);
                 // console.error('password reset link is invalid or has expired');
                 // res.status(403).send({message: 'password reset link is invalid or has expired'});
             }
@@ -209,7 +215,7 @@ mongoRouter.post('/resetPassword', (req, res) => {
 
 mongoRouter.post("/submitForgotPassword", (req, res) =>
 {
-    console.log("SUBMIT FORGOT PASSWORD REQ: ", req);
+    // console.log("SUBMIT FORGOT PASSWORD REQ: ", req);
     Credentials.findOne({email: req.body.email}).then((user) => {
 
         if(user) {
@@ -247,10 +253,13 @@ mongoRouter.post("/submitForgotPassword", (req, res) =>
             transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
                     console.log(error);
+                    res.status(200).send(false)
                 } else {
                     console.log('Email sent: ' + info.response);
+                    res.status(200).send(true)
                 }
             });
+
             // const transporter = nodemailer.createTransport({
             //     service: 'gmail',
 
@@ -281,7 +290,8 @@ mongoRouter.post("/submitForgotPassword", (req, res) =>
             // });
         }
         else {
-            return res.status(403).json({email: "Email doesn't exist."});
+            // return res.status(403).json({email: "Email doesn't exist."});
+            res.status(200).send(false)
         }
     })
     

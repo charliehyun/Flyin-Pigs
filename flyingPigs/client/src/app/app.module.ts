@@ -9,6 +9,8 @@ import { ResultsComponent } from './results/results.component';
 import { LoginSignupComponent } from './login-signup/login-signup.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { FAQComponent } from './faq/faq.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
@@ -39,8 +41,7 @@ import {RadioButtonModule} from 'primeng/radiobutton';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { MenuModule } from 'primeng/menu';
 import {ImageModule} from 'primeng/image';
-import { FAQComponent } from './faq/faq.component';
-import { FeedbackComponent } from './feedback/feedback.component';
+import {PasswordModule} from 'primeng/password';
 
 
 @NgModule({
@@ -85,6 +86,7 @@ import { FeedbackComponent } from './feedback/feedback.component';
     MenuModule,
     FontAwesomeModule,
     ImageModule,
+    PasswordModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,

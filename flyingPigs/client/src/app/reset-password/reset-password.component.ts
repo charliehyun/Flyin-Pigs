@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { Router } from '@angular/router';
-import { DataService } from "../data.service";
+import { Observable } from 'rxjs';
 import {MessageService} from 'primeng/api';
 import { ResetPasswordService } from './reset-password.service';
 
@@ -13,17 +11,13 @@ import { ResetPasswordService } from './reset-password.service';
 })
 
 export class ResetPasswordComponent {
-  subscription!: Subscription;
   newPass: string;
   confNewPass: string;
-  passHide: boolean;  // show/hide password text
 
-  constructor(private messageService: MessageService, private forgotPasswordService: ResetPasswordService, private router: Router) {
-    this.passHide = true;
+  constructor(private messageService: MessageService, private forgotPasswordService: ResetPasswordService) {
   }
 
   //backend calls
-
   // handle change password attempt. input validation
   results$: Observable<boolean> = new Observable();
   async handleResetPassword() {
@@ -48,8 +42,7 @@ export class ResetPasswordComponent {
     }
 
     if(invalid) {
-        this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
-        alert("Error!")
+        this.showMessage('error', 'Error', 'Unable to sign up. Invalid password.');
         return;
     }
 
@@ -59,7 +52,6 @@ export class ResetPasswordComponent {
         x?.classList.add('ng-invalid')
         x?.classList.add('ng-dirty')
         this.showMessage('error', 'Error', 'Passwords do not match');
-        alert("Passwords don't match!")
         return;
     }
 
@@ -69,7 +61,13 @@ export class ResetPasswordComponent {
       let params = new URLSearchParams(location.search);
       let token = params.get('token') || "";
       console.log("TOKEN: ", token);
-      this.forgotPasswordService.resetPassword(token, this.newPass);
+      this.forgotPasswordService.resetPassword(token, this.newPass).subscribe(value => {
+        if(value) {
+          this.showMessage('success', 'Success', 'Successfully changed password!');
+        } else {
+          this.showMessage('error', 'Error', 'Unable to update password. Invalid or expired token.');
+        }
+      });
 
         // if satisfies, then change password in database
         
@@ -84,17 +82,14 @@ export class ResetPasswordComponent {
         //         this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
         //     }
         // });
-        this.showMessage('success', 'Success', 'Successfully changed password! Log in to get started.');
-        alert("Password has been reset!")
     } else {
         const x = document.getElementById('passS');
         x?.classList.add('ng-invalid')
         x?.classList.add('ng-dirty')
         this.showMessage('error', 'Error', 'Password does not satisfy all requirements.');
-        alert("Password doesn't satisfy all requirements!")
     }
 
-}
+  }
   
   resetValidity() {
     const elements: Element[] = Array.from(document.getElementsByTagName("input"));
@@ -109,34 +104,10 @@ export class ResetPasswordComponent {
   showMessage(severity, summary, detail) {
     this.messageService.clear();
     this.messageService.add({severity: severity, summary: summary, detail: detail});
-}
+  }
 
-  passShowHide() {
-    this.passHide = !this.passHide
-}
   ngOnInit() {
     
-  }
-  
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-  //footer handlers
-  goToSearch() {
-    this.router.navigate(['search'])
-  }
-
-  goToFAQ() {
-  this.router.navigate(['faq'])
-  }
-
-  goToFeedback() {
-  this.router.navigate(['feedback'])
-  }
-
-  goToGithub() {
-      window.location.href = "https://github.com/jyeh00/Flyin-Pigs"
   }
 
 }

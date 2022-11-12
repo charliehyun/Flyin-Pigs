@@ -178,13 +178,16 @@ export class ResultsComponent implements OnInit, OnDestroy {
     maxTimeEnd: {name: '1 hr', sec: 3600}
   }
 
+  // COPY END
+
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
+
     this.resetValidity();
     // let departureCoord = await this.geocode(this.departAdd);
     // let arrivalCoord = await this.geocode(this.arriveAdd);
     let departureCoord;
-    let arrivalCoord
+    let arrivalCoord;
     let prevSearch = JSON.parse(sessionStorage.getItem('searchParams') || "");
     if(!prevSearch || prevSearch.departAdd != this.departAdd){
       departureCoord = await this.geocode(this.departAdd);
@@ -284,6 +287,11 @@ export class ResultsComponent implements OnInit, OnDestroy {
       el.classList.remove('ng-dirty')
       el.classList.add('ng-pristine')
     })
+
+    // this.trips = [];
+    // this.filteredTrips = [];
+    // this.displayTrips = [];
+    // this.shouldLoad = false;
   }
 
   /*
@@ -302,7 +310,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
     });
     return coord;
   }
-  // COPY END
   // DIFFERENT FROM SEARCH
   results$: Observable<ResultInfoSchema> = new Observable();  // original results returned from backend
   trips:TripSchema[]; // original results returned from backend but not async:)
@@ -410,7 +417,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
       //set airline name from code(?)
 
-
       if (trip.departingFlight.numberOfStops <= chosenStops &&
           trip.flightPrice <= this.totalPrice[1] &&
           trip.flightPrice >= this.totalPrice[0] &&
@@ -459,23 +465,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
         this.filterAirlines[0] = "Southwest";
       }
     }
-  }
-
-  //footer handlers
-  goToSearch() {
-    this.router.navigate(['search'])
-  }
-
-  goToFAQ() {
-  this.router.navigate(['faq'])
-  }
-
-  goToFeedback() {
-  this.router.navigate(['feedback'])
-  }
-
-  goToGithub() {
-      window.location.href = "https://github.com/jyeh00/Flyin-Pigs"
   }
 
   resetFilter() {
