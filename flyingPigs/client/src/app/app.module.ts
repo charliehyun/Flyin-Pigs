@@ -43,7 +43,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import { MenuModule } from 'primeng/menu';
 import {ImageModule} from 'primeng/image';
 import {PasswordModule} from 'primeng/password';
-
+import {TabViewModule} from 'primeng/tabview';
 
 @NgModule({
   declarations: [
@@ -89,6 +89,7 @@ import {PasswordModule} from 'primeng/password';
     FontAwesomeModule,
     ImageModule,
     PasswordModule,
+    TabViewModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,

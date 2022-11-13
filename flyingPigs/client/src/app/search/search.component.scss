@@ -14,4 +14,14 @@
 footer {
     text-align: center;
     padding: 3px;
-  }
+}
+
+:host ::ng-deep .p-tabview {
+    .p-tabview-panels {
+        outline: 1px solid lightgray;
+    }
+    // .p-tabview-nav-link {
+    //     background-color: green;
+    //     outline: 1px solid green;
+    // }
+}

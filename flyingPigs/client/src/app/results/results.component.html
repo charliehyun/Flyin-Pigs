@@ -1,4 +1,4 @@
-<img src="../../BOTTOM_CROPPED_LOGO.jpg" alt="Flyin' Pigs" routerLink="/search" width="8%" [style]="{cursor:'pointer'}">
+<img src="assets/images/BOTTOM_CROPPED_LOGO.png" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto; cursor:pointer; width:20%" routerLink="/search">
 <login-signup style="position: absolute; right: 0px;"></login-signup>
 <h2>Flights</h2>
 <!-- SEARCH -->
@@ -376,15 +376,15 @@
             <img src="assets/images/generic-logo.png" width="50" height="40">
           </span>
           <span *ngIf="trip.departingFlight.airlines.length < 2">
-            <img *ngIf="trip.departingFlight.airlines == 'AA'" src="assets/images/aa-logo.png" width="40" height="40">
+            <!-- <img *ngIf="trip.departingFlight.airlines == 'AA'" src="assets/images/aa-logo.png" width="40" height="40"> -->
             <img *ngIf="trip.departingFlight.airlines == 'AS'" src="assets/images/alaska-logo.png" width="40" height="40">
             <img *ngIf="trip.departingFlight.airlines == 'B6'" src="assets/images/jetblue-logo.png" width="40">
             <img *ngIf="trip.departingFlight.airlines == 'DL'" src="assets/images/delta-logo.png" width="40" height="40">
-            <img *ngIf="trip.departingFlight.airlines == 'F9'" src="assets/images/frontier-logo.jpg" width="40" height="40"> 
+            <img *ngIf="trip.departingFlight.airlines == 'F9'" src="assets/images/frontier-logo.png" width="40" height="40"> 
             <img *ngIf="trip.departingFlight.airlines == 'HA'" src="assets/images/hawaiian-logo.png" width="40" height="40"> 
             <img *ngIf="trip.departingFlight.airlines == 'NK'" src="assets/images/spirit-logo.png" width="40" height="40"> 
             <img *ngIf="trip.departingFlight.airlines == 'UA'" src="assets/images/united-logo.png" width="45" height="45"> 
-            <img *ngIf="trip.departingFlight.airlines == 'WN'" src="assets/images/southwest-logo.png" width="40"> 
+            <!-- <img *ngIf="trip.departingFlight.airlines == 'WN'" src="assets/images/southwest-logo.png" width="40">  -->
             <img *ngIf="!airlineTags.includes(trip.departingFlight.airlines[0])" src="assets/images/generic-logo.png" width="50" height="40">
           </span>
           <br>
