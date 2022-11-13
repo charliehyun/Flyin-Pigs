@@ -2,12 +2,12 @@
 <img src="assets/images/BOTTOM_CROPPED_LOGO.png" alt="Flyin' Pigs" routerLink="/search" width="8%" [style]="{cursor:'pointer'}">
 <h2>Flights</h2>
 <!-- SEARCH -->
-<p-panel header="Search Parameters" toggler="header" [toggleable]="true" expandIcon="pi pi-plus-circle" collapseIcon="pi pi-minus-circle" [collapsed]="true">
+<p-panel styleClass="p-shadow-3" header="Search Parameters" toggler="header" [toggleable]="true" expandIcon="pi pi-plus-circle" collapseIcon="pi pi-minus-circle" [collapsed]="true">
   <search-box [style]="{'margin': '0px'}"></search-box>
 </p-panel>
 
 <!-- FILTER -->
-<p-card [style]="{'height': '150px'}">
+<p-card [style]="{'height': '150px'}" styleClass="p-shadow-3">
   <h5>Filters</h5>
   <div [style]="{float: 'left'}"> 
       <!-- Layover -->
@@ -104,7 +104,7 @@
 </div>
 
 <!-- Table -->
-<p-table [value]="displayTrips" dataKey="uniqueCode">
+<p-table [value]="displayTrips" dataKey="uniqueCode" styleClass="p-shadow-3">
     <!-- Column names -->
     <ng-template pTemplate="header">
       <tr>
