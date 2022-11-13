@@ -12,6 +12,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { FAQComponent } from './faq/faq.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { SearchBoxComponent } from './search-box/search-box.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
@@ -55,7 +56,8 @@ import {TabViewModule} from 'primeng/tabview';
     ResetPasswordComponent,
     FAQComponent,
     FeedbackComponent,
-      PageNotFoundComponent
+    PageNotFoundComponent,
+    SearchBoxComponent
   ],
   imports: [
     BrowserModule,
