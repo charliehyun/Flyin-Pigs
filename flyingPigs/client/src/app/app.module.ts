@@ -11,6 +11,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { FAQComponent } from './faq/faq.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
@@ -53,7 +54,8 @@ import {PasswordModule} from 'primeng/password';
     ForgotPasswordComponent,
     ResetPasswordComponent,
     FAQComponent,
-    FeedbackComponent
+    FeedbackComponent,
+      PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
