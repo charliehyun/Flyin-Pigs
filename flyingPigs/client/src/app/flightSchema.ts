@@ -7,15 +7,16 @@ export interface FlightSchema {
     flightTime:number;
     numberOfStops:number;
     // price:number;
-    stopOvers: StopOverFlightSchema[];
+    segments: FlightSegmentSchema[];
     // timeToAirport:number;
     // timeFromAirport:number;
 }
-export interface StopOverFlightSchema {
+
+export interface FlightSegmentSchema {
     airline:string;
     depAirportCode:string;
     arrAirportCode:string;
-    stopOverDuration:number;
+    segmentDuration:number;
     departTime:string;
     arrivalTime:string;
 }
@@ -28,4 +29,13 @@ export interface TripSchema {
     flightPrice: number;
     totalDepTime: number;
     totalRetTime?: number;
+}
+
+export interface ResultInfoSchema {
+    airlines: string[];
+    depAirlines: string[];
+    arrAirlines: string[];
+    minPrice?: number;
+    maxPrice?: number;
+    trips: TripSchema[];
 }

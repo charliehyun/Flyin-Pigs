@@ -3,13 +3,10 @@ import { Observable, Subscription } from 'rxjs';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { DataService } from "../data.service";
-import {FlightSchema} from "../flightSchema";
-import {Message} from 'primeng/api';
 import {NGXLogger} from "ngx-logger";
 import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
-import {ScrollTopModule} from 'primeng/scrolltop';
+import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'search',
@@ -22,8 +19,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedClass: DropdownOption = {name: 'Economy', code: 'ECONOMY'}; // Selected flight class
   dTransportType: DropdownOption[]; // Transportation to airport options
   aTransportType: DropdownOption[]; // Transportation from airport options
-  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
-  selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
+  selectedATransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -36,18 +33,19 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
   subscription!: Subscription;  // subscription to send search from search to results
-  date: any;
-  maxDate: any;
-  departDate: string;
-  returnDate: string;
-  dates: any;
+  date: any;  // current date
+  maxDate: any; // max selectable date
+  departDate: string; // selected departure date
+  returnDate: string; // selected return date (in the case of round trip)
+
+  departAdd= "";  // departure address input
+  arriveAdd= "";  // arrival address input
 
   //icons
-  faCar = faCar;
-  faBus = faBus;
+  driving = faCar;
+  transit = faBus;
 
-  constructor(private data: DataService, private router: Router, private fb: FormBuilder, private logger: NGXLogger) {
-  // COPY START
+  constructor(private data: DataService, private router: Router, private logger: NGXLogger, library: FaIconLibrary) {
     this.classes = [
       {name: 'Economy', code: 'ECONOMY'},
       {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
@@ -55,14 +53,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       {name: 'First', code: 'FIRST'}
     ];
     this.dTransportType = [
-      {name: 'Car', code: 'driving'},
-      {name: 'Public Transit', code: 'transit'},
+      {name: 'Car', code: 'driving', icon: 'car'},
+      {name: 'Public Transit', code: 'transit', icon:'bus'},
       // {name: 'Bike', code: 'Biking'},
       // {name: 'Walk', code: 'Walking'}
     ];
     this.aTransportType = [
-      {name: 'Car', code: 'driving'},
-      {name: 'Public Transit', code: 'transit'},
+      {name: 'Car', code: 'driving', icon: 'car'},
+      {name: 'Public Transit', code: 'transit', icon:'bus'},
       // {name: 'Bike', code: 'Biking'},
       // {name: 'Walk', code: 'Walking'}
     ];
@@ -75,11 +73,16 @@ export class SearchComponent implements OnInit, OnDestroy {
       {name: '6 hr', sec: 21600},
       {name: '7 hr', sec: 25200}
     ];
+
+    library.addIcons(
+      faCar,
+      faBus
+    );
   }
 
+  // COPY START
+
   // Google autocomplete stuff
-  departAdd= "";
-  arriveAdd= "";
   options:Options = new Options({
     componentRestrictions:{
       country:"US"}
@@ -108,8 +111,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem('searchParams');
     this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
-    this.selectedDTransport = {name: 'Car', code: 'driving'};
-    this.selectedATransport = {name: 'Car', code: 'driving'};
+    this.selectedDTransport = {name: 'Car', code: 'driving', icon: 'car'};
+    this.selectedATransport = {name: 'Car', code: 'driving', icon: 'car'};
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
@@ -136,11 +139,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     arriveAdd: "",
     arriveCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
-    selectedDTransport: {name: 'Car', code: 'driving'},
-    selectedATransport: {name: 'Car', code: 'driving'},
+    selectedDTransport: {name: 'Car', code: 'driving', icon: 'car'},
+    selectedATransport: {name: 'Car', code: 'driving', icon: 'car'},
     maxTimeStart: {name: '3 hr', sec: 10800},
     maxTimeEnd: {name: '1 hr', sec: 3600}
   }
+
+  // COPY END
 
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
@@ -155,8 +160,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       x?.classList.add('ng-invalid')
       x?.classList.add('ng-dirty')
       route = false
-    } 
-    else {
+    } else {
       const x = document.getElementById('departDate');
       var departDateObj = new Date(this.departDate);
       if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
@@ -172,8 +176,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         x?.classList.add('ng-dirty')
         route = false
       }
-    }
-    else {
+    } else {
       const x = document.getElementById('returnDate');
       var returnDateObj = new Date(this.returnDate);
       if(returnDateObj < new Date(this.departDate) || returnDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
@@ -229,6 +232,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
   
   resetValidity() {
+    // reset validity of all input boxes
     const elements: Element[] = Array.from(document.getElementsByTagName("input"));
     elements.forEach((el: Element) => {
       el.classList.remove('ng-invalid')
@@ -243,43 +247,24 @@ export class SearchComponent implements OnInit, OnDestroy {
   If an error occurs, returns a null. 
   */
   async geocode(address) {
+    console.log("GEOCODING");
     var coord;
     var geocoder = new google.maps.Geocoder();
     await geocoder.geocode({ 'address': address}).then(response => {
       coord = response.results[0].geometry.location;
-      // console.log(response);
     }).catch(e => {
       coord = null;
-      // console.log(e);
     });
     return coord;
   }
-  // COPY END
 
   // DIFFERENT FROM RESULTS
   ngOnInit() {
-    // this.search = JSON.parse(sessionStorage.getItem('searchParams') || "");
-    // if(this.search) {
-    //   this.selectedClass = this.search.selectedClass;
-    //   this.isRoundTrip = this.search.isRoundTrip;
-    //   this.adultPass = this.search.adultPass;
-    //   this.childPass = this.search.childPass;
-    //   this.infantPass = this.search.infantPass;
-    //   this.totalPass = this.search.totalPass;
-    //   this.departDate = this.search.departDate;
-    //   this.returnDate = this.search.returnDate;
-    //   this.departAdd = this.search.departAdd;
-    //   this.arriveAdd = this.search.arriveAdd;
-    //   this.selectedDTransport = this.search.selectedDTransport;
-    //   this.selectedATransport = this.search.selectedATransport;
-    //   this.maxTimeStart = this.search.maxTimeStart;
-    //   this.maxTimeEnd = this.search.maxTimeEnd;
-    // }
     this.subscription = this.data.currentMessage.subscribe(search => this.search = search)
     this.date = new Date().toISOString().split("T")[0];
     this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
   }
-  
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

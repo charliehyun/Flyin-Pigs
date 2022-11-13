@@ -1,7 +1,7 @@
 <!-- Header -->
 <login-signup style="position: absolute; right: 0px;"></login-signup>
 <div>
-  <img src="favicon.ico" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto;">
+  <img src="favicon.ico" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto; cursor:pointer" routerLink="/search">
   <h2>Flyin' Pigs</h2>  
 </div>
 <!-- Main Search Content -->
@@ -13,7 +13,13 @@
         <h4>Departure</h4>
         <!-- Address -->
         <span>
-          <label for="daddress">Address:</label>
+          <label for="daddress">
+            Starting Address
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="Where are you leaving from? Input an address or a general location." 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <input 
             pInputText 
             type="text" 
@@ -25,7 +31,6 @@
             [options]="options" 
             (onAddressChange)="AddressChange1($event)" 
             [(ngModel)]="departAdd"
-            pTooltip="Where are you leaving from? Input an address or a general location." 
             tooltipPosition="right" 
             tooltipEvent="focus"
           >
@@ -34,40 +39,72 @@
 
         <!-- Transportation method -->
         <span>
-          <label for="dTransportType">Mode of Transport:</label>
+          <label for="dTransportType">
+            Mode of Transport
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How will you be getting to the departure airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <p-dropdown 
             id="dTransportType" 
             [options]="dTransportType" 
             [(ngModel)]="selectedDTransport" 
-            placeholder="Select a Mode of Transport" 
             optionLabel="name"
-            pTooltip="How will you be getting to the departure airport?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
-          ></p-dropdown>
+          >
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedDTransport">
+                <fa-icon *ngIf="selectedDTransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+                <fa-icon *ngIf="selectedDTransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+                {{selectedDTransport.name}}
+              </div>
+            </ng-template>
+            <ng-template let-transport pTemplate="dTransportType">
+              <div class="flex align-items-center">
+                <fa-icon [icon]="['fas', transport.icon]"></fa-icon>
+                <span>{{transport.name}}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </span>
         <br>
 
         <!-- Transport Hours Before Flight -->
         <span>
-          <label for="drivingStartHours">Maximum {{selectedDTransport.code}} time:</label>
+          <label for="drivingStartHours">
+            Maximum approximate {{selectedDTransport.code}} time
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How long are you willing to travel to get to the departure airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <p-dropdown 
             id="drivingStartHours" 
             [options]="hours" 
             [(ngModel)]="maxTimeStart" 
             optionLabel="name"
-            pTooltip="How long are you willing to travel to get to the departure airport?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
-          ></p-dropdown>
+          >
+          </p-dropdown>
         </span>
       </div>
+
       <p-divider layout="vertical"></p-divider>
+
       <div class="p-col">
         <h4>Arrival</h4>
         <!-- Address -->
         <span>
-          <label for="aaddress">Address:</label>
+          <label for="aaddress">
+            Destination Address
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="Where are you traveling to?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <input 
             pInputText 
             type="text" 
@@ -79,7 +116,6 @@
             [options]="options" 
             (onAddressChange)="AddressChange2($event)" 
             [(ngModel)]="arriveAdd"
-            pTooltip="Where are you traveling to?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
           >
@@ -88,28 +124,52 @@
 
         <!-- Transportation method -->
         <span>
-          <label for="aTransportType">Mode of Transport:</label>
+          <label for="aTransportType">
+            Mode of Transport
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How will you be getting to your destination from the airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <p-dropdown 
             id="aTransportType" 
             [options]="aTransportType" 
             [(ngModel)]="selectedATransport" 
-            placeholder="Select a Mode of Transport" 
             optionLabel="name"
-            pTooltip="How will you be getting to your destination from the airport?" 
             tooltipPosition="right"
             tooltipEvent="focus"
-          ></p-dropdown>
+            dropdown
+          >
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedATransport">
+                <fa-icon *ngIf="selectedATransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+                <fa-icon *ngIf="selectedATransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+                {{selectedATransport.name}}
+              </div>
+            </ng-template>
+            <ng-template let-transport pTemplate="item">
+              <div class="flex align-items-center">
+                <fa-icon [icon]="['fas', transport.icon]"></fa-icon>
+                <span>{{transport.name}}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </span>
         <br>
-
+      
         <!-- Transport Hours After Flight -->
         <span>
-          <label for="drivingEndHours">Maximum {{selectedATransport.code}} time:</label>
+          <label for="drivingEndHours">
+            Maximum approximate {{selectedATransport.code}} time
+            <i class="pi pi-question-circle" style="white-space: pre-line" 
+              pTooltip="How long are you willing to travel to get to your destination from the airport?" 
+              tooltipPosition="top"
+            ></i>
+          </label>
           <p-dropdown 
             [options]="hours" 
             [(ngModel)]="maxTimeEnd" 
             optionLabel="name" 
-            pTooltip="How long are you willing to travel to get to your destination from the airport?" 
             tooltipPosition="right" 
             tooltipEvent="focus"
           ></p-dropdown>
@@ -121,15 +181,15 @@
       <br><hr><br>
       <!-- One way/Round trip -->
       One Way 
-      <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" style="vertical-align: middle;"></p-inputSwitch>
+      <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" [style]="{'vertical-align':'middle'}"></p-inputSwitch>
       Round Trip &nbsp;
 
       <!-- Passenger # and selection Overlay -->
       <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></button>
       <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
         <div>
-          <label for="adult" class="pass1">Adults</label>
-          <div class="pass2">
+          <label for="adult" class="overlay1">Adults</label>
+          <div class="overlay2">
             <p-inputNumber 
               [(ngModel)]="adultPass" 
               inputId="adult" 
@@ -142,8 +202,8 @@
             ></p-inputNumber>
           </div>
           <br><br><br>
-          <label for="child" class="pass1">Children &nbsp;</label>
-          <div class="pass2">
+          <label for="child" class="overlay1">Children &nbsp;</label>
+          <div class="overlay2">
             <p-inputNumber 
               [(ngModel)]="childPass" 
               inputId="child" 
@@ -156,8 +216,8 @@
             ></p-inputNumber>
           </div>
           <br><br><br>
-          <label for="infant" class="pass1">Infants</label>
-          <div class="pass2">
+          <label for="infant" class="overlay1">Infants</label>
+          <div class="overlay2">
             <p-inputNumber 
               [(ngModel)]="infantPass" 
               inputId="infant" 
@@ -195,9 +255,17 @@
   <!-- COPY END -->
 </p-card>
 
+<footer>
+  <p-button label="Search" styleClass="p-button-link" icon="pi pi-search" routerLink="/search"></p-button>
+  <p-button label="FAQ" styleClass="p-button-link" icon="pi pi-question-circle" routerLink="/faq"></p-button>
+  <p-button label="Give Feedback" styleClass="p-button-link" icon="pi pi-comment" routerLink="/feedback"></p-button>
+  <p-button label="Github" styleClass="p-button-link" icon="pi pi-github" onclick="window.open('https://github.com/jyeh00/Flyin-Pigs','_blank')"></p-button>
+  <p> 2022 Flyin' Pigs </p>
+</footer>
+
 <p-scrollTop
-      target="parent"
-      styleClass="custom-scrolltop"
-      [threshold]="100"
-      icon="pi pi-arrow-up"
-    ></p-scrollTop>
+  target="parent"
+  styleClass="custom-scrolltop"
+  [threshold]="100"
+  icon="pi pi-arrow-up"
+></p-scrollTop>

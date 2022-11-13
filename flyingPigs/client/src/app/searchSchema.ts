@@ -23,4 +23,5 @@ export interface DropdownOption {
     name: string;
     code?: string;
     sec?: number;
+    icon?: string;
 }

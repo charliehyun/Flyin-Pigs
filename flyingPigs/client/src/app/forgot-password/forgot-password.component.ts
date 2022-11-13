@@ -1,39 +1,50 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
-//import { SearchService } from "./search.service";
-//import { AirportSchema } from "../airportSchema";
-import { SearchSchema, DropdownOption } from '../searchSchema';
-import { ForgotPasswordSchema } from '../forgotPasswordSchema';
-import { Router } from '@angular/router';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
-import { DataService } from "../data.service";
-import {FlightSchema} from "../flightSchema";
-import {Message} from 'primeng/api';
-// import {Client} from "@googlemaps/google-maps-services-js";
+import { Observable } from 'rxjs';
+import {Message, MessageService} from 'primeng/api';
+import { ForgotPasswordService } from './forgot-password.service';
+import {NGXLogger} from "ngx-logger";
+
 @Component({
   selector: 'forgot-password',
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.scss']
+  styleUrls: ['./forgot-password.component.scss'],
+  providers: [MessageService]
 })
 
-export class ForgotPasswordComponent implements OnInit, OnDestroy {
-  subscription!: Subscription;
-  email: string = '';
+export class ForgotPasswordComponent {
+  email: string;
+  service: any;
 
+  constructor(private messageService: MessageService, private forgotPasswordService: ForgotPasswordService, private logger: NGXLogger) {
 
-  constructor(private data: DataService, private router: Router, private fb: FormBuilder) {
-  // COPY START
-    this.createForm();
+  }
+
+  // show toast based on success/error
+  showMessage(severity, summary, detail) {
+    this.messageService.clear();
+    this.messageService.add({severity: severity, summary: summary, detail: detail});
   }
 
   //backend calls
+  results$: Observable<boolean> = new Observable();
+  async handleForgotPassword() {
+    // this.logger.info("forgot password component email:", this.email);
 
-  
+    if(!this.email) {
+      const x = document.getElementById('email');
+      x?.classList.add('ng-invalid')
+      x?.classList.add('ng-dirty')
+    }
 
-  forgotPassword() {
     this.resetValidity();
-    let route = true;
+    this.forgotPasswordService.sendEmail(this.email).subscribe(value => {
+      if(value) {
+        this.showMessage('success', 'Success', 'Successfully sent email');
+      } else {
+        this.showMessage('error', 'Error', 'Unable to send email. Invalid email or no account linked to provided email.');
+      }
+    });
+    // let route = true;
     // input validation
     // TODO: check if email is in database
     // if valid, create search object and route to results
@@ -41,15 +52,13 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
     // if valid email in database, send link to email
     // have alert that says, "if email exists, then a reset email link will be sent to you"
-
-    if(route) {
-      
-      //this.data.changeMessage(this.email)
-      //this.router.navigate(['results'])
-      alert("Email has been sent if you have an existing account with us!")
-    }
+    // if(route) {
+    //this.data.changeMessage(this.email)
+    //this.router.navigate(['results'])
+    //   alert("Email has been sent if you have an existing account with us!")
+    // }
   }
-  
+
   resetValidity() {
     const elements: Element[] = Array.from(document.getElementsByTagName("input"));
     elements.forEach((el: Element) => {
@@ -57,20 +66,6 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       el.classList.remove('ng-dirty')
       el.classList.add('ng-pristine')
     })
-  }
-    
-  createForm() {
-    
-  }
-  // COPY END
-
-  // DIFFERENT FROM RESULTS
-  ngOnInit() {
-    
-  }
-  
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
 }

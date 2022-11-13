@@ -2,25 +2,71 @@
     margin: 5px;
 }
 
-.pass1{
+body {
+    overflow-y:scroll;
+}
+
+.overlay1 {
     float:left;
     padding-left:10px;
 }
-.pass2{
+
+.overlay2{
     float:right;
     padding-right:10px;
-
 }
 
-.pass3{
+.overlay3 {
     float:left;
     padding-left:5px;
     padding-top: 20px;
 }
 
+:host ::ng-deep .p-panel {
+    background: lightgray;
+    .p-panel-header {
+        background: lightgray;
+        cursor:pointer;
+    }
+    .p-panel-content {
+        background: white;
+        // make border round
+        border-radius: 5px;
+        padding: 20px;
+    }
+}
 
-// :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-//     position: -webkit-sticky;
-//     position: sticky;
-//     top: 5rem;
-// }
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+}
+
+@media screen and (max-width: 64em) {
+    :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+        top: 0px;
+    }
+}
+
+.loadMore {
+    text-align: center;  
+}
+
+:host ::ng-deep .custom-scrolltop {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    &:hover {
+      background-color: var(--primary-color);
+    }
+    .p-scrolltop-icon {
+      font-size: 1rem;
+      color: var(--primary-color-text);
+    }
+}
+
+footer {
+    text-align: center;
+    padding: 3px;
+}

@@ -1,24 +1,13 @@
 <p-toast position="top-left"></p-toast>
 
 <!-- Header -->
-<login-signup style="position: absolute; right: 0px;"></login-signup>
 <div>
   <img src="favicon.ico" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto; cursor:pointer" routerLink="/search">
-  <h2>Forgot Password?</h2>  
+  <h2 align="center">404: Page Not Found!</h2>
 </div>
 
-<p-card>
-  <div>
-    Tell us your recovery email address to get sent a reset link:
-    <br>
-    <!-- Email -->
-    <h6><br>Email</h6>
-    <input pInputText type="text" id="email" name="email" size="35" [(ngModel)]="email">
-    <br><br>
-    <button pButton pRipple type="button" (click)="handleForgotPassword()" label="Send Link"></button>
-    <br>
-  </div>
-</p-card>
+
+<!-- Potential other items / space -->
 
 <footer>
   <p-button label="Search" styleClass="p-button-link" icon="pi pi-search" routerLink="/search"></p-button>
