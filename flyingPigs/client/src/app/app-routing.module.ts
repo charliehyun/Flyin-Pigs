@@ -6,6 +6,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { FAQComponent } from './faq/faq.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full'},
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'faq', component: FAQComponent },
   { path: 'feedback', component: FeedbackComponent },
+  {path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({
