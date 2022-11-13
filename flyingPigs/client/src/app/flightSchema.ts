@@ -29,12 +29,13 @@ export interface TripSchema {
     flightPrice: number;
     totalDepTime: number;
     totalRetTime?: number;
+    availSeats: number;
 }
 
 export interface ResultInfoSchema {
     airlines: string[];
-    depAirlines: string[];
-    arrAirlines: string[];
+    depAirports: string[];
+    arrAirports: string[];
     minPrice?: number;
     maxPrice?: number;
     trips: TripSchema[];
