@@ -30,6 +30,7 @@ export interface TripSchema {
     totalDepTime: number;
     totalRetTime?: number;
     availSeats: number;
+    uniqueCode: number;
 }
 
 export interface ResultInfoSchema {

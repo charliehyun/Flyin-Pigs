@@ -62,6 +62,7 @@ export class Trip {
     totalDepTime: number;
     totalRetTime?: number;
     availSeats: number;
+    uniqueCode: number;
 
     constructor(timeToAirportA: number, timeToAirportB: number, flightPrice:number, departingFlight: Flight, returningFlight: Flight, availSeats:number) {
         this.timeToAirportA = timeToAirportA;
@@ -74,6 +75,7 @@ export class Trip {
         }
         this.totalDepTime = timeToAirportA + timeToAirportB + departingFlight.flightTime;
         this.availSeats = availSeats;
+        this.uniqueCode = this.totalDepTime / this.flightPrice + this.availSeats;
     }
 }
 

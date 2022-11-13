@@ -1,4 +1,4 @@
-<img src="favicon.ico" alt="Flyin' Pigs" routerLink="/search" width="100px" [style]="{cursor:'pointer'}">
+<img src="../../BOTTOM_CROPPED_LOGO.jpg" alt="Flyin' Pigs" routerLink="/search" width="8%" [style]="{cursor:'pointer'}">
 <login-signup style="position: absolute; right: 0px;"></login-signup>
 <h2>Flights</h2>
 <!-- SEARCH -->
@@ -182,7 +182,7 @@
       Round Trip &nbsp;
 
       <!-- Passenger # and selection Overlay -->
-      <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></button>
+      <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}" [style]="{'vertical-align':'middle'}"></button>
       <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
         <div>
           <label for="adult" class="overlay1">Adults</label>
@@ -350,7 +350,7 @@
 </div>
 
 <!-- Table -->
-<p-table [value]="displayTrips" dataKey="id">
+<p-table [value]="displayTrips" dataKey="uniqueCode">
     <!-- Column names -->
     <ng-template pTemplate="header">
       <tr>
@@ -401,7 +401,7 @@
         <td>{{trip.departingFlight.numberOfStops}}</td>
         <td>${{trip.flightPrice}}</td>
         <td>
-          <button type="button" pButton pRipple [pRowToggler]="trip" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-left'"></button>
+          <button type="button" pButton pRipple [pRowToggler]="trip" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></button>
         </td>
       </tr>
     </ng-template>
@@ -411,7 +411,7 @@
         <td colspan="12">
           <div class="p-3">
             <p-card header="Stop Overs">
-              <tr *ngFor="let stops of trip.departingFlight.stopOvers">
+              <tr *ngFor="let stops of trip.departingFlight.segments">
                 <td>Airline:{{stops.airline}}, </td>
                 <td>Departure Airport:{{stops.depAirportCode}}, </td>
                 <td>Arrival Airport:{{stops.arrAirportCode}}, </td>
