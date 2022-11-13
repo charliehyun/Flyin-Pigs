@@ -1,7 +1,7 @@
 <!-- Header -->
 <login-signup style="position: absolute; right: 0px;"></login-signup>
 <div>
-  <img src="favicon.ico" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto;">
+  <img src="favicon.ico" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto; cursor:pointer" routerLink="/search">
   <h2>Flyin' Pigs</h2>  
 </div>
 <!-- Main Search Content -->
@@ -50,15 +50,20 @@
             id="dTransportType" 
             [options]="dTransportType" 
             [(ngModel)]="selectedDTransport" 
-            placeholder="Select a Mode of Transport" 
             optionLabel="name"
             tooltipPosition="right" 
             tooltipEvent="focus"
           >
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedDTransport">
+                <fa-icon *ngIf="selectedDTransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+                <fa-icon *ngIf="selectedDTransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+                {{selectedDTransport.name}}
+              </div>
+            </ng-template>
             <ng-template let-transport pTemplate="dTransportType">
               <div class="flex align-items-center">
-                <fa-icon *ngIf="transport.name == 'Car'"[icon]="car"></fa-icon>
-                <fa-icon *ngIf="transport.name == 'Public Transit'"[icon]="bus"></fa-icon>
+                <fa-icon [icon]="['fas', transport.icon]"></fa-icon>
                 <span>{{transport.name}}</span>
               </div>
             </ng-template>
@@ -86,7 +91,9 @@
           </p-dropdown>
         </span>
       </div>
+
       <p-divider layout="vertical"></p-divider>
+
       <div class="p-col">
         <h4>Arrival</h4>
         <!-- Address -->
@@ -117,7 +124,6 @@
 
         <!-- Transportation method -->
         <span>
-          
           <label for="aTransportType">
             Mode of Transport
             <i class="pi pi-question-circle" style="white-space: pre-line" 
@@ -129,26 +135,28 @@
             id="aTransportType" 
             [options]="aTransportType" 
             [(ngModel)]="selectedATransport" 
-            placeholder="Select a Mode of Transport" 
             optionLabel="name"
             tooltipPosition="right"
             tooltipEvent="focus"
             dropdown
           >
-            <ng-template let-transport pTemplate="aTransportType">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedATransport">
+                <fa-icon *ngIf="selectedATransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+                <fa-icon *ngIf="selectedATransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+                {{selectedATransport.name}}
+              </div>
+            </ng-template>
+            <ng-template let-transport pTemplate="item">
               <div class="flex align-items-center">
-                <fa-icon *ngIf="transport.name == 'Car'"[icon]="car"></fa-icon>
-                <fa-icon *ngIf="transport.name == 'Public Transit'"[icon]="bus"></fa-icon>
+                <fa-icon [icon]="['fas', transport.icon]"></fa-icon>
                 <span>{{transport.name}}</span>
               </div>
             </ng-template>
           </p-dropdown>
-          
-          
         </span>
         <br>
-        
-
+      
         <!-- Transport Hours After Flight -->
         <span>
           <label for="drivingEndHours">
@@ -247,9 +255,17 @@
   <!-- COPY END -->
 </p-card>
 
+<footer>
+  <p-button label="Search" styleClass="p-button-link" icon="pi pi-search" routerLink="/search"></p-button>
+  <p-button label="FAQ" styleClass="p-button-link" icon="pi pi-question-circle" routerLink="/faq"></p-button>
+  <p-button label="Give Feedback" styleClass="p-button-link" icon="pi pi-comment" routerLink="/feedback"></p-button>
+  <p-button label="Github" styleClass="p-button-link" icon="pi pi-github" onclick="window.open('https://github.com/jyeh00/Flyin-Pigs','_blank')"></p-button>
+  <p> 2022 Flyin' Pigs </p>
+</footer>
+
 <p-scrollTop
-      target="parent"
-      styleClass="custom-scrolltop"
-      [threshold]="100"
-      icon="pi pi-arrow-up"
-    ></p-scrollTop>
+  target="parent"
+  styleClass="custom-scrolltop"
+  [threshold]="100"
+  icon="pi pi-arrow-up"
+></p-scrollTop>

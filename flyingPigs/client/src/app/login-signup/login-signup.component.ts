@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { LoginSignupService } from './login-signup.service';
 import { LoginSchema } from '../loginSchema';
-import {MessageService} from 'primeng/api';
+import {MessageService, MenuItem} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
@@ -24,18 +24,32 @@ export class LoginSignupComponent {
     displayLogin: boolean;  // show login modal
     displaySignup: boolean; // show signup modal
 
-    passHide: boolean;  // show/hide password text
-
     currentUser: string = "";   // current logged in user
+    loggedIn: boolean;
+
+    userOptionsMenu: MenuItem[];
+
+    loginResults$: Observable<boolean> = new Observable();
+    signupResults$: Observable<boolean> = new Observable();
+
 
     constructor(private messageService: MessageService, private primengConfig: PrimeNGConfig, private loginSignupService: LoginSignupService, private router: Router) {
         this.displayLogin = false;
         this.displaySignup = false;
-        this.passHide = true;
+        this.userOptionsMenu = [{
+            items: [{
+                label: 'Logout',
+                icon: 'pi pi-user-minus'
+            }]
+        }]
+        this.loggedIn = false;
     }
 
     ngOnInit() {
         this.currentUser = sessionStorage.getItem('flyinPigsCurrentUser') || "";
+        if(this.currentUser) {
+            this.loggedIn = true;
+        }
         this.primengConfig.ripple = true;
     }
 
@@ -66,20 +80,15 @@ export class LoginSignupComponent {
         }
     }
 
-    // show/hide password text
-    passShowHide() {
-        this.passHide = !this.passHide
-    }
-
     // handle log out
     async handleLogOut() {
         this.resetValidity();
         this.currentUser = "";
+        this.loggedIn = false;
         sessionStorage.removeItem("flyinPigsCurrentUser");
     }
 
     // handle login attempt. account validation
-    results$: Observable<boolean> = new Observable();
     async handleLogin() {
         this.resetValidity();
 
@@ -100,14 +109,16 @@ export class LoginSignupComponent {
             password: this.passL
         }
 
-        this.results$ = this.loginSignupService.loginUser(credentialsInput);
+        this.loginResults$ = this.loginSignupService.loginUser(credentialsInput);
 
-        this.results$.subscribe(value => {
-            if(value){
+        this.loginResults$.subscribe(value => {
+            if(value) {
                 this.displayLogin = false;
                 this.currentUser = this.emailL;
+                this.loggedIn = true;
                 sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
                 this.showMessage('success', 'Success', 'Successfully logged in.');
+                this.clearFields();
             } else {
                 this.showMessage('error', 'Error', 'Unable to log in. Invalid email or password.');
             }
@@ -162,12 +173,16 @@ export class LoginSignupComponent {
                 password: this.passS
             }
 
-            this.results$ = this.loginSignupService.signupUser(credentialsInput);
+            this.signupResults$ = this.loginSignupService.signupUser(credentialsInput);
 
-            this.results$.subscribe(value => {
-                if(value){
-                    this.displaySignup = false
-                    this.showMessage('success', 'Success', 'Successfully signed up. Log in to get started.');
+            this.signupResults$.subscribe(value => {
+                if(value) {
+                    this.displaySignup = false;
+                    this.currentUser = this.emailS;
+                    this.loggedIn = true;
+                    sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
+                    this.showMessage('success', 'Success', 'Successfully signed up and logged in!');
+                    this.clearFields();
                 } else {
                     this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
                 }
@@ -178,11 +193,19 @@ export class LoginSignupComponent {
             x?.classList.add('ng-dirty')
             this.showMessage('error', 'Error', 'Password does not satisfy all requirements.');
         }
-
     }
 
     handlePassword() {
         this.router.navigate(['forgot-password'])
+    }
+
+    clearFields() {
+        this.emailL = ""
+        this.passL = ""
+
+        this.emailS = ""
+        this.passS = ""
+        this.confPassS = ""
     }
 
     resetValidity() {

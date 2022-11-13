@@ -9,6 +9,8 @@ import { ResultsComponent } from './results/results.component';
 import { LoginSignupComponent } from './login-signup/login-signup.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { FAQComponent } from './faq/faq.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
@@ -37,6 +39,9 @@ import {TreeSelectModule} from 'primeng/treeselect';
 import { SliderModule } from 'primeng/slider';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {MultiSelectModule} from 'primeng/multiselect';
+import { MenuModule } from 'primeng/menu';
+import {ImageModule} from 'primeng/image';
+import {PasswordModule} from 'primeng/password';
 
 
 @NgModule({
@@ -46,7 +51,9 @@ import {MultiSelectModule} from 'primeng/multiselect';
     ResultsComponent,
     LoginSignupComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    FAQComponent,
+    FeedbackComponent
   ],
   imports: [
     BrowserModule,
@@ -76,11 +83,14 @@ import {MultiSelectModule} from 'primeng/multiselect';
     SliderModule,
     RadioButtonModule,
     MultiSelectModule,
+    MenuModule,
     FontAwesomeModule,
+    ImageModule,
+    PasswordModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
-      serverLogLevel: NgxLoggerLevel.ERROR,
+      serverLogLevel: NgxLoggerLevel.DEBUG,
       disableConsoleLogging: false
     })
   ],

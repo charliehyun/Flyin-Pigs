@@ -46,11 +46,24 @@
             id="dTransportType" 
             [options]="dTransportType" 
             [(ngModel)]="selectedDTransport" 
-            placeholder="Select a Mode of Transport" 
             optionLabel="name"
             tooltipPosition="right" 
             tooltipEvent="focus"
-          ></p-dropdown>
+          >
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedDTransport">
+                <fa-icon *ngIf="selectedDTransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+                <fa-icon *ngIf="selectedDTransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+                {{selectedDTransport.name}}
+              </div>
+            </ng-template>
+            <ng-template let-transport pTemplate="dTransportType">
+              <div class="flex align-items-center">
+                <fa-icon [icon]="['fas', transport.icon]"></fa-icon>
+                <span>{{transport.name}}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </span>
         <br>
 
@@ -70,10 +83,13 @@
             optionLabel="name"
             tooltipPosition="right" 
             tooltipEvent="focus"
-          ></p-dropdown>
+          >
+          </p-dropdown>
         </span>
       </div>
+
       <p-divider layout="vertical"></p-divider>
+
       <div class="p-col">
         <h4>Arrival</h4>
         <!-- Address -->
@@ -115,14 +131,28 @@
             id="aTransportType" 
             [options]="aTransportType" 
             [(ngModel)]="selectedATransport" 
-            placeholder="Select a Mode of Transport" 
             optionLabel="name"
             tooltipPosition="right"
             tooltipEvent="focus"
-          ></p-dropdown>
+            dropdown
+          >
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedATransport">
+                <fa-icon *ngIf="selectedATransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+                <fa-icon *ngIf="selectedATransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+                {{selectedATransport.name}}
+              </div>
+            </ng-template>
+            <ng-template let-transport pTemplate="item">
+              <div class="flex align-items-center">
+                <fa-icon [icon]="['fas', transport.icon]"></fa-icon>
+                <span>{{transport.name}}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </span>
         <br>
-
+      
         <!-- Transport Hours After Flight -->
         <span>
           <label for="drivingEndHours">
@@ -150,7 +180,7 @@
       <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" [style]="{'vertical-align':'middle'}"></p-inputSwitch>
       Round Trip &nbsp;
 
-      <!-- Passenger # and selection overlay -->
+      <!-- Passenger # and selection Overlay -->
       <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}"></button>
       <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
         <div>
@@ -239,14 +269,14 @@
       <p-overlayPanel #op1 [showCloseIcon]="true" [style]="{width: '300px'}"> 
         <div>
           <div class="overlay1">
-            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[0]"/>
+            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[0]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
           </div>
           <div class="overlay2">
-            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[1]"/>
+            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[1]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
           </div>
           <br><br>
           <div>
-            <p-slider [min]="0" [(ngModel)]="totalPrice" [range]="true" [max]="10000" [min]="1" [style]="{width: '250px'}"></p-slider>
+            <p-slider [(ngModel)]="totalPrice" [range]="true" [min]="minPrice" [max]="maxPrice" [style]="{width: '250px'}"></p-slider>
           </div>
         </div>
       </p-overlayPanel>
@@ -289,14 +319,12 @@
       <button pButton pRipple type="button" (click)="op5.toggle($event)" class="p-button-outlined" label="Airports"></button>
       <p-overlayPanel #op5 [showCloseIcon]="true" [style]="{width: '350px'}"> 
         <div>
-          <label>Departure Airports:</label> 
-          <br>
-          <p-multiSelect [options]="filterDepartAirports" [(ngModel)]="selectedDepartAirports" [style]="{width: '100%'}"></p-multiSelect>
+          <label>Departure Airports: </label> <br>
+          <p-multiSelect [options]="filterDepartAirports" [(ngModel)]="selectedDepartAirports" display="chip" [style]="{width: '100%'}"></p-multiSelect>
         </div>
         <div>
-          <label>Arrival Airports:</label> 
-          <br>
-          <p-multiSelect [options]="filterArrivalAirports" [(ngModel)]="selectedArrivalAirports" [style]="{width: '100%'}"></p-multiSelect>
+          <label>Arrival Airports: </label> <br>
+          <p-multiSelect [options]="filterArrivalAirports" [(ngModel)]="selectedArrivalAirports" display="chip" [style]="{width: '100%'}"></p-multiSelect>
         </div>
       </p-overlayPanel>
 
@@ -305,7 +333,7 @@
       <p-overlayPanel #op6 [showCloseIcon]="true" [style]="{width: '350px'}"> 
         <div>
           <label>Departure Airlines: </label> <br>
-          <p-multiSelect [options]="filterAirlines" [(ngModel)]="selectedAirlines" [style]="{width: '100%'}"></p-multiSelect>
+          <p-multiSelect [options]="filterAirlines" [(ngModel)]="selectedAirlines" display="chip" [style]="{width: '100%'}"></p-multiSelect>
         </div>
       </p-overlayPanel>    
   </div>
@@ -321,7 +349,7 @@
 </div>
 
 <!-- Table -->
-<p-table [value] = "displayTrips" dataKey="name" responsiveLayout="scroll">
+<p-table [value] = "displayTrips" dataKey="name">
     <!-- Column names -->
     <ng-template pTemplate="header">
         <tr>
@@ -342,7 +370,25 @@
     <!-- Row content -->
     <ng-template pTemplate="body" let-trip let-expanded="expanded">
         <tr>
-            <td>{{trip.departingFlight.airlines}}</td>
+            <td style="text-align:center">
+              <span *ngIf="trip.departingFlight.airlines.length > 1">
+                <img src="assets/images/generic-logo.png" width="50" height="40">
+              </span>
+              <span *ngIf="trip.departingFlight.airlines.length < 2">
+                <img *ngIf="trip.departingFlight.airlines == 'AA'" src="assets/images/aa-logo.png" width="40" height="40">
+                <img *ngIf="trip.departingFlight.airlines == 'AS'" src="assets/images/alaska-logo.png" width="40" height="40">
+                <img *ngIf="trip.departingFlight.airlines == 'B6'" src="assets/images/jetblue-logo.png" width="40">
+                <img *ngIf="trip.departingFlight.airlines == 'DL'" src="assets/images/delta-logo.png" width="40" height="40">
+                <img *ngIf="trip.departingFlight.airlines == 'F9'" src="assets/images/frontier-logo.jpg" width="40" height="40"> 
+                <img *ngIf="trip.departingFlight.airlines == 'HA'" src="assets/images/hawaiian-logo.png" width="40" height="40"> 
+                <img *ngIf="trip.departingFlight.airlines == 'NK'" src="assets/images/spirit-logo.png" width="40" height="40"> 
+                <img *ngIf="trip.departingFlight.airlines == 'UA'" src="assets/images/united-logo.png" width="45" height="45"> 
+                <img *ngIf="trip.departingFlight.airlines == 'WN'" src="assets/images/southwest-logo.png" width="40"> 
+                <img *ngIf="!airlineTags.includes(trip.departingFlight.airlines[0])" src="assets/images/generic-logo.png" width="50" height="40">
+              </span>
+              <br>
+              {{trip.departingFlight.airlines}}
+            </td>
             <td>{{trip.timeToAirportA}}</td> 
             <td>{{trip.departingFlight.departureAirport}}</td>
             <td>{{trip.departingFlight.departureTime}}</td>
@@ -391,6 +437,14 @@
       No flights match your search:(
   </p-card>
 </div>
+
+<footer>
+  <p-button label="Search" styleClass="p-button-link" icon="pi pi-search" routerLink="/search"></p-button>
+  <p-button label="FAQ" styleClass="p-button-link" icon="pi pi-question-circle" routerLink="/faq"></p-button>
+  <p-button label="Give Feedback" styleClass="p-button-link" icon="pi pi-comment" routerLink="/feedback"></p-button>
+  <p-button label="Github" styleClass="p-button-link" icon="pi pi-github" onclick="window.open('https://github.com/jyeh00/Flyin-Pigs','_blank')"></p-button>
+  <p> 2022 Flyin' Pigs </p>
+</footer>
 
 <p-scrollTop 
   icon="pi pi-arrow-up" 

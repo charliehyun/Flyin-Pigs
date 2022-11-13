@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DataService } from "../data.service";
 import {NGXLogger} from "ngx-logger";
 import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
+import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'search',
@@ -18,8 +19,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedClass: DropdownOption = {name: 'Economy', code: 'ECONOMY'}; // Selected flight class
   dTransportType: DropdownOption[]; // Transportation to airport options
   aTransportType: DropdownOption[]; // Transportation from airport options
-  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
-  selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
+  selectedATransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -41,10 +42,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   arriveAdd= "";  // arrival address input
 
   //icons
-  car = faCar;
-  bus = faBus;
+  driving = faCar;
+  transit = faBus;
 
-  constructor(private data: DataService, private router: Router, private logger: NGXLogger) {
+  constructor(private data: DataService, private router: Router, private logger: NGXLogger, library: FaIconLibrary) {
     this.classes = [
       {name: 'Economy', code: 'ECONOMY'},
       {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
@@ -52,14 +53,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       {name: 'First', code: 'FIRST'}
     ];
     this.dTransportType = [
-      {name: 'Car', code: 'driving'},
-      {name: 'Public Transit', code: 'transit'},
+      {name: 'Car', code: 'driving', icon: 'car'},
+      {name: 'Public Transit', code: 'transit', icon:'bus'},
       // {name: 'Bike', code: 'Biking'},
       // {name: 'Walk', code: 'Walking'}
     ];
     this.aTransportType = [
-      {name: 'Car', code: 'driving'},
-      {name: 'Public Transit', code: 'transit'},
+      {name: 'Car', code: 'driving', icon: 'car'},
+      {name: 'Public Transit', code: 'transit', icon:'bus'},
       // {name: 'Bike', code: 'Biking'},
       // {name: 'Walk', code: 'Walking'}
     ];
@@ -72,6 +73,11 @@ export class SearchComponent implements OnInit, OnDestroy {
       {name: '6 hr', sec: 21600},
       {name: '7 hr', sec: 25200}
     ];
+
+    library.addIcons(
+      faCar,
+      faBus
+    );
   }
 
   // COPY START
@@ -105,8 +111,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem('searchParams');
     this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
-    this.selectedDTransport = {name: 'Car', code: 'driving'};
-    this.selectedATransport = {name: 'Car', code: 'driving'};
+    this.selectedDTransport = {name: 'Car', code: 'driving', icon: 'car'};
+    this.selectedATransport = {name: 'Car', code: 'driving', icon: 'car'};
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
@@ -133,11 +139,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     arriveAdd: "",
     arriveCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
-    selectedDTransport: {name: 'Car', code: 'driving'},
-    selectedATransport: {name: 'Car', code: 'driving'},
+    selectedDTransport: {name: 'Car', code: 'driving', icon: 'car'},
+    selectedATransport: {name: 'Car', code: 'driving', icon: 'car'},
     maxTimeStart: {name: '3 hr', sec: 10800},
     maxTimeEnd: {name: '1 hr', sec: 3600}
   }
+
+  // COPY END
 
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
@@ -239,6 +247,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   If an error occurs, returns a null. 
   */
   async geocode(address) {
+    console.log("GEOCODING");
     var coord;
     var geocoder = new google.maps.Geocoder();
     await geocoder.geocode({ 'address': address}).then(response => {
@@ -248,7 +257,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
     return coord;
   }
-  // COPY END
 
   // DIFFERENT FROM RESULTS
   ngOnInit() {
@@ -256,7 +264,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.date = new Date().toISOString().split("T")[0];
     this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
   }
-  
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

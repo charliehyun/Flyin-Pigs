@@ -8,6 +8,8 @@ import { DataService } from "../data.service";
 import { ResultInfoSchema, TripSchema } from '../flightSchema';
 import {NGXLogger} from "ngx-logger";
 import { MenuItem } from 'primeng/api';
+import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
+import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import { Time } from '@angular/common';
 
 @Component({
@@ -22,8 +24,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   selectedClass: DropdownOption = {name: 'Economy', code: 'ECONOMY'}; // Selected flight class
   dTransportType: DropdownOption[]; // Transportation to airport options
   aTransportType: DropdownOption[]; // Transportation from airport options
-  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
-  selectedATransport: DropdownOption = {name: 'Car', code: 'driving'}; // Transportation option
+  selectedDTransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
+  selectedATransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
   isRoundTrip: boolean = false; // Round Trip toggle
   hours: DropdownOption[]; // hours for transportation before/after flight
 
@@ -44,11 +46,15 @@ export class ResultsComponent implements OnInit, OnDestroy {
   departAdd= "";  // departure address input
   arriveAdd= "";  // arrival address input
 
+  //icons
+  driving = faCar;
+  transit = faBus;
+
   // FILTER VARS
-  selectedStop: any = null;
+  totalPrice: number[] = [];
   stops: any[];
-  totalPrice: number[] = [1,10000];
-  filterAirlines: any[];
+  selectedStop: any = null;
+  filterAirlines: string[];
   selectedAirlines: any[];
   filterDepartAirports: any[];
   selectedDepartAirports: any[];
@@ -58,9 +64,13 @@ export class ResultsComponent implements OnInit, OnDestroy {
   maxFlightTime: number = 10;
   departTime: Time;
   arrivalTime: Time;
+  minPrice: number;
+  maxPrice: number;
+
   airports: any[];
+  airlineTags: string[] = ['AA', 'AS', 'B6', 'DL', 'F9', 'HA', 'NK', 'UA', 'WN'];
    
-  constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger) {
+  constructor(private resultsService: ResultsService, private data: DataService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
     this.classes = [
       {name: 'Economy', code: 'ECONOMY'},
       {name: 'Premium Economy', code: 'PREMIUM_ECONOMY'},
@@ -68,14 +78,14 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: 'First', code: 'FIRST'}
     ];
     this.dTransportType = [
-      {name: 'Car', code: 'driving'},
-      {name: 'Public Transit', code: 'transit'},
+      {name: 'Car', code: 'driving', icon: 'car'},
+      {name: 'Public Transit', code: 'transit', icon:'bus'},
       // {name: 'Bike', code: 'Biking'},
       // {name: 'Walk', code: 'Walking'}
     ];
     this.aTransportType = [
-      {name: 'Car', code: 'driving'},
-      {name: 'Public Transit', code: 'transit'},
+      {name: 'Car', code: 'driving', icon: 'car'},
+      {name: 'Public Transit', code: 'transit', icon:'bus'},
       // {name: 'Bike', code: 'Biking'},
       // {name: 'Walk', code: 'Walking'}
     ];
@@ -94,6 +104,11 @@ export class ResultsComponent implements OnInit, OnDestroy {
       {name: '1 stop or fewer', key: 'one'},
       {name: '2 stops or fewer', key: 'two'}
     ];
+
+    library.addIcons(
+      faCar,
+      faBus
+    );
 
     this.selectedStop = this.stops[0];
   }
@@ -129,8 +144,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem('searchParams');
     this.resetValidity();
     this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
-    this.selectedDTransport = {name: 'Car', code: 'driving'};
-    this.selectedATransport = {name: 'Car', code: 'driving'};
+    this.selectedDTransport = {name: 'Car', code: 'driving', icon: 'car'};
+    this.selectedATransport = {name: 'Car', code: 'driving', icon: 'car'};
     this.isRoundTrip = false;
     this.adultPass = 1;
     this.childPass = 0;
@@ -157,17 +172,35 @@ export class ResultsComponent implements OnInit, OnDestroy {
     departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
     arriveAdd: "",
     arriveCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
-    selectedDTransport: {name: 'Car', code: 'driving'},
-    selectedATransport: {name: 'Car', code: 'driving'},
+    selectedDTransport: {name: 'Car', code: 'driving', icon: 'car'},
+    selectedATransport: {name: 'Car', code: 'driving', icon: 'car'},
     maxTimeStart: {name: '3 hr', sec: 10800},
     maxTimeEnd: {name: '1 hr', sec: 3600}
   }
 
+  // COPY END
+
   // input validation, geocoding, search sent to results, and navigate to results
   async handleSearch() {
+
     this.resetValidity();
-    let departureCoord = await this.geocode(this.departAdd);
-    let arrivalCoord = await this.geocode(this.arriveAdd);
+    // let departureCoord = await this.geocode(this.departAdd);
+    // let arrivalCoord = await this.geocode(this.arriveAdd);
+    let departureCoord;
+    let arrivalCoord;
+    let prevSearch = JSON.parse(sessionStorage.getItem('searchParams') || "");
+    if(!prevSearch || prevSearch.departAdd != this.departAdd){
+      departureCoord = await this.geocode(this.departAdd);
+    }
+    else {
+      departureCoord = prevSearch.departCoord;
+    }
+    if(!prevSearch || prevSearch.arriveAdd != this.arriveAdd){
+      arrivalCoord = await this.geocode(this.arriveAdd);
+    }
+    else {
+      arrivalCoord = prevSearch.arriveCoord;
+    }
 
     let route = true;
     // input validation
@@ -254,6 +287,11 @@ export class ResultsComponent implements OnInit, OnDestroy {
       el.classList.remove('ng-dirty')
       el.classList.add('ng-pristine')
     })
+
+    // this.trips = [];
+    // this.filteredTrips = [];
+    // this.displayTrips = [];
+    // this.shouldLoad = false;
   }
 
   /*
@@ -262,6 +300,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   If an error occurs, returns a null. 
   */
   async geocode(address) {
+    console.log("GEOCODING");
     var coord;
     var geocoder = new google.maps.Geocoder();
     await geocoder.geocode({ 'address': address}).then(response => {
@@ -271,7 +310,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
     });
     return coord;
   }
-  // COPY END
   // DIFFERENT FROM SEARCH
   results$: Observable<ResultInfoSchema> = new Observable();  // original results returned from backend
   trips:TripSchema[]; // original results returned from backend but not async:)
@@ -313,6 +351,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.selectedArrivalAirports = this.filterArrivalAirports;
       this.selectedDepartAirports = this.filterDepartAirports;
       this.filterAirlines = value.airlines;
+      this.airlineNames();
+      this.maxPrice = value.maxPrice || 0;
+      this.minPrice = value.minPrice || 0;
+      this.totalPrice = [this.minPrice, this.maxPrice];
       this.selectedAirlines = this.filterAirlines;
     });
   }
@@ -373,6 +415,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
       //determine what airlines are available.
       let includedAirlines = trip.departingFlight.airlines.every(airline => this.selectedAirlines.includes(airline));
 
+      //set airline name from code(?)
+
       if (trip.departingFlight.numberOfStops <= chosenStops &&
           trip.flightPrice <= this.totalPrice[1] &&
           trip.flightPrice >= this.totalPrice[0] &&
@@ -395,6 +439,31 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.shouldLoad = true;
     } else {
       this.shouldLoad = false;
+    }
+  }
+
+  //setting airline names from code (need to redo)
+  airlineNames() {
+    if (this.filterAirlines.length == 1) {
+      if (this.filterAirlines[0] == "AA") {
+        this.filterAirlines[0] = "American";
+      } else if (this.filterAirlines[0] == "AS") {
+        this.filterAirlines[0] = "Alaska";
+      } else if (this.filterAirlines[0] == "B6") {
+        this.filterAirlines[0] = "JetBlue";
+      } else if (this.filterAirlines[0] == "DL") {
+        this.filterAirlines[0] = "Delta";
+      } else if (this.filterAirlines[0] == "F9") {
+        this.filterAirlines[0] = "Frontier";
+      } else if (this.filterAirlines[0] == "HA") {
+        this.filterAirlines[0] = "Hawaiian";
+      } else if (this.filterAirlines[0] == "NK") {
+        this.filterAirlines[0] = "Spirit";
+      } else if (this.filterAirlines[0] == "UA") {
+        this.filterAirlines[0] = "United";
+      } else if (this.filterAirlines[0] == "WN") {
+        this.filterAirlines[0] = "Southwest";
+      }
     }
   }
 
