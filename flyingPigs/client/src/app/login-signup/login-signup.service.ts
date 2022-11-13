@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, tap } from 'rxjs';
-import { SearchSchema } from '../searchSchema';
-import { FlightSchema, StopOverFlightSchema} from '../flightSchema';
 import { LoginSchema } from '../loginSchema';
 @Injectable({
     providedIn: 'root'
