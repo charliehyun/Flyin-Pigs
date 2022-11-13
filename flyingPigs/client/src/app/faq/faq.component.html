@@ -4,6 +4,23 @@
   <img src="favicon.ico" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto; cursor:pointer" routerLink="/search">
   <h2>Frequently Asked Questions</h2>  
 </div>
+<p-accordion [multiple]="true">
+  <p-accordionTab header="Why are there no flights with American Airlines?">
+      The <a href="https://developers.amadeus.com/">API</a> we use to get the flight data does not support American Airlines at this time.
+  </p-accordionTab>
+  <p-accordionTab header="Why are there no flights with Southwest?">
+      Southwest doesn't let third party apps like Google Flights, Expedia, Kayak or other travel agencies(including us :p) share or sell its fares.
+  </p-accordionTab>
+  <p-accordionTab header="What APIs do we use?">
+    We use
+    <ul>
+      <li><a href="https://developers.google.com/maps">Google Maps API</a> for driving and transit times</li>
+      <li><a href="https://developers.amadeus.com/">Amadeus API</a> for flight data</li>
+    </ul>
+
+      
+  </p-accordionTab>
+</p-accordion>
 
 <!-- <p-card>
   <div>

@@ -16,7 +16,11 @@
           <label for="daddress">
             Starting Address
             <i class="pi pi-question-circle" style="white-space: pre-line" 
-              pTooltip="Where are you leaving from? Input an address or a general location." 
+              pTooltip=
+              'Where are you traveling from?
+              This can be an address or a general location. 
+              E.g. "305 N University St, West Lafayette, IN 47907"
+              or "Chicago, IL"'              
               tooltipPosition="top"
             ></i>
           </label>
@@ -76,7 +80,7 @@
           <label for="drivingStartHours">
             Maximum approximate {{selectedDTransport.code}} time
             <i class="pi pi-question-circle" style="white-space: pre-line" 
-              pTooltip="How long are you willing to travel to get to the departure airport?" 
+              pTooltip="How long are you willing to drive/transit to get to the departure airport?" 
               tooltipPosition="top"
             ></i>
           </label>
@@ -101,7 +105,11 @@
           <label for="aaddress">
             Destination Address
             <i class="pi pi-question-circle" style="white-space: pre-line" 
-              pTooltip="Where are you traveling to?" 
+              pTooltip=
+              'Where are you traveling to? 
+              This can be an address or a general location. 
+              E.g. "305 N University St, West Lafayette, IN 47907"
+              or "Chicago, IL"'
               tooltipPosition="top"
             ></i>
           </label>
@@ -162,7 +170,7 @@
           <label for="drivingEndHours">
             Maximum approximate {{selectedATransport.code}} time
             <i class="pi pi-question-circle" style="white-space: pre-line" 
-              pTooltip="How long are you willing to travel to get to your destination from the airport?" 
+              pTooltip="How long are you willing to drive/transit to get to your destination from the airport?" 
               tooltipPosition="top"
             ></i>
           </label>
