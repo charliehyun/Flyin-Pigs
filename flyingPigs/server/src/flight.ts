@@ -61,8 +61,9 @@ export class Trip {
     flightPrice:number;
     totalDepTime: number;
     totalRetTime?: number;
+    availSeats: number;
 
-    constructor(timeToAirportA: number, timeToAirportB: number, flightPrice:number, departingFlight: Flight, returningFlight: Flight) {
+    constructor(timeToAirportA: number, timeToAirportB: number, flightPrice:number, departingFlight: Flight, returningFlight: Flight, availSeats:number) {
         this.timeToAirportA = timeToAirportA;
         this.timeToAirportB = timeToAirportB;
         this.flightPrice = flightPrice;
@@ -72,21 +73,22 @@ export class Trip {
             this.totalRetTime = timeToAirportA + timeToAirportB + returningFlight.flightTime;
         }
         this.totalDepTime = timeToAirportA + timeToAirportB + departingFlight.flightTime;
+        this.availSeats = availSeats;
     }
 }
 
 export class ResultInfo {
     airlines: string[];
-    depAirlines: string[];
-    arrAirlines: string[];
+    depAirports: string[];
+    arrAirports: string[];
     minPrice?: number;
     maxPrice?: number;
     trips: Trip[];
 
-    constructor(airlines: string[], depAirlines: string[], arrAirlines: string[], trips: Trip[]) {
+    constructor(airlines: string[], depAirports: string[], arrAirports: string[], trips: Trip[]) {
         this.airlines = airlines;
-        this.depAirlines = depAirlines;
-        this.arrAirlines = arrAirlines;
+        this.depAirports = depAirports;
+        this.arrAirports = arrAirports;
         this.trips = trips;
     }
 
