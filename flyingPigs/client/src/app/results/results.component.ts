@@ -33,8 +33,8 @@ export class ResultsComponent implements OnInit {
   selectedDepartAirports: any[];
   filterArrivalAirports: string[];
   selectedArrivalAirports: any[];
-  maxTravelTime: number = 24;
-  maxFlightTime: number = 10;
+  maxDepartTravelTime: number = 24;
+  maxDepartFlightTime: number = 12;
   departTimeStart: string;
   departTimeEnd: string;
   arrivalTimeStart: string;
@@ -134,7 +134,16 @@ export class ResultsComponent implements OnInit {
       this.minPrice = value.minPrice || 0;
       this.totalPrice = [this.minPrice, this.maxPrice];
       this.selectedAirlines = this.filterAirlines;
+
+      //currently only sets default values for existing filters (i.e. departing flights only)
+      let maxDepartTravelTime = Math.max(...this.trips.map(trip => trip.totalDepTime));
+      if (maxDepartTravelTime / 3600 > this.maxDepartTravelTime) {this.maxDepartTravelTime = Math.ceil(maxDepartTravelTime / 3600);}
+      let maxDepartFlightTime = Math.max(...this.trips.map(trip => trip.departingFlight.flightTime));
+      if (maxDepartFlightTime / 3600 > this.maxDepartFlightTime) {this.maxDepartFlightTime = Math.ceil(maxDepartFlightTime / 3600);}
+
+
     });
+
   }
 
   loadMore() {
@@ -165,15 +174,9 @@ export class ResultsComponent implements OnInit {
 
     this.trips.forEach(trip => {
       //get total trip time
-      let totalTripTime:number = trip.totalDepTime
-      if (trip.totalRetTime) {
-        totalTripTime += trip.totalRetTime;
-      }
+      let totalDepartTravelTime:number = trip.totalDepTime
       //get total flight time
-      let totalFlightTime:number = trip.departingFlight.flightTime;
-      if (trip.returningFlight) {
-        totalFlightTime += trip.returningFlight.flightTime;
-      }
+      let totalDepartFlightTime:number = trip.departingFlight.flightTime;
 
       //convert string to Time to object
       let departTimeStrings = trip.departingFlight.departureTime.split("T").slice(-1)[0].split(":");
@@ -190,8 +193,8 @@ export class ResultsComponent implements OnInit {
       if (trip.departingFlight.numberOfStops <= chosenStops &&
           trip.flightPrice <= this.totalPrice[1] &&
           trip.flightPrice >= this.totalPrice[0] &&
-          totalTripTime <= (this.maxTravelTime * 3600) &&
-          totalFlightTime <= (this.maxFlightTime * 3600) &&
+          totalDepartTravelTime <= (this.maxDepartTravelTime * 3600) &&
+          totalDepartFlightTime <= (this.maxDepartFlightTime * 3600) &&
           departTimeString >= this.departTimeStart &&
           departTimeString <= this.departTimeEnd &&
           arriveTimeString >= this.arrivalTimeStart &&
