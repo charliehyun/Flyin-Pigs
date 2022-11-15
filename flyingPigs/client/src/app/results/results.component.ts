@@ -35,8 +35,10 @@ export class ResultsComponent implements OnInit {
   selectedArrivalAirports: any[];
   maxTravelTime: number = 24;
   maxFlightTime: number = 10;
-  departTime: Time;
-  arrivalTime: Time;
+  departTimeStart: string;
+  departTimeEnd: string;
+  arrivalTimeStart: string;
+  arrivalTimeEnd: string;
   minPrice: number;
   maxPrice: number;
 
@@ -65,6 +67,13 @@ export class ResultsComponent implements OnInit {
     );
 
     this.selectedStop = this.stops[0];
+
+    this.departTimeStart = "00:00";
+    this.departTimeEnd = "23:59";
+
+    this.arrivalTimeStart = "00:00";
+    this.arrivalTimeEnd = "23:59";
+
   }
 
   // reset validity of all input boxes
@@ -172,10 +181,6 @@ export class ResultsComponent implements OnInit {
       let arriveTimeStrings = trip.departingFlight.arrivalTime.split("T").slice(-1)[0].split(":");
       let arriveTimeString = arriveTimeStrings[0] + ":" + arriveTimeStrings[1];
 
-      let userDepartTime:string;
-      let userArriveTime:string;
-      this.departTime ? userDepartTime = this.departTime.toString() : userDepartTime = "23:59";
-      this.arrivalTime ? userArriveTime = this.arrivalTime.toString() : userArriveTime = "23:59";
 
       //determine what airlines are available.
       let includedAirlines = trip.departingFlight.airlines.every(airline => this.selectedAirlines.includes(airline));
@@ -187,8 +192,10 @@ export class ResultsComponent implements OnInit {
           trip.flightPrice >= this.totalPrice[0] &&
           totalTripTime <= (this.maxTravelTime * 3600) &&
           totalFlightTime <= (this.maxFlightTime * 3600) &&
-          departTimeString <= userDepartTime &&
-          arriveTimeString <= userArriveTime &&
+          departTimeString >= this.departTimeStart &&
+          departTimeString <= this.departTimeEnd &&
+          arriveTimeString >= this.arrivalTimeStart &&
+          arriveTimeString <= this.arrivalTimeEnd &&
           this.selectedDepartAirports.includes(trip.departingFlight.departureAirport) &&
           this.selectedArrivalAirports.includes(trip.departingFlight.arrivalAirport) &&
           includedAirlines
