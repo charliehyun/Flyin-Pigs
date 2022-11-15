@@ -2,16 +2,16 @@
     margin: 5px;
 }
 
-.overlay1 {
-    float:left;
-    padding-left:10px;
-}
-.overlay2 {
-    float:right;
-    padding-right:10px;
-}
-
 footer {
     text-align: center;
     padding: 3px;
-  }
+}
+
+:host ::ng-deep .p-tabview {
+    // make border round
+    border-radius: 5px;
+    // padding: 20px;
+    // .p-tabview-panels {
+    //     outline: 1px solid lightgray;
+    // }
+}

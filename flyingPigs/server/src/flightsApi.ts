@@ -3,7 +3,7 @@ const Amadeus = require('amadeus');
 
 import log4js from "log4js";
 
-import {Flight, stopOverFlight, Trip} from "./flight";
+import {Flight, flightSegment, Trip} from "./flight";
 
 export class flightsApi {
 
@@ -118,7 +118,7 @@ export class flightsApi {
                     returningFlight = this.parseItinerary(flight.itineraries[1]);
                     // this.stackedAirlines.push(returningFlight.airlines);
                 }
-                let newTrip = new Trip(this.timeToAirportA, this.timeToAirportB, parseFloat(flight.price.total), departingFlight, returningFlight);
+                let newTrip = new Trip(this.timeToAirportA, this.timeToAirportB, parseFloat(flight.price.total), departingFlight, returningFlight, flight.numberOfBookableSeats);
                 returnTripObjects.push(newTrip);
             }
         }, this);
@@ -134,8 +134,8 @@ export class flightsApi {
         for(let  i = 0; i < segments.length - 1; i++) {
             let curr = segments[i];
             let next = segments[i + 1];
-            let stopOver = new stopOverFlight(curr.carrierCode, curr.departure.iataCode, curr.arrival.iataCode, this.calculateStopover(next.arrival.at, curr.departure.at), curr.departure.at, next.arrival.at);
-            newFlight.addStopOver(stopOver);
+            let stopOver = new flightSegment(curr.carrierCode, curr.departure.iataCode, curr.arrival.iataCode, this.calculateStopover(next.arrival.at, curr.departure.at), curr.departure.at, next.arrival.at);
+            newFlight.addSegment(stopOver);
             newFlight.addAirline(curr.carrierCode);
             // this.airlines.push(curr.carrierCode);
             if(i == segments.length - 2) {

@@ -12,6 +12,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { FAQComponent } from './faq/faq.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { SearchBoxComponent } from './search-box/search-box.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
@@ -43,7 +44,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import { MenuModule } from 'primeng/menu';
 import {ImageModule} from 'primeng/image';
 import {PasswordModule} from 'primeng/password';
-
+import {TabViewModule} from 'primeng/tabview';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {PasswordModule} from 'primeng/password';
     ResetPasswordComponent,
     FAQComponent,
     FeedbackComponent,
-      PageNotFoundComponent
+    PageNotFoundComponent,
+    SearchBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -89,6 +91,7 @@ import {PasswordModule} from 'primeng/password';
     FontAwesomeModule,
     ImageModule,
     PasswordModule,
+    TabViewModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,

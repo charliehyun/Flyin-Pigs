@@ -7,13 +7,13 @@
     <input pInputText type="email" id="emailL" [(ngModel)]="emailL">
 
     <h6><br>Password</h6>
-    <p-password [(ngModel)]="confPassS" [toggleMask]="true" [feedback]="false" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-password>
+    <p-password [(ngModel)]="passL" [toggleMask]="true" [feedback]="false" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-password>
 
     <button pButton label="Forgot password?" class="p-button-link" (click)="handlePassword()"></button>
 
     <ng-template pTemplate="footer">
         <button pButton type="button" (click)="switchModal()" label="Don't have a Flyin' Pigs account?" class="p-button-sm p-button-outlined p-button-secondary"></button>
-        <button pButton type="button" (click)="handleLogin()" class="p-button-sm" label="Log In"></button>
+        <button pButton type="button" (click)="handleLogin()" class="p-button-sm" label="Log In" icon="pi pi-sign-in"></button>
     </ng-template>
 </p-dialog>
 
@@ -23,26 +23,25 @@
     <h6>Email</h6>
     <input pInputText type="email" id="emailS" [(ngModel)]="emailS">
 
-    <h6><br>Password</h6>
-    <p-password [(ngModel)]="passS" [toggleMask]="true" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}">
-        <ng-template pTemplate="footer">
-          <hr>
-          <p class="p-mt-2">Requires:</p>
-          <ul class="p-pl-2 p-ml-2 p-mt-0" style="line-height: 1.5">
-            <li>At least one lowercase</li>
-            <li>At least one uppercase</li>
-            <li>At least one numeric</li>
-            <li>Minimum 8 characters</li>
-          </ul>
-        </ng-template>
-    </p-password>
+    <h6><br>Password
+        <i class="pi pi-info-circle" style="white-space: pre-line" 
+            pTooltip="Minimum 8 characters
+            Requires at least one of each: 
+            - Uppercase
+            - Lowercase
+            - Number
+            - Special character" 
+        tooltipPosition="top"></i>
+    </h6>
+
+    <p-password [(ngModel)]="passS" [toggleMask]="true" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-password>
 
     <h6><br>Confirm Password</h6>
     <p-password [(ngModel)]="confPassS" [toggleMask]="true" [feedback]="false" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-password>
 
     <ng-template pTemplate="footer">
         <button pButton type="button" (click)="switchModal()" label="Already have a Flyin' Pigs account?" class="p-button-sm p-button-outlined p-button-secondary"></button>
-        <button pButton type="button" (click)="handleSignup()" class="p-button-sm" label="Sign Up"></button>
+        <button pButton type="button" (click)="handleSignup()" class="p-button-sm" label="Sign Up" icon="pi pi-sign-in"></button>
     </ng-template>
 </p-dialog>
 
