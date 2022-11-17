@@ -149,14 +149,21 @@ export class flightsApi {
     parseApiTimeToSeconds(apiTime: string): number {
         // The time returned by the API is in the format: PTXXHXXM
         // ex: PT17H3M meaning 17 hours 3 minutes
+        // Note: String might not have an H or M value
         let seconds = -1;
 
         let t = apiTime.indexOf('T');
         let h = apiTime.indexOf('H');
         let m = apiTime.indexOf("M");
+        let hours = 0;
+        let minutes = 0;
 
-        let hours = parseInt(apiTime.slice(t + 1, h));
-        let minutes = parseInt(apiTime.slice(h + 1, m));
+        if(h > -1) {
+            hours = parseInt(apiTime.slice(t + 1, h));
+        }
+        if(m > -1) {
+            minutes = parseInt(apiTime.slice(h + 1, m));
+        }
 
         seconds = (3600 * hours) + (60 * minutes);
 
