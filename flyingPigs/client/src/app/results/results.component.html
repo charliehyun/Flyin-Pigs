@@ -42,12 +42,12 @@
         <div>
           <label class="overlay3">Max Total Travel Time (hr):</label>
           <div class="overlay2">
-            <input type="text" size="5" pInputText [(ngModel)]="maxTravelTime"/>
+            <input type="text" size="5" pInputText [(ngModel)]="maxDepartTravelTime"/>
           </div>
           <br><br><br>
           <label class="overlay3">Max Flight Duration (hr):</label>
           <div class="overlay2">
-            <input type="text" size="5" pInputText [(ngModel)]="maxFlightTime"/>
+            <input type="text" size="5" pInputText [(ngModel)]="maxDepartFlightTime"/>
           </div>
         </div>
       </p-overlayPanel>
@@ -56,16 +56,20 @@
       <button pButton pRipple type="button" (click)="op3.toggle($event)" class="p-button-outlined" label="Times"></button>
       <p-overlayPanel #op3 [showCloseIcon]="true"> 
         <div>
-          <label class="overlay3">Depart by:</label>
+          <label class="overlay3">Depart between:</label>
           <div class="overlay2">
-            <input type="time" size="5" min="00:00" max="24:00" value="12:00" pInputText [(ngModel)]="departTime"/>
+            <input type="time" size="5" min="00:00" max="24:00" value="12:00" pInputText [(ngModel)]="departTimeStart"/>
+            -
+            <input type="time" size="5" min="00:00" max="24:00" value="12:00" pInputText [(ngModel)]="departTimeEnd"/>
           </div>
         </div>
         <div>
           <br><br><br>
-          <label class="overlay3">Arrive by:</label>
+          <label class="overlay3">Arrive between:</label>
           <div class="overlay2">
-            <input type="time" size="5" min="00:00" max="24:00" value="0:00"pInputText [(ngModel)]="arrivalTime"/>
+            <input type="time" size="5" min="00:00" max="24:00" value="0:00"pInputText [(ngModel)]="arrivalTimeStart"/>
+            -
+            <input type="time" size="5" min="00:00" max="24:00" value="0:00"pInputText [(ngModel)]="arrivalTimeEnd"/>
           </div>
         </div>
       </p-overlayPanel>
