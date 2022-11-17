@@ -118,6 +118,7 @@ export class ResultsComponent implements OnInit {
     // get trip results
     this.results$ = this.resultsService.searchAirports(this.search);
     this.results$.subscribe(value => {
+      // value = this.convertTimes(value);
       this.trips = value.trips;
       this.filteredTrips = value.trips;
       this.displayTrips = value.trips.slice(0,this.loaded);
@@ -217,6 +218,19 @@ export class ResultsComponent implements OnInit {
     }
   }
 
+  resetFilter() {
+    this.logger.info("Resetting filter");
+
+    this.filteredTrips = this.trips;
+    this.displayTrips = this.filteredTrips.slice(0,this.loaded);
+    if(this.filteredTrips.length > this.loaded) {
+      this.shouldLoad = true;
+    } else {
+      this.shouldLoad = false;
+    }
+  }
+
+
   //setting airline names from code (need to redo)
   airlineNames() {
     if (this.filterAirlines.length == 1) {
@@ -242,16 +256,23 @@ export class ResultsComponent implements OnInit {
     }
   }
 
-  resetFilter() {
-    this.logger.info("Resetting filter");
+  convertTimes(value):ResultInfoSchema {
+    value.trips.forEach(function(trip) {
+      trip.timeToAirportA = Math.round(trip.timeToAirportA / 60);
+      trip.timeToAirportB = Math.round(trip.timeToAirportB / 60);
+      trip.totalDepTime = Math.round(trip.totalDepTime / 60);
 
-    this.filteredTrips = this.trips;
-    this.displayTrips = this.filteredTrips.slice(0,this.loaded);
-    if(this.filteredTrips.length > this.loaded) {
-      this.shouldLoad = true;
-    } else {
-      this.shouldLoad = false;
-    }
+      trip.departingFlight.departureTime = trip.departingFlight.departureTime.split("T")[1];
+      trip.departingFlight.arrivalTime = trip.departingFlight.arrivalTime.split("T")[1];
+      trip.departingFlight.flightTime = Math.round(trip.departingFlight.flightTime / 60);
+
+      trip.departingFlight.segments.forEach(function(segment) {
+        segment.segmentDuration = Math.round(segment.segmentDuration / 60);
+        segment.departTime = segment.departTime.split("T")[1];
+        segment.arrivalTime = segment.arrivalTime.split("T")[1];
+      })
+    });
+    return value;
   }
 
 }
