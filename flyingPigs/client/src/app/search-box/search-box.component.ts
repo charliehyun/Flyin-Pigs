@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Options } from 'ngx-google-places-autocomplete/objects/options/options';
 import { SearchSchema, DropdownOption } from '../searchSchema';
 import { Router } from '@angular/router';
@@ -21,7 +21,6 @@ export class SearchBoxComponent implements OnInit {
     aTransportType: DropdownOption[]; // Transportation from airport options
     selectedDTransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
     selectedATransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
-    isRoundTrip: boolean = false; // Round Trip toggle
     hours: DropdownOption[]; // hours for transportation before/after flight
 
     adultPass: number = 1;  // number of adult passengers
@@ -32,6 +31,8 @@ export class SearchBoxComponent implements OnInit {
     maxTimeEnd: DropdownOption = {name: '1 hr', sec: 3600}; //default end driving hours
 
     totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
+    isRoundTrip: boolean = false; // Round Trip toggle
+    bufferTime: DropdownOption = {name: '2 hr', sec: 7200};
     date: any;  // current date
     maxDate: any; // max selectable date
     departDate: string; // selected departure date
@@ -41,6 +42,12 @@ export class SearchBoxComponent implements OnInit {
     arriveAdd= "";  // arrival address input
 
     search: SearchSchema;
+
+    dateRange: Date[];
+    testDate = new Date();
+
+    @Input()
+    explore: boolean;
 
     //icons
     driving = faCar;
@@ -284,7 +291,7 @@ export class SearchBoxComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.date = new Date().toISOString().split("T")[0];
+        // this.date = new Date().toISOString().split("T")[0];
         this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
 
         this.search = JSON.parse(sessionStorage.getItem('searchParams') || this.setDefaults());

@@ -176,7 +176,8 @@
       </div>
     </div>
 
-    <div>
+    <!-- SEARCH TAB -->
+    <div *ngIf="!explore">
       <br><hr><br>
       <!-- One way/Round trip -->
       One Way 
@@ -238,12 +239,109 @@
       <!-- Class -->
       <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
       
+      <!-- Buffer Time -->
+      <label for="bufferTime">Buffer Time:</label>
+      <p-dropdown 
+        id="bufferTime" 
+        [options]="hours" 
+        [(ngModel)]="bufferTime" 
+        optionLabel="name"
+        tooltipPosition="right" 
+        tooltipEvent="focus"
+      ></p-dropdown>
+
       <!-- Dates -->
       <label for="departDate">Departure Date: </label>
       <input pInputText type="date" [(ngModel)]="departDate" id="departDate" name="departDate" min="{{this.date}}" required>
       <label for="returnDate" *ngIf="isRoundTrip">Return Date: </label>
       <input pInputText type="date" [(ngModel)]="returnDate" id="returnDate" name="returnDate" min="{{this.departDate}}" *ngIf="isRoundTrip">
-    </div>    
+    </div>
+
+    <!-- EXPLORE TAB -->
+    <div *ngIf="explore">
+      <br><hr><br>
+
+      <!-- Passenger # and selection Overlay -->
+      <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}" [style]="{'vertical-align':'middle'}"></button>
+      <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
+        <div>
+          <label for="adult" class="overlay1">Adults</label>
+          <div class="overlay2">
+            <p-inputNumber 
+              [(ngModel)]="adultPass" 
+              inputId="adult" 
+              [showButtons]="true" 
+              buttonLayout="horizontal" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus" 
+              [min]=0 
+              [size]=1
+            ></p-inputNumber>
+          </div>
+          <br><br><br>
+          <label for="child" class="overlay1">Children &nbsp;</label>
+          <div class="overlay2">
+            <p-inputNumber 
+              [(ngModel)]="childPass" 
+              inputId="child" 
+              [showButtons]="true" 
+              buttonLayout="horizontal" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus" 
+              [min]=0 
+              [size]=1
+            ></p-inputNumber>
+          </div>
+          <br><br><br>
+          <label for="infant" class="overlay1">Infants</label>
+          <div class="overlay2">
+            <p-inputNumber 
+              [(ngModel)]="infantPass" 
+              inputId="infant" 
+              [showButtons]="true" 
+              buttonLayout="horizontal" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus" 
+              [min]=0 
+              [size]=1
+            ></p-inputNumber>
+          </div>
+          <br><br><br>
+          <button pButton pRipple type="button" (click)="updatePassengers(); op.hide()">
+            <i class="pi pi-check"></i>
+          </button>
+        </div>
+      </p-overlayPanel>
+            
+      <!-- Class -->
+      <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
+      
+      <!-- Buffer Time -->
+      <label for="bufferTime">Buffer Time:</label>
+      <p-dropdown 
+        id="bufferTime" 
+        [options]="hours" 
+        [(ngModel)]="bufferTime" 
+        optionLabel="name"
+        tooltipPosition="right" 
+        tooltipEvent="focus"
+      ></p-dropdown>
+
+      <!-- Date Range -->
+      <label for="dateRange">Date Range:</label>
+      <p-calendar 
+        [style]="{'width':'265px'}" 
+        [(ngModel)]="dateRange"
+        id="dateRange"
+        selectionMode="range" 
+        [readonlyInput]="false" 
+        inputId="range" 
+        [showIcon]="true" 
+        [showButtonBar]="true" 
+        placeholder="01/01/2023 - 01/02/2023" 
+        [minDate]="testDate"
+      ></p-calendar>
+    </div> 
 </div>
 <div align="center">
 <!-- Clear/Search -->
