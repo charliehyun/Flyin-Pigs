@@ -45,6 +45,7 @@ import { MenuModule } from 'primeng/menu';
 import {ImageModule} from 'primeng/image';
 import {PasswordModule} from 'primeng/password';
 import {TabViewModule} from 'primeng/tabview';
+import {InputTextareaModule} from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import {TabViewModule} from 'primeng/tabview';
     ImageModule,
     PasswordModule,
     TabViewModule,
+    InputTextareaModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
