@@ -8,7 +8,8 @@ import { Router } from "@angular/router";
   })
   
   export class FeedbackComponent {
-    
+    email: string;
+    comments: string;
   
     constructor( private router: Router) {
   
