@@ -121,6 +121,7 @@
       <th pSortableColumn="departingFlight.arrivalTime">Arrival Time <p-sortIcon field="departingFlight.arrivalTime"></p-sortIcon></th>
       <th pSortableColumn="timeToAirportB">{{selectedATransport.code}} Time From Airport <p-sortIcon field="timeToAirportB"></p-sortIcon></th>
       <th pSortableColumn="totalDepTime">Total Travel Time <p-sortIcon field="totalDepTime"></p-sortIcon></th>
+      <th>Available Seats</th>
       <th pSortableColumn="departingFlight.numberOfStops">Number of Stops <p-sortIcon field="departingFlight.numberOfStops"></p-sortIcon></th>
       <th pSortableColumn="flightPrice">Price <p-sortIcon field="flightPrice"></p-sortIcon></th>
       <th>More Details</th>
@@ -167,6 +168,7 @@
       <td>{{(trip.timeToAirportB / 3600) - (trip.timeToAirportB / 3600)%1}} hr {{((trip.timeToAirportB % 3600) / 60).toFixed(0)}} min</td> 
       <!-- <td>{{trip.totalDepTime}}</td> -->
       <td>{{(trip.totalDepTime / 3600).toFixed(0)}} hr {{((trip.totalDepTime % 3600) / 60).toFixed(0)}} min</td>
+      <td>{{trip.availSeats}}</td>
       <td>{{trip.departingFlight.numberOfStops}}</td>
       <td>${{trip.flightPrice}}</td>
       <td>
