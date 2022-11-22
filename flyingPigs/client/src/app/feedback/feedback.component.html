@@ -5,6 +5,22 @@
   <h2>Feedback</h2>  
 </div>
 
+<p-card styleClass="p-shadow-3">
+  <div>
+    Want to get in contact with us? Leave a comment below!
+    <br>
+    <!-- Email -->
+    <h6><br>Email</h6>
+    <input pInputText type="text" id="email" name="email" size="51" [(ngModel)]="email">
+    <br>
+    <h6><br>Comments</h6>
+    <textarea pInputTextarea rows="5" cols="50" [(ngModel)]="comments"></textarea>
+    <br>
+    <button pButton pRipple type="button" label="Contact Us"></button>
+    <br>
+  </div>
+</p-card>
+
 <footer>
   <p-button label="Search" styleClass="p-button-link" icon="pi pi-search" routerLink="/search"></p-button>
   <p-button label="FAQ" styleClass="p-button-link" icon="pi pi-question-circle" routerLink="/faq"></p-button>
