@@ -3,7 +3,7 @@
 <div>
     <div class="p-grid p-nogutter">
       <div class="p-col">
-        <h4>Departure</h4>
+        <h4>Where from?</h4>
         <!-- Address -->
         <span>
           <label for="daddress">
@@ -91,7 +91,7 @@
       <p-divider layout="vertical"></p-divider>
 
       <div class="p-col">
-        <h4>Arrival</h4>
+        <h4>Where to?</h4>
         <!-- Address -->
         <span>
           <label for="aaddress">
@@ -175,13 +175,15 @@
         </span>
       </div>
     </div>
+    <br><hr><br>
 
-    <div>
-      <br><hr><br>
+    <!-- SEARCH TAB -->
+    <div *ngIf="!explore" style="display: flex;">
       <!-- One way/Round trip -->
-      One Way 
+      <p-selectButton [options]="oneWayRoundTrip" [(ngModel)]="isRoundTrip" optionLabel="label" optionValue="value"></p-selectButton>
+      <!-- One Way 
       <p-inputSwitch [(ngModel)]="isRoundTrip" (onChange)="handleOneWay($event)" [style]="{'vertical-align':'middle'}"></p-inputSwitch>
-      Round Trip &nbsp;
+      Round Trip &nbsp; -->
 
       <!-- Passenger # and selection Overlay -->
       <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}" [style]="{'vertical-align':'middle'}"></button>
@@ -236,14 +238,143 @@
       </p-overlayPanel>
             
       <!-- Class -->
-      <p-dropdown [options]="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
+      <span class="p-float-label">
+        <p-dropdown [options]="classes" id="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
+        <label for="classes">Class:</label>
+      </span>
       
+      <!-- Buffer Time -->
+      <span class="p-float-label">
+        <p-dropdown 
+          id="bufferTime" 
+          [options]="hours" 
+          [(ngModel)]="bufferTime" 
+          optionLabel="name"
+          tooltipPosition="right" 
+          tooltipEvent="focus"
+        ></p-dropdown>
+        <label for="bufferTime">Buffer Time:</label>
+      </span>
+
       <!-- Dates -->
-      <label for="departDate">Departure Date: </label>
-      <input pInputText type="date" [(ngModel)]="departDate" id="departDate" name="departDate" min="{{this.date}}" required>
-      <label for="returnDate" *ngIf="isRoundTrip">Return Date: </label>
-      <input pInputText type="date" [(ngModel)]="returnDate" id="returnDate" name="returnDate" min="{{this.departDate}}" *ngIf="isRoundTrip">
-    </div>    
+      <span class="p-float-label">
+        <p-calendar 
+          [style]="{'width':'175px'}" 
+          [(ngModel)]="departDate"
+          id="departDate"
+          [readonlyInput]="true"
+          [showIcon]="true" 
+          [showButtonBar]="true" 
+          [minDate]="date"
+        ></p-calendar>
+        <label for="departDate">Departure Date:</label>
+      </span>
+
+      <span class="p-float-label">
+        <p-calendar 
+          [style]="{'width':'175px'}" 
+          [(ngModel)]="returnDate"
+          id="returnDate"
+          [readonlyInput]="true"
+          [showIcon]="true" 
+          [showButtonBar]="true" 
+          [minDate]="departDate"
+          *ngIf="isRoundTrip"
+        ></p-calendar>
+        <!-- <input pInputText type="date" [(ngModel)]="returnDate" id="returnDate" name="returnDate" min="{{this.departDate}}" *ngIf="isRoundTrip"> -->
+        <label for="returnDate" *ngIf="isRoundTrip">Return Date:</label>
+      </span>
+    </div>
+
+    <!-- EXPLORE TAB -->
+    <div *ngIf="explore" style="display: flex;">
+      <!-- Passenger # and selection Overlay -->
+      <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}" [style]="{'vertical-align':'middle'}"></button>
+      <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 
+        <div>
+          <label for="adult" class="overlay1">Adults</label>
+          <div class="overlay2">
+            <p-inputNumber 
+              [(ngModel)]="adultPass" 
+              inputId="adult" 
+              [showButtons]="true" 
+              buttonLayout="horizontal" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus" 
+              [min]=0 
+              [size]=1
+            ></p-inputNumber>
+          </div>
+          <br><br><br>
+          <label for="child" class="overlay1">Children &nbsp;</label>
+          <div class="overlay2">
+            <p-inputNumber 
+              [(ngModel)]="childPass" 
+              inputId="child" 
+              [showButtons]="true" 
+              buttonLayout="horizontal" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus" 
+              [min]=0 
+              [size]=1
+            ></p-inputNumber>
+          </div>
+          <br><br><br>
+          <label for="infant" class="overlay1">Infants</label>
+          <div class="overlay2">
+            <p-inputNumber 
+              [(ngModel)]="infantPass" 
+              inputId="infant" 
+              [showButtons]="true" 
+              buttonLayout="horizontal" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus" 
+              [min]=0 
+              [size]=1
+            ></p-inputNumber>
+          </div>
+          <br><br><br>
+          <button pButton pRipple type="button" (click)="updatePassengers(); op.hide()">
+            <i class="pi pi-check"></i>
+          </button>
+        </div>
+      </p-overlayPanel>
+            
+      <!-- Class -->
+      <span class="p-float-label">
+        <p-dropdown [options]="classes" id="classes" [(ngModel)]="selectedClass" placeholder="Select a Class" optionLabel="name"></p-dropdown>
+        <label for="classes">Class:</label>
+      </span>
+      
+      <!-- Buffer Time -->
+      <span class="p-float-label">
+        <p-dropdown 
+          id="bufferTime" 
+          [options]="hours" 
+          [(ngModel)]="bufferTime" 
+          optionLabel="name"
+          tooltipPosition="right" 
+          tooltipEvent="focus"
+        ></p-dropdown>
+        <label for="bufferTime">Buffer Time:</label>
+      </span>
+
+      <!-- Date Range -->
+      <span class="p-float-label">
+        <p-calendar 
+          [style]="{'width':'265px'}" 
+          [(ngModel)]="dateRange"
+          id="dateRange"
+          selectionMode="range" 
+          [readonlyInput]="true"
+          inputId="range" 
+          [showIcon]="true" 
+          [showButtonBar]="true" 
+          [minDate]="date"
+        ></p-calendar>
+        <label for="dateRange">Date Range:</label>
+      </span>
+    </div> 
 </div>
 <div align="center">
 <!-- Clear/Search -->

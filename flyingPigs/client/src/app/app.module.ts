@@ -45,6 +45,8 @@ import { MenuModule } from 'primeng/menu';
 import {ImageModule} from 'primeng/image';
 import {PasswordModule} from 'primeng/password';
 import {TabViewModule} from 'primeng/tabview';
+import { CalendarModule } from 'primeng/calendar';
+import {SelectButtonModule} from 'primeng/selectbutton';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 
 @NgModule({
@@ -93,6 +95,8 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
     ImageModule,
     PasswordModule,
     TabViewModule,
+    CalendarModule,
+    SelectButtonModule,
     InputTextareaModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
