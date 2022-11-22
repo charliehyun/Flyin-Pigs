@@ -98,8 +98,6 @@ export class SearchBoxComponent implements OnInit {
             faCar,
             faBus
         );
-
-        console.log(this.departDate)
     }
 
     // show toast based on success/error
