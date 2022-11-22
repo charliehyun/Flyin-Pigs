@@ -77,6 +77,12 @@ export class Trip {
         this.availSeats = availSeats;
         this.uniqueCode = this.totalDepTime / this.flightPrice + this.availSeats;
     }
+    setTotalDepTime(depTime: number) {
+        this.totalDepTime = depTime;
+    }
+    setTotalRetTime(retTime: number) {
+        this.totalRetTime = retTime;
+    }
 }
 
 export class ResultInfo {

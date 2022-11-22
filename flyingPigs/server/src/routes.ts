@@ -6,9 +6,10 @@ mongoRouter.use(express.json());
 var Airport = require("./airport");
 import log4js from "log4js";
 import { TravelMode } from "@googlemaps/google-maps-services-js";
-import { Trip, ResultInfo, sortTrips, removeDuplicates } from "./flight";
+import { Trip, ResultInfo, sortTrips, removeDuplicates, Flight } from "./flight";
 import { ObjectId } from "mongodb";
 import { mongo } from "mongoose";
+import { timeStamp } from "console";
 const crypto = require('crypto');
 var logger = log4js.getLogger();
 var Credentials = require("./credentials");
@@ -53,32 +54,71 @@ mongoRouter.post("/search", async (req, res) => {
         let arrAirportArray = await myArrFinder.findAirports(searchParams.arriveCoord.lat, searchParams.arriveCoord.lng, arrPrefilter, searchParams.maxTimeEnd.sec, searchParams.selectedATransport.code);
         // console.log(arrAirportArray);
         let trips = [];
+
+        if(searchParams.selectedDTransport.code === searchParams.selectedATransport.code) {
+            let emptyFlight = new Flight("", "", "", "", 0, 0);
+            emptyFlight.addAirline(searchParams.selectedDTransport.name);
+            let times = await myDepFinder.getDistanceInSec(searchParams.departCoord, searchParams.arriveCoord, searchParams.selectedDTransport.code);
+            let tempTrip: Trip;
+            if(searchParams.isRoundTrip) {
+                tempTrip = new Trip(0, 0, 0, emptyFlight, emptyFlight, Infinity);
+                tempTrip.setTotalDepTime(times.timeTo);
+                tempTrip.setTotalRetTime(times.timeBack);
+            }
+            else{
+                tempTrip = new Trip(0, 0, 0, emptyFlight, undefined, Infinity);
+                tempTrip.setTotalDepTime(times.timeTo);
+            }
+            trips.push(tempTrip);
+        }
+        else {            
+            let emptyFlight1 = new Flight("", "", "", "", 0, 0);
+            emptyFlight1.addAirline(searchParams.selectedDTransport.name);
+            let emptyFlight2 = new Flight("", "", "", "", 0, 0);
+            emptyFlight2.addAirline(searchParams.selectedATransport.name);
+
+            let times1 = await myDepFinder.getDistanceInSec(searchParams.departCoord, searchParams.arriveCoord, searchParams.selectedDTransport.code);
+            let times2 = await myDepFinder.getDistanceInSec(searchParams.departCoord, searchParams.arriveCoord, searchParams.selectedATransport.code);
+            let tempTrip1: Trip;
+            let tempTrip2: Trip;
+            if(searchParams.isRoundTrip) {
+                tempTrip1 = new Trip(0, 0, 0, emptyFlight1, emptyFlight1, Infinity);
+                tempTrip1.setTotalDepTime(times1.timeTo);
+                tempTrip1.setTotalRetTime(times1.timeBack);
+
+                tempTrip2 = new Trip(0, 0, 0, emptyFlight2, emptyFlight2, Infinity);
+                tempTrip2.setTotalDepTime(times2.timeTo);
+                tempTrip2.setTotalRetTime(times2.timeBack);
+            }
+            else{
+                tempTrip1 = new Trip(0, 0, 0, emptyFlight1, undefined, Infinity);
+                tempTrip1.setTotalDepTime(times1.timeTo);
+
+                tempTrip2 = new Trip(0, 0, 0, emptyFlight2, undefined, Infinity);
+                tempTrip2.setTotalDepTime(times2.timeTo);
+            }
+            trips.push(tempTrip1);    
+            trips.push(tempTrip2);       
+        }
+
         for(let i = 0; i < depAirportArray.length; i++) {
             resultInfo.depAirports.push(depAirportArray[i].IATA);
             for(let j = 0; j < arrAirportArray.length; j++) {
                 if(i == 0) {
                     resultInfo.arrAirports.push(arrAirportArray[j].IATA);
                 }
-                let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate, 
-                    searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
-                    depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
-                // stackedAirlines.concat(myFlightApi.stackedAirlines);
-                // stackedAirlines.push(myFlightApi.airlines);
-                trips.push(myFlightApi.queryApi());
-                // let tripsThree = trips.slice(0,3);
-                // tripsThree.forEach((element: Trip) => tripList.push(element));
+                if(depAirportArray[i].IATA !== arrAirportArray[j].IATA){
+                    let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate, 
+                        searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
+                        depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
+                    trips.push(myFlightApi.queryApi());
+                }
             }
         }
         
         tripList = await Promise.all(trips)
         tripList = tripList.flat();
-        // let myFlightApi = new flightsApi(depAirportArray[6].IATA, arrAirportArray[0].IATA, searchParams.departDate, searchParams.returnDate, searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip);
 
-        // let myFlightApi = new flightsApi("ORD", "IND",
-        //     "2022-10-21", "2022-10-23", 1, 0, 0, "Economy", true);
-        // let flightsTen = await myFlightApi.queryApi()
-        // console.log(flightsTen.slice(0,10));
-        // res.status(200).send(flightsTen.slice(0,10));
         resultInfo.trips = sortTrips(tripList, "flightPrice");
         resultInfo.minPrice = resultInfo.trips[0].flightPrice;
         resultInfo.maxPrice = resultInfo.trips[tripList.length - 1].flightPrice;
