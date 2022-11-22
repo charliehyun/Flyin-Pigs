@@ -32,19 +32,20 @@ export class SearchBoxComponent implements OnInit {
 
     totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
     isRoundTrip: boolean = false; // Round Trip toggle
+    oneWayRoundTrip: any[];
+
     bufferTime: DropdownOption = {name: '2 hr', sec: 7200};
-    date: any;  // current date
+    date: Date = new Date();  // current date
     maxDate: any; // max selectable date
-    departDate: string; // selected departure date
-    returnDate: string; // selected return date (in the case of round trip)
+    departDate: Date = new Date(); // selected departure date
+    returnDate: Date = new Date(); // selected return date (in the case of round trip)
 
     departAdd= "";  // departure address input
     arriveAdd= "";  // arrival address input
 
     search: SearchSchema;
 
-    dateRange: Date[];
-    testDate = new Date();
+    dateRange: Date[] = [new Date(), new Date()];
 
     @Input()
     explore: boolean;
@@ -59,6 +60,11 @@ export class SearchBoxComponent implements OnInit {
         };
 
         this.setDefaults();
+
+        this.oneWayRoundTrip = [
+            { label: 'One Way', value: false },
+            { label: 'Round Trip', value: true },
+        ];
 
         this.classes = [
             {name: 'Economy', code: 'ECONOMY'},
@@ -92,6 +98,8 @@ export class SearchBoxComponent implements OnInit {
             faCar,
             faBus
         );
+
+        console.log(this.departDate)
     }
 
     // show toast based on success/error
@@ -119,9 +127,9 @@ export class SearchBoxComponent implements OnInit {
 
     // ensure return date is cleared if one way is selected
     handleOneWay(e) {
-        if(e.checked) {
-            this.returnDate = ""
-        }
+        // if(e.checked) {
+        //     this.returnDate = ""
+        // }
     }
 
     setDefaults() {
@@ -132,7 +140,7 @@ export class SearchBoxComponent implements OnInit {
             childPass: 0,
             infantPass: 0,
             totalPass: 1,
-            departDate: "",
+            departDate: this.date.toISOString().split("T")[0],
             returnDate: "",
             departAdd: "",
             departCoord: new google.maps.LatLng({"lat": 0, "lng": 0}),
@@ -149,6 +157,7 @@ export class SearchBoxComponent implements OnInit {
     // reset input boxes to valid, clear inputs, set back to default, and set search object back to default
     handleClear() {
         sessionStorage.removeItem('searchParams');
+        this.setDefaults();
         this.resetValidity();
         this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
         this.selectedDTransport = {name: 'Car', code: 'driving', icon: 'car'};
@@ -157,13 +166,15 @@ export class SearchBoxComponent implements OnInit {
         this.adultPass = 1;
         this.childPass = 0;
         this.infantPass = 0;
-        this.departDate = "";
-        this.returnDate = "";
+        this.departDate = new Date();
+        this.returnDate = new Date();
         this.totalPass = this.adultPass + this.childPass + this.infantPass;
         this.departAdd = "";
         this.arriveAdd = "";
         this.maxTimeStart = {name: '3 hr', sec: 10800};
         this.maxTimeEnd = {name: '1 hr', sec: 3600};
+        this.bufferTime = {name: '2 hr', sec: 7200};
+        this.dateRange = [new Date(), new Date()];
     }
 
     // input validation, geocoding, search sent to results, and navigate to results
@@ -196,25 +207,25 @@ export class SearchBoxComponent implements OnInit {
             const x = document.getElementById('departDate');
             var departDateObj = new Date(this.departDate);
             if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
-            x?.classList.add('ng-invalid')
-            x?.classList.add('ng-dirty')
-            route = false
+                x?.classList.add('ng-invalid')
+                x?.classList.add('ng-dirty')
+                route = false
             }
         }
         if(!this.returnDate) {
             if(this.isRoundTrip) {
-            const x = document.getElementById('returnDate');
-            x?.classList.add('ng-invalid')
-            x?.classList.add('ng-dirty')
-            route = false
+                const x = document.getElementById('returnDate');
+                x?.classList.add('ng-invalid')
+                x?.classList.add('ng-dirty')
+                route = false
             }
         } else {
             const x = document.getElementById('returnDate');
             var returnDateObj = new Date(this.returnDate);
             if(returnDateObj < new Date(this.departDate) || returnDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
-            x?.classList.add('ng-invalid')
-            x?.classList.add('ng-dirty')
-            route = false
+                x?.classList.add('ng-invalid')
+                x?.classList.add('ng-dirty')
+                route = false
             }
         }
         if(!this.departAdd || departureCoord == null) {
@@ -244,8 +255,8 @@ export class SearchBoxComponent implements OnInit {
             childPass: this.childPass,
             infantPass: this.infantPass,
             totalPass: this.totalPass,
-            departDate: this.departDate,
-            returnDate: this.returnDate,
+            departDate: this.departDate.toISOString().split("T")[0],
+            returnDate: this.isRoundTrip ? this.returnDate.toISOString().split("T")[0] : "",
             departAdd: this.departAdd,
             departCoord: departureCoord,
             arriveAdd: this.arriveAdd,
@@ -295,15 +306,15 @@ export class SearchBoxComponent implements OnInit {
         this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
 
         this.search = JSON.parse(sessionStorage.getItem('searchParams') || this.setDefaults());
-        this.date = new Date().toISOString().split("T")[0];
+        // this.date = new Date();
         this.selectedClass = this.search.selectedClass;
         this.isRoundTrip = this.search.isRoundTrip;
         this.adultPass = this.search.adultPass;
         this.childPass = this.search.childPass;
         this.infantPass = this.search.infantPass;
         this.totalPass = this.search.totalPass;
-        this.departDate = this.search.departDate;
-        this.returnDate = this.search.returnDate;
+        this.departDate = new Date(this.search.departDate);
+        this.returnDate = this.isRoundTrip ? new Date(this.search.returnDate) : new Date();
         this.departAdd = this.search.departAdd;
         this.arriveAdd = this.search.arriveAdd;
         this.selectedDTransport = this.search.selectedDTransport;

@@ -46,6 +46,7 @@ import {ImageModule} from 'primeng/image';
 import {PasswordModule} from 'primeng/password';
 import {TabViewModule} from 'primeng/tabview';
 import { CalendarModule } from 'primeng/calendar';
+import {SelectButtonModule} from 'primeng/selectbutton';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { CalendarModule } from 'primeng/calendar';
     PasswordModule,
     TabViewModule,
     CalendarModule,
+    SelectButtonModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,

@@ -163,7 +163,8 @@
         <p style="color:grey;">{{trip.departingFlight.arrivalAirport}}</p>
       </td>
       <!-- <td>{{trip.timeToAirportB}}</td> -->
-      <td>{{(trip.timeToAirportB / 3600).toFixed(0)}} hr {{((trip.timeToAirportB % 3600) / 60).toFixed(0)}} min</td> 
+      <!-- THIS ONE HAS THE CORRECT IMPLEMENTATION BUT ITS UGLY -->
+      <td>{{(trip.timeToAirportB / 3600) - (trip.timeToAirportB / 3600)%1}} hr {{((trip.timeToAirportB % 3600) / 60).toFixed(0)}} min</td> 
       <!-- <td>{{trip.totalDepTime}}</td> -->
       <td>{{(trip.totalDepTime / 3600).toFixed(0)}} hr {{((trip.totalDepTime % 3600) / 60).toFixed(0)}} min</td>
       <td>{{trip.departingFlight.numberOfStops}}</td>
