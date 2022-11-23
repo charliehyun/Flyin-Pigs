@@ -48,6 +48,7 @@ import {TabViewModule} from 'primeng/tabview';
 import { CalendarModule } from 'primeng/calendar';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {InputTextareaModule} from 'primeng/inputtextarea';
+import { TimelineModule } from 'primeng/timeline';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
     CalendarModule,
     SelectButtonModule,
     InputTextareaModule,
+    TimelineModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
