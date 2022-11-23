@@ -17,6 +17,32 @@ export class airportFinder {
         this.current25 = 0;
         this.logger = log4js.getLogger();
     }
+
+    // Use google maps distnace matrix to get distance between two coordinates
+    async getDistanceInSec(startCoord: google.maps.LatLng, destCoord: google.maps.LatLng, travelMethod: string) {
+        const {Client} = require("@googlemaps/google-maps-services-js");
+        const client = new Client({});
+
+        let times = {
+            timeTo: Infinity,
+            timeBack: Infinity
+        };
+        await client.distancematrix({
+            params: {
+                origins: [startCoord, destCoord],
+                destinations: [startCoord, destCoord],
+                mode: travelMethod,
+                key: "AIzaSyA24p5rileUNbxSp8afoKXcwYH3zLlyxuU",
+            },
+        }).then((r: any) => {
+            times.timeTo = r.data.rows[0].elements[1].duration.value;
+            times.timeBack = r.data.rows[1].elements[0].duration.value;
+        }).catch((e: any) => {
+            console.log(e);
+        })
+        return times;
+    }
+
     // this function finds the closest (reachable) airport from the starting location
     // and the time to that airport
     async findClosestAirport(startLat: number, startLng: number, travelMethod: string) {
