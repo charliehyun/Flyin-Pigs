@@ -48,6 +48,8 @@ import {TabViewModule} from 'primeng/tabview';
 import { CalendarModule } from 'primeng/calendar';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {InputTextareaModule} from 'primeng/inputtextarea';
+import { TrackedTripsComponent } from './tracked-trips/tracked-trips.component';
+import { AccountComponent } from './account/account.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
     FAQComponent,
     FeedbackComponent,
     PageNotFoundComponent,
-    SearchBoxComponent
+    SearchBoxComponent,
+    TrackedTripsComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
