@@ -10,6 +10,7 @@ import { MenuItem } from 'primeng/api';
 import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import { Time } from '@angular/common';
+import { PrimeIcons } from "primeng/api";
 
 @Component({
   selector: 'results',
@@ -52,6 +53,8 @@ export class ResultsComponent implements OnInit {
   displayTrips:TripSchema[];  // results that are displayed on frontend (splice of filteredTrips)
   loaded: number = 10;  // number of results to show
   shouldLoad:boolean = false; // if it is possible to load more
+
+  events1: any[];
    
   constructor(private resultsService: ResultsService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
     this.stops = [
@@ -73,6 +76,34 @@ export class ResultsComponent implements OnInit {
 
     this.arrivalTimeStart = "00:00";
     this.arrivalTimeEnd = "23:59";
+
+    this.events1 = [
+      {
+        status: "Ordered",
+        date: "15/10/2020 10:30",
+        icon: PrimeIcons.SHOPPING_CART,
+        color: "#9C27B0",
+        image: "game-controller.jpg"
+      },
+      {
+        status: "Processing",
+        date: "15/10/2020 14:00",
+        icon: PrimeIcons.COG,
+        color: "#673AB7"
+      },
+      {
+        status: "Shipped",
+        date: "15/10/2020 16:15",
+        icon: PrimeIcons.ENVELOPE,
+        color: "#FF9800"
+      },
+      {
+        status: "Delivered",
+        date: "16/10/2020 10:00",
+        icon: PrimeIcons.CHECK,
+        color: "#607D8B"
+      }
+    ];
 
   }
 
