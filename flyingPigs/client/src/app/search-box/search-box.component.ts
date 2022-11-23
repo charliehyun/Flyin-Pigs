@@ -35,10 +35,10 @@ export class SearchBoxComponent implements OnInit {
     oneWayRoundTrip: any[];
 
     bufferTime: DropdownOption = {name: '2 hr', sec: 7200};
-    date: Date = new Date();  // current date
-    maxDate: any; // max selectable date
+    maxDate: Date; // max selectable date
     departDate: Date = new Date(); // selected departure date
     returnDate: Date = new Date(); // selected return date (in the case of round trip)
+    date: Date = new Date();  // current date
 
     departAdd= "";  // departure address input
     arriveAdd= "";  // arrival address input
@@ -98,8 +98,6 @@ export class SearchBoxComponent implements OnInit {
             faCar,
             faBus
         );
-
-        console.log(this.departDate)
     }
 
     // show toast based on success/error
@@ -205,8 +203,13 @@ export class SearchBoxComponent implements OnInit {
             route = false
         } else {
             const x = document.getElementById('departDate');
-            var departDateObj = new Date(this.departDate);
-            if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
+            // var departDateObj = new Date(this.departDate);
+            if(this.departDate < this.date) {
+                console.log("sucs", this.departDate, this.date)
+            }
+
+            if(this.departDate < this.date || this.departDate > this.maxDate || x?.classList.contains('ng-invalid')) {
+            // if(departDateObj < new Date(this.date) || departDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
                 x?.classList.add('ng-invalid')
                 x?.classList.add('ng-dirty')
                 route = false
@@ -221,8 +224,9 @@ export class SearchBoxComponent implements OnInit {
             }
         } else {
             const x = document.getElementById('returnDate');
-            var returnDateObj = new Date(this.returnDate);
-            if(returnDateObj < new Date(this.departDate) || returnDateObj > new Date(this.maxDate) || x?.classList.contains('ng-invalid')) {
+            // var returnDateObj = new Date(this.returnDate);
+            if(this.returnDate < new Date(this.departDate) || this.returnDate > this.maxDate || x?.classList.contains('ng-invalid')) {
+            // if(returnDateObj < new Date(this.departDate) || returnDateObj > this.maxDate || x?.classList.contains('ng-invalid')) {
                 x?.classList.add('ng-invalid')
                 x?.classList.add('ng-dirty')
                 route = false
@@ -276,11 +280,18 @@ export class SearchBoxComponent implements OnInit {
 
     // reset validity of all input boxes
     resetValidity() {
-        const elements: Element[] = Array.from(document.getElementsByTagName("input"));
-        elements.forEach((el: Element) => {
-            el.classList.remove('ng-invalid')
-            el.classList.remove('ng-dirty')
-            el.classList.add('ng-pristine')
+        const inputs: Element[] = Array.from(document.getElementsByTagName("input"));
+        inputs.forEach((ins: Element) => {
+            ins.classList.remove('ng-invalid')
+            ins.classList.remove('ng-dirty')
+            ins.classList.add('ng-pristine')
+        })
+
+        const calendars: Element[] = Array.from(document.getElementsByTagName("p-calendar"));
+        calendars.forEach((cals: Element) => {
+            cals.classList.remove('ng-invalid')
+            cals.classList.remove('ng-dirty')
+            cals.classList.add('ng-pristine')
         })
     }
 
@@ -303,7 +314,8 @@ export class SearchBoxComponent implements OnInit {
 
     ngOnInit() {
         // this.date = new Date().toISOString().split("T")[0];
-        this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
+        // this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5)).toISOString().split("T")[0];
+        this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 5));
 
         this.search = JSON.parse(sessionStorage.getItem('searchParams') || this.setDefaults());
         // this.date = new Date();
@@ -313,7 +325,8 @@ export class SearchBoxComponent implements OnInit {
         this.childPass = this.search.childPass;
         this.infantPass = this.search.infantPass;
         this.totalPass = this.search.totalPass;
-        this.departDate = new Date(this.search.departDate);
+        // this.departDate = new Date(this.search.departDate);
+        this.departDate = (new Date(this.search.departDate) > this.date) ? new Date(this.search.departDate) : new Date();
         this.returnDate = this.isRoundTrip ? new Date(this.search.returnDate) : new Date();
         this.departAdd = this.search.departAdd;
         this.arriveAdd = this.search.arriveAdd;

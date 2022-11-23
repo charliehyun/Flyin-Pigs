@@ -50,6 +50,7 @@ import {SelectButtonModule} from 'primeng/selectbutton';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import { TrackedTripsComponent } from './tracked-trips/tracked-trips.component';
 import { AccountComponent } from './account/account.component';
+import { TimelineModule } from 'primeng/timeline';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { AccountComponent } from './account/account.component';
     CalendarModule,
     SelectButtonModule,
     InputTextareaModule,
+    TimelineModule,
     LoggerModule.forRoot({
       serverLoggingUrl: 'http://localhost:5200/airports/log',
       level: NgxLoggerLevel.DEBUG,
