@@ -25,7 +25,6 @@ import {InputNumberModule} from 'primeng/inputnumber';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import {AccordionModule} from 'primeng/accordion';
 import {InputTextModule} from 'primeng/inputtext';
-import { DataService } from './data.service';
 import { CardModule } from 'primeng/card';
 import {TableModule} from 'primeng/table';
 import {DialogModule} from 'primeng/dialog';
@@ -107,7 +106,7 @@ import { TimelineModule } from 'primeng/timeline';
       disableConsoleLogging: false
     })
   ],
-  providers: [DataService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
