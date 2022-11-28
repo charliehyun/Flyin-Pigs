@@ -336,3 +336,88 @@ mongoRouter.post("/submitForgotPassword", (req, res) =>
     })
     
 });
+
+
+mongoRouter.post("/autoReply", (req, res) =>
+{
+
+    const caseId = req.body.caseId;
+    const type = req.body.type;
+
+    let messages =  {
+        feedback: "We appreciate your feedback."
+                + "Thank you for being a valued customer of Flyin' Pigs!",
+        inquiry: "We received your email and appreciate you taking the time to contact us.\n"
+                 + "We will look into the issue and resolve it as soon as possible.\n"
+                 + "In the mean time, if you have any follow up messages, please feel free to email us at: flyinPigs407+inquiry@gmail.com\n"
+                 + 'With the subject :"Inquiry #' + caseId + ' Followup"' 
+                 + "\n\n"
+                 + "Sincerely,\n"
+                 + "Flyin' Pigs Team"
+    }
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        //put credentials into an .env file later and include it in .gitignore
+        // user: `${process.env.EMAIL_ADDRESSS}`,
+        // pass: `${process.env.EMAIL_PASSWORD}`,
+        auth: {
+            user: 'flyinpigs407@gmail.com',
+            pass: 'gseexbubldnyjdvu'
+        }
+    });
+        
+    var mailOptions = {
+        from: 'flyinpigs407@gmail.com',
+        to: req.body.email,
+        subject: `Flyin' Pigs Response to your Inquiry (Case #${caseId})`,
+        text: messages[type],
+    };
+        
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+            res.status(200).send(false)
+        } else {
+            console.log('Email sent: ' + info.response);
+            res.status(200).send(true)
+        }
+    }); 
+});
+
+
+mongoRouter.post("/feedback", (req, res) =>
+{
+    const caseId = crypto.randomBytes(8).toString('hex');
+    const type = req.body.type;
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        //put credentials into an .env file later and include it in .gitignore
+        // user: `${process.env.EMAIL_ADDRESSS}`,
+        // pass: `${process.env.EMAIL_PASSWORD}`,
+        auth: {
+            user: 'flyinpigs407@gmail.com',
+            pass: 'gseexbubldnyjdvu'
+        }
+    });
+        
+    var mailOptions = {
+        from: 'flyinpigs407@gmail.com',
+        to: 'flyinpigs407+' + type + '@gmail.com',
+        subject: `Inquiry (Case #${caseId})`,
+        text: req.body.email + '\n' + req.body.text,
+    };
+        
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+            // TODO: change the status code and check the code in the front end.
+            // We should not just send status 200 for everything.
+            res.status(200).send({message: ""});
+        } else {
+            console.log('Email sent: ' + info.response);
+            res.status(200).send({caseId: caseId});
+        }
+    }); 
+});
