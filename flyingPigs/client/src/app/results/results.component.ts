@@ -10,11 +10,14 @@ import { MenuItem } from 'primeng/api';
 import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import { Time } from '@angular/common';
+import { PrimeIcons } from "primeng/api";
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss']
+  styleUrls: ['./results.component.scss'],
+  providers: [MessageService]
 })
 
 export class ResultsComponent implements OnInit {
@@ -52,8 +55,10 @@ export class ResultsComponent implements OnInit {
   displayTrips:TripSchema[];  // results that are displayed on frontend (splice of filteredTrips)
   loaded: number = 10;  // number of results to show
   shouldLoad:boolean = false; // if it is possible to load more
+
+  events1: any[];
    
-  constructor(private resultsService: ResultsService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
+  constructor(private messageService:MessageService, private resultsService: ResultsService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
     this.stops = [
       {name: 'Any number of stops', key: 'all'},
       {name: 'Nonstop only', key: 'none'},
@@ -73,6 +78,34 @@ export class ResultsComponent implements OnInit {
 
     this.arrivalTimeStart = "00:00";
     this.arrivalTimeEnd = "23:59";
+
+    this.events1 = [
+      {
+        status: "Ordered",
+        date: "15/10/2020 10:30",
+        icon: PrimeIcons.SHOPPING_CART,
+        color: "#9C27B0",
+        image: "game-controller.jpg"
+      },
+      {
+        status: "Processing",
+        date: "15/10/2020 14:00",
+        icon: PrimeIcons.COG,
+        color: "#673AB7"
+      },
+      {
+        status: "Shipped",
+        date: "15/10/2020 16:15",
+        icon: PrimeIcons.ENVELOPE,
+        color: "#FF9800"
+      },
+      {
+        status: "Delivered",
+        date: "16/10/2020 10:00",
+        icon: PrimeIcons.CHECK,
+        color: "#607D8B"
+      }
+    ];
 
   }
 
@@ -157,10 +190,33 @@ export class ResultsComponent implements OnInit {
     }
   }
 
+  showMessage(severity, summary, detail) {
+    this.messageService.clear();
+    this.messageService.add({severity: severity, summary: summary, detail: detail});
+  }
+  validateFilter() {
+    //price
+    if (!(this.totalPrice[0] < this.minPrice) || !(this.totalPrice[1] > this.maxPrice))
+    {
+      this.showMessage('error', 'Error', 'The price range is invalid.');
+      return false;
+    }
+    //travelTimes
+    if (!(this.maxDepartTravelTime > 0) || !(this.maxDepartFlightTime > 0)) {
+      this.showMessage('error', 'Error', 'The max durations are invalid.');
+      return false;
+    }
+    return true;
+  }
+
   filterResults() {
     let newTripArr:TripSchema[] = [];
     let chosenStops:number;
     this.logger.info("Filtering data...");
+    if (!this.validateFilter())
+    {
+      return;
+    }
     //converted selected stops into a number
     switch(this.selectedStop.key) {
       case("none"): chosenStops = 0;

@@ -6,6 +6,7 @@
   <search-box [style]="{'margin': '0px'}"></search-box>
 </p-panel>
 
+<p-toast position="top-left"></p-toast>
 <!-- FILTER -->
 <p-card [style]="{'height': '150px'}" styleClass="p-shadow-3">
   <h5>Filters</h5>
@@ -24,10 +25,10 @@
       <p-overlayPanel #op1 [showCloseIcon]="true" [style]="{width: '300px'}"> 
         <div>
           <div class="overlay1">
-            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[0]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
+            $<input type="number" size="5" pInputText [(ngModel)]="totalPrice[0]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
           </div>
           <div class="overlay2">
-            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[1]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
+            $<input type="number" size="5" pInputText [(ngModel)]="totalPrice[1]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
           </div>
           <br><br>
           <div>
@@ -42,12 +43,12 @@
         <div>
           <label class="overlay3">Max Total Travel Time (hr):</label>
           <div class="overlay2">
-            <input type="text" size="5" pInputText [(ngModel)]="maxDepartTravelTime"/>
+            <input type="number" size="5" pInputText [(ngModel)]="maxDepartTravelTime"/>
           </div>
           <br><br><br>
           <label class="overlay3">Max Flight Duration (hr):</label>
           <div class="overlay2">
-            <input type="text" size="5" pInputText [(ngModel)]="maxDepartFlightTime"/>
+            <input type="number" size="5" pInputText [(ngModel)]="maxDepartFlightTime"/>
           </div>
         </div>
       </p-overlayPanel>
@@ -179,8 +180,9 @@
     <tr>
       <td colspan="12">
         <div class="p-3">
-          <p-card header="Stop Overs">
+          <!-- <p-card header="Stop Overs"> -->
             <tr *ngFor="let stops of trip.departingFlight.segments">
+              <td>Number of Seats:{{trip.availSeats}}</td>
               <td>Airline:{{stops.airline}}, </td>
               <td>Departure Airport:{{stops.depAirportCode}}, </td>
               <td>Arrival Airport:{{stops.arrAirportCode}}, </td>
@@ -188,7 +190,52 @@
               <td>Departure Time:{{stops.departTime}}, </td>
               <td>Arrival Time:{{stops.arrivalTime}}</td>
             </tr>
-          </p-card>
+            <div class="p-grid p-nogutter">
+              <div class="p-col">
+                <p-timeline [value]="events1" styleClass="customized-timeline" style="align-items: left;">
+                  <!-- <ng-template pTemplate="marker" let-event>
+                    <span class="custom-marker p-shadow-2" [style.backgroundColor]="event.color">
+                              <i [ngClass]="event.icon"></i>
+                          </span>
+                  </ng-template> -->
+                  <ng-template pTemplate="content" let-event>
+                    <small class="p-text-secondary">&#123;&#123;event.date&#125;&#125;</small><br>
+                    <b>{{event.status}}</b>
+                    <!-- <p-card [header]="event.status" [subheader]="event.date"> -->
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error
+                        repudiandae numquam deserunt
+                        quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
+                        neque quas!</p>
+                    <!-- </p-card> -->
+                  </ng-template>
+                  <ng-template pTemplate="opposite" let-event>
+                    <br><br><br>
+                    <i [ngClass]="event.icon"></i>
+                    <!-- <br><br> -->
+                  </ng-template>
+                </p-timeline>
+              </div>
+              <div class="p-col">
+                hello
+              </div>
+            </div>
+
+            <!-- <p-timeline [value]="trip.departingFlight.segments" align="alternate" styleClass="customized-timeline">
+              <ng-template pTemplate="marker" let-stops>
+                <span class="custom-marker p-shadow-2">
+                  <i class="pi pi-car"></i>
+                </span>
+              </ng-template>
+              <ng-template pTemplate="content" let-stops>
+                <p-card [header]="stops.depAirportCode" [subheader]="stops.segmentDuration">
+                    hello
+                </p-card>
+              </ng-template>
+              <ng-template pTemplate="opposite" let-stops>
+                <small class="p-text-secondary">{{stops.departTime}}</small>
+              </ng-template>
+            </p-timeline> -->
+          <!-- </p-card> -->
         </div>
       </td>
     </tr>
