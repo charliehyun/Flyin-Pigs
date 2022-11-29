@@ -114,13 +114,10 @@
   <ng-template pTemplate="header">
     <tr>
       <th>Airline</th>
-      <th pSortableColumn="timeToAirportA">{{selectedDTransport.code}} Time To Airport <p-sortIcon field="timeToAirportA"></p-sortIcon></th>
       <!-- <th>Departure Airport</th> -->
       <th pSortableColumn="departingFlight.departureTime">Departure Time <p-sortIcon field="departingFlight.departureTime"></p-sortIcon></th>
-      <th pSortableColumn="departingFlight.flightTime">Flight Duration <p-sortIcon field="departingFlight.flightTime"></p-sortIcon></th>
       <!-- <th>Arrival Airport</th> -->
       <th pSortableColumn="departingFlight.arrivalTime">Arrival Time <p-sortIcon field="departingFlight.arrivalTime"></p-sortIcon></th>
-      <th pSortableColumn="timeToAirportB">{{selectedATransport.code}} Time From Airport <p-sortIcon field="timeToAirportB"></p-sortIcon></th>
       <th pSortableColumn="totalDepTime">Total Travel Time <p-sortIcon field="totalDepTime"></p-sortIcon></th>
       <th pSortableColumn="departingFlight.numberOfStops">Number of Stops <p-sortIcon field="departingFlight.numberOfStops"></p-sortIcon></th>
       <th pSortableColumn="flightPrice">Price <p-sortIcon field="flightPrice"></p-sortIcon></th>
@@ -150,14 +147,14 @@
         <p style="color:grey;">{{trip.departingFlight.airlines}}</p>
       </td>
       <!-- <td>{{trip.timeToAirportA}}</td> -->
-      <td>{{(trip.timeToAirportA / 3600).toFixed(0)}} hr {{((trip.timeToAirportA % 3600) / 60).toFixed(0)}} min</td> 
+      <!-- <td>{{(trip.timeToAirportA / 3600).toFixed(0)}} hr {{((trip.timeToAirportA % 3600) / 60).toFixed(0)}} min</td> -->
       <!-- <td>{{trip.departingFlight.departureAirport}}</td> -->
       <td>
         <p>{{trip.departingFlight.departureTime}}</p>
         <p style="color:grey;">{{trip.departingFlight.departureAirport}}</p>
       </td>
       <!-- <td>{{trip.departingFlight.flightTime}}</td> -->
-      <td>{{(trip.departingFlight.flightTime / 3600).toFixed(0)}} hr {{((trip.departingFlight.flightTime % 3600) / 60).toFixed(0)}} min</td>
+      <!-- <td>{{(trip.departingFlight.flightTime / 3600).toFixed(0)}} hr {{((trip.departingFlight.flightTime % 3600) / 60).toFixed(0)}} min</td> -->
       <!-- <td>{{trip.departingFlight.arrivalAirport}}</td> -->
       <td>
         <p>{{trip.departingFlight.arrivalTime}}</p>
@@ -165,7 +162,7 @@
       </td>
       <!-- <td>{{trip.timeToAirportB}}</td> -->
       <!-- THIS ONE HAS THE CORRECT IMPLEMENTATION BUT ITS UGLY -->
-      <td>{{(trip.timeToAirportB / 3600) - (trip.timeToAirportB / 3600)%1}} hr {{((trip.timeToAirportB % 3600) / 60).toFixed(0)}} min</td> 
+      <!-- <td>{{(trip.timeToAirportB / 3600) - (trip.timeToAirportB / 3600)%1}} hr {{((trip.timeToAirportB % 3600) / 60).toFixed(0)}} min</td> -->
       <!-- <td>{{trip.totalDepTime}}</td> -->
       <td>{{(trip.totalDepTime / 3600).toFixed(0)}} hr {{((trip.totalDepTime % 3600) / 60).toFixed(0)}} min</td>
       <td>{{trip.departingFlight.numberOfStops}}</td>
