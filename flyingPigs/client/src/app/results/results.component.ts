@@ -11,11 +11,13 @@ import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, f
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import { Time } from '@angular/common';
 import { PrimeIcons } from "primeng/api";
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss']
+  styleUrls: ['./results.component.scss'],
+  providers: [MessageService]
 })
 
 export class ResultsComponent implements OnInit {
@@ -56,7 +58,7 @@ export class ResultsComponent implements OnInit {
 
   events1: any[];
    
-  constructor(private resultsService: ResultsService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
+  constructor(private messageService:MessageService, private resultsService: ResultsService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
     this.stops = [
       {name: 'Any number of stops', key: 'all'},
       {name: 'Nonstop only', key: 'none'},
@@ -188,10 +190,33 @@ export class ResultsComponent implements OnInit {
     }
   }
 
+  showMessage(severity, summary, detail) {
+    this.messageService.clear();
+    this.messageService.add({severity: severity, summary: summary, detail: detail});
+  }
+  validateFilter() {
+    //price
+    if (!(this.totalPrice[0] < this.minPrice) || !(this.totalPrice[1] > this.maxPrice))
+    {
+      this.showMessage('error', 'Error', 'The price range is invalid.');
+      return false;
+    }
+    //travelTimes
+    if (!(this.maxDepartTravelTime > 0) || !(this.maxDepartFlightTime > 0)) {
+      this.showMessage('error', 'Error', 'The max durations are invalid.');
+      return false;
+    }
+    return true;
+  }
+
   filterResults() {
     let newTripArr:TripSchema[] = [];
     let chosenStops:number;
     this.logger.info("Filtering data...");
+    if (!this.validateFilter())
+    {
+      return;
+    }
     //converted selected stops into a number
     switch(this.selectedStop.key) {
       case("none"): chosenStops = 0;

@@ -6,6 +6,7 @@
   <search-box [style]="{'margin': '0px'}"></search-box>
 </p-panel>
 
+<p-toast position="top-left"></p-toast>
 <!-- FILTER -->
 <p-card [style]="{'height': '150px'}" styleClass="p-shadow-3">
   <h5>Filters</h5>
@@ -24,10 +25,10 @@
       <p-overlayPanel #op1 [showCloseIcon]="true" [style]="{width: '300px'}"> 
         <div>
           <div class="overlay1">
-            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[0]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
+            $<input type="number" size="5" pInputText [(ngModel)]="totalPrice[0]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
           </div>
           <div class="overlay2">
-            $<input type="text" size="5" pInputText [(ngModel)]="totalPrice[1]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
+            $<input type="number" size="5" pInputText [(ngModel)]="totalPrice[1]" (ngModelChange)="totalPrice = [totalPrice[0], totalPrice[1]]"/>
           </div>
           <br><br>
           <div>
@@ -42,12 +43,12 @@
         <div>
           <label class="overlay3">Max Total Travel Time (hr):</label>
           <div class="overlay2">
-            <input type="text" size="5" pInputText [(ngModel)]="maxDepartTravelTime"/>
+            <input type="number" size="5" pInputText [(ngModel)]="maxDepartTravelTime"/>
           </div>
           <br><br><br>
           <label class="overlay3">Max Flight Duration (hr):</label>
           <div class="overlay2">
-            <input type="text" size="5" pInputText [(ngModel)]="maxDepartFlightTime"/>
+            <input type="number" size="5" pInputText [(ngModel)]="maxDepartFlightTime"/>
           </div>
         </div>
       </p-overlayPanel>
@@ -257,7 +258,7 @@
 <footer>
   <p-button label="Search" styleClass="p-button-link" icon="pi pi-search" routerLink="/search"></p-button>
   <p-button label="FAQ" styleClass="p-button-link" icon="pi pi-question-circle" routerLink="/faq"></p-button>
-  <p-button label="Give Feedback" styleClass="p-button-link" icon="pi pi-comment" routerLink="/feedback"></p-button>
+  <p-button label="Contact Us" styleClass="p-button-link" icon="pi pi-comment" routerLink="/feedback"></p-button>
   <p-button label="Github" styleClass="p-button-link" icon="pi pi-github" onclick="window.open('https://github.com/jyeh00/Flyin-Pigs','_blank')"></p-button>
   <p> 2022 Flyin' Pigs </p>
 </footer>

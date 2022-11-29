@@ -24,12 +24,25 @@
       <li><a href="https://developers.amadeus.com/">Amadeus API</a>for flight data</li>
     </ul>
   </p-accordionTab>
+  <p-accordionTab header="What search fields do I need to input and what do they mean?">
+    We split our input parameters into 3 categories: departure(Where from?), arrival(Where to?), and general
+    <ul>
+      <li>Departure(Where from?)</li>
+      <ul>
+        <li>Starting Address</li>
+        <li>Mode of Transport</li>
+        <li>Maximum approximate d</li>
+      </ul>
+      <li>Arrival(Where to?)</li>
+      <li>General</li>
+    </ul>
+</p-accordionTab>
 </p-accordion>
 
 <footer>
   <p-button label="Search" styleClass="p-button-link" icon="pi pi-search" routerLink="/search"></p-button>
   <p-button label="FAQ" styleClass="p-button-link" icon="pi pi-question-circle" routerLink="/faq"></p-button>
-  <p-button label="Give Feedback" styleClass="p-button-link" icon="pi pi-comment" routerLink="/feedback"></p-button>
+  <p-button label="Contact Us" styleClass="p-button-link" icon="pi pi-comment" routerLink="/feedback"></p-button>
   <p-button label="Github" styleClass="p-button-link" icon="pi pi-github" onclick="window.open('https://github.com/jyeh00/Flyin-Pigs','_blank')"></p-button>
     <p> 2022 Flyin' Pigs </p>
   </footer>
