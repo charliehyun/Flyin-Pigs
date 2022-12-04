@@ -3,7 +3,7 @@ const Amadeus = require('amadeus');
 
 import log4js from "log4js";
 
-import {Flight, flightSegment, Trip} from "./flight";
+import {Flight, TravelSegmentSchema, Trip} from "./flight";
 
 export class flightsApi {
 
@@ -134,7 +134,7 @@ export class flightsApi {
         for(let  i = 0; i < segments.length - 1; i++) {
             let curr = segments[i];
             let next = segments[i + 1];
-            let stopOver = new flightSegment(curr.carrierCode, curr.departure.iataCode, curr.arrival.iataCode, this.calculateStopover(next.arrival.at, curr.departure.at), curr.departure.at, next.arrival.at);
+            let stopOver = new TravelSegmentSchema(curr.carrierCode, curr.departure.iataCode, curr.arrival.iataCode, 0, curr.departure.at, next.arrival.at, this.calculateStopover(next.arrival.at, curr.departure.at));
             newFlight.addSegment(stopOver);
             newFlight.addAirline(curr.carrierCode);
             // this.airlines.push(curr.carrierCode);

@@ -114,13 +114,11 @@
   <ng-template pTemplate="header">
     <tr>
       <th>Airline</th>
-      <!-- <th>Departure Airport</th> -->
       <th pSortableColumn="departingFlight.departureTime">Departure Time <p-sortIcon field="departingFlight.departureTime"></p-sortIcon></th>
-      <!-- <th>Arrival Airport</th> -->
       <th pSortableColumn="departingFlight.arrivalTime">Arrival Time <p-sortIcon field="departingFlight.arrivalTime"></p-sortIcon></th>
       <th pSortableColumn="totalDepTime">Total Travel Time <p-sortIcon field="totalDepTime"></p-sortIcon></th>
-      <th pSortableColumn="departingFlight.numberOfStops">Number of Stops <p-sortIcon field="departingFlight.numberOfStops"></p-sortIcon></th>
-      <th pSortableColumn="flightPrice">Price <p-sortIcon field="flightPrice"></p-sortIcon></th>
+      <th pSortableColumn="departingFlight.numberOfStops">Stops <p-sortIcon field="departingFlight.numberOfStops"></p-sortIcon></th>
+      <th pSortableColumn="flightPrice">Total Flight Price <p-sortIcon field="flightPrice"></p-sortIcon></th>
       <th>More Details</th>
     </tr>
   </ng-template>
@@ -146,24 +144,18 @@
         </span>
         <p style="color:grey;">{{trip.departingFlight.airlines}}</p>
       </td>
-      <!-- <td>{{trip.timeToAirportA}}</td> -->
       <!-- <td>{{(trip.timeToAirportA / 3600) - (trip.timeToAirportA / 3600)%1}} hr {{((trip.timeToAirportA % 3600) / 60) - (trip.timeToAirportA % 3600 / 60)%1}} min</td>  -->
-      <!-- <td>{{trip.departingFlight.departureAirport}}</td> -->
       <td>
         <p>{{trip.departingFlight.departureTime}}</p>
         <p style="color:grey;">{{trip.departingFlight.departureAirport}}</p>
       </td>
-      <!-- <td>{{trip.departingFlight.flightTime}}</td> -->
       <!-- <td>{{(trip.departingFlight.flightTime / 3600) - (trip.departingFlight.flightTime / 3600)%1}} hr {{((trip.departingFlight.flightTime % 3600) / 60) - (trip.departingFlight.flightTime % 3600 / 60)%1}} min</td> -->
-      <!-- <td>{{trip.departingFlight.arrivalAirport}}</td> -->
       <td>
         <p>{{trip.departingFlight.arrivalTime}}</p>
         <p style="color:grey;">{{trip.departingFlight.arrivalAirport}}</p>
       </td>
-      <!-- <td>{{trip.timeToAirportB}}</td> -->
       <!-- THIS ONE HAS THE CORRECT IMPLEMENTATION BUT ITS UGLY -->
       <!-- <td>{{(trip.timeToAirportB / 3600) - (trip.timeToAirportB / 3600)%1}} hr {{((trip.timeToAirportB % 3600) / 60) - (trip.timeToAirportB % 3600 / 60)%1}} min</td>  -->
-      <!-- <td>{{trip.totalDepTime}}</td> -->
       <td>{{(trip.totalDepTime / 3600) - (trip.totalDepTime / 3600)%1}} hr {{((trip.totalDepTime % 3600) / 60) - (trip.totalDepTime % 3600 / 60)%1}} min</td>
       <td>{{trip.departingFlight.numberOfStops}}</td>
       <td>${{trip.flightPrice}}</td>
@@ -183,14 +175,11 @@
             <table>
               <tr style="font-weight:450;">
                 <td>Airline</td>
-                <td>{{selectedATransport.code}} Time To Airport</td>
                 <td>Departure Time</td>
-                <td>Flight Duration</td>
                 <td>Arrival Time</td>
-                <td>{{selectedDTransport.code}} Time From Airport</td>
                 <td>Total Travel Time</td>
                 <td>Stops</td>
-                <td style="width: 12rem"></td>
+                <td style="width: 24rem"></td>
               </tr>
               <tr>
                 <!-- Airline -->
@@ -210,20 +199,17 @@
                   </span>
                   <p style="color:grey;">{{trip.returningFlight.airlines}}</p>
                 </td>
-                <td>{{(trip.timeToAirportB / 3600) - (trip.timeToAirportB / 3600)%1}} hr {{((trip.timeToAirportB % 3600) / 60) - (trip.timeToAirportB % 3600 / 60)%1}} min</td> 
                 <td>
                   <p>{{trip.returningFlight.departureTime}}</p>
                   <p style="color:grey;">{{trip.returningFlight.departureAirport}}</p>
                 </td>
-                <td>{{(trip.returningFlight.flightTime / 3600) - (trip.returningFlight.flightTime / 3600)%1}} hr {{((trip.returningFlight.flightTime % 3600) / 60) - (trip.returningFlight.flightTime % 3600 / 60)%1}} min</td>
                 <td>
                   <p>{{trip.returningFlight.arrivalTime}}</p>
                   <p style="color:grey;">{{trip.returningFlight.arrivalAirport}}</p>
                 </td>
-                <td>{{(trip.timeToAirportA / 3600) - (trip.timeToAirportA / 3600)%1}} hr {{((trip.timeToAirportA % 3600) / 60) - (trip.timeToAirportA % 3600 / 60)%1}} min</td> 
                 <td>{{(trip.totalRetTime / 3600) - (trip.totalRetTime / 3600)%1}} hr {{((trip.totalRetTime % 3600) / 60) - (trip.totalRetTime % 3600 / 60)%1}} min</td>
                 <td>{{trip.returningFlight.numberOfStops}}</td>
-                <td style="width: 12rem"></td>
+                <td style="width: 24rem"></td>
               </tr>
             </table>
             <hr>
@@ -239,51 +225,36 @@
           </span>
           <div class="p-grid p-nogutter">
             <div class="p-col">
-              <p-timeline [value]="events1">
-                <ng-template pTemplate="content" let-event>
-                  <small class="p-text-secondary">&#123;&#123;event.date&#125;&#125;</small><br>
-                  <b>{{event.status}}</b>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error
-                      repudiandae numquam deserunt quisquam repellat
-                    </p>
+              <!-- Departure trip timeline -->
+              <b>Departure</b>
+              <small class="p-text-secondary">{{(trip.totalDepTime / 3600) - (trip.totalDepTime / 3600)%1}} hr {{((trip.totalDepTime % 3600) / 60) - (trip.totalDepTime % 3600 / 60)%1}} min</small>
+              <p-timeline [value]="trip.depTravelSegments">
+                <ng-template pTemplate="content" let-segment>
+                  <p>{{segment.depTime}} | {{segment.depLocation}}</p>
+                  <p>{{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</p>
+                  <!-- <p>{{segment.arrTime}} | {{segment.arrLocation}}</p> -->
                 </ng-template>
-                <ng-template pTemplate="opposite" let-event style="float:left; position:relative">
-                  <br><br><br>
-                  <i [ngClass]="event.icon"></i>
+                <ng-template pTemplate="opposite" let-segment>
+                  <p>{{segment.travelType}}</p>
+                  <!-- <i [ngClass]="event.icon"></i> -->
                 </ng-template>
               </p-timeline>
             </div>
+            <!-- Return trip timeline -->
             <div class="p-col" *ngIf="trip.returningFlight">
-              <p-timeline [value]="events1" style="align-items: left;">
-                <ng-template pTemplate="content" let-event>
-                  <small class="p-text-secondary">&#123;&#123;event.date&#125;&#125;</small><br>
-                  <b>{{event.status}}</b>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error
-                      repudiandae numquam deserunt quisquam repellat
-                    </p>
+              <b>Return</b>
+              <small class="p-text-secondary">{{(trip.totalRetTime / 3600) - (trip.totalRetTime / 3600)%1}} hr {{((trip.totalRetTime % 3600) / 60) - (trip.totalRetTime % 3600 / 60)%1}} min</small>
+              <p-timeline [value]="trip.retTravelSegments">
+                <ng-template pTemplate="content" let-segment>
+                  <p>{{segment.travelType}}</p>
                 </ng-template>
-                <ng-template pTemplate="opposite" let-event>
-                  <br><br><br>
-                  <i [ngClass]="event.icon"></i>
+                <ng-template pTemplate="opposite" let-segment>
+                  <p>{{segment.travelType}}</p>
+                  <!-- <i [ngClass]="event.icon"></i> -->
                 </ng-template>
               </p-timeline>
             </div>
           </div>
-          <!-- <p-timeline [value]="trip.departingFlight.segments" align="alternate" styleClass="customized-timeline">
-            <ng-template pTemplate="marker" let-stops>
-              <span class="custom-marker p-shadow-2">
-                <i class="pi pi-car"></i>
-              </span>
-            </ng-template>
-            <ng-template pTemplate="content" let-stops>
-              <p-card [header]="stops.depAirportCode" [subheader]="stops.segmentDuration">
-                  hello
-              </p-card>
-            </ng-template>
-            <ng-template pTemplate="opposite" let-stops>
-              <small class="p-text-secondary">{{stops.departTime}}</small>
-            </ng-template>
-          </p-timeline> -->
         </div>
       </td>
     </tr>

@@ -6,7 +6,7 @@ export class Flight{
     arrivalTime:string;
     flightTime:number;
     numberOfStops:number;
-    segments: flightSegment[];
+    segments: TravelSegmentSchema[];
     // timeToAirport:number;
     // timeFromAirport:number;
 
@@ -24,7 +24,7 @@ export class Flight{
         // this.timeFromAirport = timeFromAirport;
     }
 
-    addSegment(segment:flightSegment) {
+    addSegment(segment:TravelSegmentSchema) {
         this.segments.push(segment);
     }
     
@@ -35,44 +35,44 @@ export class Flight{
     }
 }
 
-export class flightSegment {
-    airline:string;
-    depAirportCode:string;
-    arrAirportCode:string;
-    segmentDuration:number;
-    arrivalTime:string;
-    departTime:string;
+// export class flightSegment {
+//     airline:string;
+//     depAirportCode:string;
+//     arrAirportCode:string;
+//     segmentDuration:number;
+//     arrivalTime:string;
+//     departTime:string;
 
-    constructor(al:string, depAirportCode:string, arrAirportCode:string, segmentDuration:number, departTime:string, arrivalTime:string) {
-        this.airline = al;
-        this.depAirportCode = depAirportCode;
-        this.arrAirportCode = arrAirportCode;
-        this.segmentDuration = segmentDuration;
-        this.departTime = departTime;
-        this.arrivalTime = arrivalTime;
-    }
-}
-
-// export class TravelSegmentSchema {
-//     travelDuration: number;
-//     travelType: string; // airline code, car, or transit
-//     waitTime: number;   // buffer time or layover time
-//     depTime: string;
-//     arrTime: string;
-//     depLocation: string;
-//     arrLocation: string;
-
-//     constructor(travelDuration: number, travelType: string, waitTime: number, depTime: string, arrTime: string, depLocation: string, arrLocation: string) {
-//         this.travelDuration = travelDuration;
-//         this.travelType = travelType;
-//         this.waitTime = waitTime;
-//         this.depTime = depTime;
-//         this.arrTime = arrTime;
-//         this.depTime = depTime;
-//         this.depLocation = depLocation;
-//         this.arrLocation = arrLocation;
+//     constructor(al:string, depAirportCode:string, arrAirportCode:string, segmentDuration:number, departTime:string, arrivalTime:string) {
+//         this.airline = al;
+//         this.depAirportCode = depAirportCode;
+//         this.arrAirportCode = arrAirportCode;
+//         this.segmentDuration = segmentDuration;
+//         this.departTime = departTime;
+//         this.arrivalTime = arrivalTime;
 //     }
 // }
+
+export class TravelSegmentSchema {
+    travelType: string; // airline code, car, or transit
+    depLocation: string;
+    arrLocation: string;
+    travelDuration: number;
+    depTime: string;
+    arrTime: string;
+    waitTime: number;   // buffer time or layover time
+
+    constructor(travelType: string, depLocation: string, arrLocation: string, travelDuration: number, depTime: string, arrTime: string, waitTime: number) {
+        this.travelDuration = travelDuration;
+        this.travelType = travelType;
+        this.waitTime = waitTime;
+        this.depTime = depTime;
+        this.arrTime = arrTime;
+        this.depTime = depTime;
+        this.depLocation = depLocation;
+        this.arrLocation = arrLocation;
+    }
+}
 
 export class Trip {
     departingFlight: Flight;
@@ -84,6 +84,8 @@ export class Trip {
     totalRetTime?: number;
     availSeats: number;
     uniqueCode: number;
+    depTravelSegments: TravelSegmentSchema[];
+    retTravelSegments?: TravelSegmentSchema[];
 
     constructor(timeToAirportA: number, timeToAirportB: number, flightPrice:number, departingFlight: Flight, returningFlight: Flight, availSeats:number) {
         this.timeToAirportA = timeToAirportA;
@@ -97,10 +99,29 @@ export class Trip {
         this.totalDepTime = timeToAirportA + timeToAirportB + departingFlight.flightTime;
         this.availSeats = availSeats;
         this.uniqueCode = this.totalDepTime / this.flightPrice + this.availSeats;
+        this.depTravelSegments = [];
+        this.retTravelSegments = [];
+        this.setTravelSegment();
     }
+
+    setTravelSegment() {
+        // TODO: if not car, update to transit in frontend
+        // TODO: fill locations for first and last element of array
+        this.depTravelSegments.push(new TravelSegmentSchema("Car", "", this.departingFlight.departureAirport, this.timeToAirportA, "", "", 0));
+        this.depTravelSegments = this.depTravelSegments.concat(this.departingFlight.segments);
+        this.depTravelSegments.push(new TravelSegmentSchema("Car", "", this.departingFlight.arrivalAirport, this.timeToAirportB, "", "", 0));
+
+        if(this.returningFlight) {
+            this.retTravelSegments.push(new TravelSegmentSchema("Car", this.returningFlight.departureAirport, "", this.timeToAirportB, "", "", 0));
+            this.retTravelSegments = this.retTravelSegments.concat(this.returningFlight.segments);
+            this.retTravelSegments.push(new TravelSegmentSchema("Car", this.returningFlight.arrivalAirport, "", this.timeToAirportA, "", "", 0));
+        }
+    }
+
     setTotalDepTime(depTime: number) {
         this.totalDepTime = depTime;
     }
+
     setTotalRetTime(retTime: number) {
         this.totalRetTime = retTime;
     }
