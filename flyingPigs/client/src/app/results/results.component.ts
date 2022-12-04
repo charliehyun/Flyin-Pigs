@@ -197,7 +197,8 @@ export class ResultsComponent implements OnInit {
   
   validateFilter() {
     //price
-    if (!(this.totalPrice[0] < this.minPrice) || !(this.totalPrice[1] > this.maxPrice))
+    //this.logger.info(this.totalPrice[0], " ", this.minPrice, " ", this.totalPrice[1], " ", this.maxPrice);
+    if (this.totalPrice[0] < this.minPrice || this.totalPrice[1] > this.maxPrice)
     {
       this.showMessage('error', 'Error', 'The price range is invalid.');
       return false;
