@@ -216,43 +216,55 @@
           </div>
           <span style="color:grey;" *ngIf="trip.availSeats">
             Seats Available: {{trip.availSeats}}
-            <!-- Airline:{{stops.airline}},  -->
-            <!-- Departure Airport:{{stops.depAirportCode}},  -->
-            <!-- Arrival Airport:{{stops.arrAirportCode}},  -->
-            <!-- Stop Over Duration:{{stops.segmentDuration}},  -->
-            <!-- Departure Time:{{stops.departTime}},  -->
-            <!-- Arrival Time:{{stops.arrivalTime}} -->
           </span>
           <div class="p-grid p-nogutter">
             <div class="p-col">
               <!-- Departure trip timeline -->
-              <p><b>Departure</b></p>
-              <p><small class="p-text-secondary">{{(trip.totalDepTime / 3600) - (trip.totalDepTime / 3600)%1}} hr {{((trip.totalDepTime % 3600) / 60) - (trip.totalDepTime % 3600 / 60)%1}} min</small></p>
+              <h6 align="center"><b>Departure</b></h6>
               <p-timeline [value]="trip.depTravelSegments">
+                <!-- <ng-template pTemplate="marker" let-segment>
+                  <span class="custom-marker p-shadow-2" *ngIf="segment.waitTime == -1">
+                    <i class="pi pi-star"></i>
+                  </span>
+                  <span class="custom-marker p-shadow-2" *ngIf="segment.waitTime != -1">
+                    <i class="pi pi-circle"></i>
+                  </span>
+                </ng-template> -->
                 <ng-template pTemplate="content" let-segment>
                   <b>{{segment.depTime}} | {{segment.depLocation}}</b>
-                  <p *ngIf="segment.depLocation != arriveAdd">{{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</p>
+                  <p *ngIf="segment.depLocation != arriveAdd" style="color:grey;">&nbsp;Travel Time: {{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</p>
                 </ng-template>
                 <ng-template pTemplate="opposite" let-segment>
-                  <p>{{segment.travelType}}</p>
-                  <!-- <i [ngClass]="event.icon"></i> -->
+                  <!-- <p>{{segment.travelType}}</p> -->
+                  <i *ngIf="segment.travelType == 'Car'" class="pi pi-car"></i>
+                  <i *ngIf="segment.travelType != 'Car' && segment.travelType != 'Transit' && segment.travelType != ''" class="pi pi-send"></i>
                 </ng-template>
               </p-timeline>
+              <p align="center"><small class="p-text-secondary">Total Time: {{(trip.totalDepTime / 3600) - (trip.totalDepTime / 3600)%1}} hr {{((trip.totalDepTime % 3600) / 60) - (trip.totalDepTime % 3600 / 60)%1}} min</small></p>
             </div>
-            <div class="p-col" *ngIf="trip.returningFlight">
+
+            <p-divider layout="vertical" *ngIf="trip.returningFlight"></p-divider>
+
+            <div class="p-col">
               <!-- Return trip timeline -->
-              <p><b>Return</b></p>
-              <p><small class="p-text-secondary">{{(trip.totalRetTime / 3600) - (trip.totalRetTime / 3600)%1}} hr {{((trip.totalRetTime % 3600) / 60) - (trip.totalRetTime % 3600 / 60)%1}} min</small></p>
-              <p-timeline [value]="trip.retTravelSegments">
+              <h6 align="center" *ngIf="trip.returningFlight"><b>Return</b></h6>
+              <p-timeline [value]="trip.retTravelSegments" *ngIf="trip.returningFlight">
+                <!-- <ng-template pTemplate="marker" let-segment>
+                  <span class="custom-marker p-shadow-2" *ngIf="segment.travelType == 'Car' || segment.travelType == 'Transit'">
+                    <i class="pi pi-star"></i>
+                  </span>
+                </ng-template> -->
                 <ng-template pTemplate="content" let-segment>
                   <b>{{segment.depTime}} | {{segment.depLocation}}</b>
-                  <p *ngIf="segment.depLocation != arriveAdd">{{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</p>
+                  <p *ngIf="segment.depLocation != departAdd" style="color:grey;">&nbsp;Travel Time: {{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</p>
                 </ng-template>
                 <ng-template pTemplate="opposite" let-segment>
-                  <p>{{segment.travelType}}</p>
-                  <!-- <i [ngClass]="event.icon"></i> -->
+                  <!-- <p>{{segment.travelType}}</p> -->
+                  <i *ngIf="segment.travelType == 'Car'" class="pi pi-car"></i>
+                  <i *ngIf="segment.travelType != 'Car' && segment.travelType != 'Transit' && segment.travelType != ''" class="pi pi-send"></i>
                 </ng-template>
               </p-timeline>
+              <p align="center" *ngIf="trip.returningFlight"><small class="p-text-secondary">Total Time: {{(trip.totalRetTime / 3600) - (trip.totalRetTime / 3600)%1}} hr {{((trip.totalRetTime % 3600) / 60) - (trip.totalRetTime % 3600 / 60)%1}} min</small></p>
             </div>
           </div>
         </div>
