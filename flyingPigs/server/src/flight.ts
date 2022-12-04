@@ -83,11 +83,11 @@ export class Trip {
     totalDepTime: number;
     totalRetTime?: number;
     availSeats: number;
-    uniqueCode: number;
+    uniqueCode: string;
     depTravelSegments: TravelSegmentSchema[];
     retTravelSegments?: TravelSegmentSchema[];
 
-    constructor(timeToAirportA: number, timeToAirportB: number, flightPrice:number, departingFlight: Flight, returningFlight: Flight, availSeats:number, id:number) {
+    constructor(timeToAirportA: number, timeToAirportB: number, flightPrice:number, departingFlight: Flight, returningFlight: Flight, availSeats:number, id:string) {
         this.timeToAirportA = timeToAirportA;
         this.timeToAirportB = timeToAirportB;
         this.flightPrice = flightPrice;
@@ -99,7 +99,7 @@ export class Trip {
         this.totalDepTime = timeToAirportA + timeToAirportB + departingFlight.flightTime;
         this.availSeats = availSeats;
         // this.uniqueCode = this.totalDepTime / this.flightPrice + this.availSeats;
-        this.uniqueCode = id;
+        this.uniqueCode = id + this.departingFlight.departureAirport + this.departingFlight.arrivalAirport;
         this.depTravelSegments = [];
         this.retTravelSegments = [];
         this.setTravelSegment();
