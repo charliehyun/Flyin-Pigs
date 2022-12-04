@@ -21,6 +21,16 @@ export interface FlightSegmentSchema {
     arrivalTime:string;
 }
 
+export interface TravelSegmentSchema {
+    travelDuration: number;
+    travelType: string; // airline code, car, or transit
+    waitTime: number;   // buffer time or layover time
+    depTime: string;
+    arrTime: string;
+    depLocation: string;
+    arrLocation: string;
+}
+
 export interface TripSchema {
     departingFlight: FlightSchema;
     returningFlight?: FlightSchema;
@@ -31,6 +41,8 @@ export interface TripSchema {
     totalRetTime?: number;
     availSeats: number;
     uniqueCode: number;
+    depTravelTimeline: TravelSegmentSchema[];
+    retTravelTimeline: TravelSegmentSchema[];
 }
 
 export interface ResultInfoSchema {

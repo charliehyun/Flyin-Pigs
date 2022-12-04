@@ -244,7 +244,7 @@
       <!-- Dates -->
       <span class="p-float-label">
         <p-calendar 
-          [style]="{'width':'175px'}" 
+          [style]="{'width':'170px'}" 
           [(ngModel)]="departDate"
           id="departDate"
           [readonlyInput]="true"
@@ -256,7 +256,7 @@
 
       <span class="p-float-label">
         <p-calendar 
-          [style]="{'width':'175px'}" 
+          [style]="{'width':'170px'}" 
           [(ngModel)]="returnDate"
           id="returnDate"
           [readonlyInput]="true"
@@ -270,7 +270,7 @@
     </div>
 
     <!-- EXPLORE TAB -->
-    <div *ngIf="explore" style="display: flex;">
+    <div *ngIf="explore" style="display: flex; align-items: center;">
       <!-- Passenger # and selection Overlay -->
       <button pButton pRipple type="button" (click)="op.toggle($event)" icon="pi pi-user" label="{{totalPass}}" [style]="{'vertical-align':'middle'}"></button>
       <p-overlayPanel #op [showCloseIcon]="true" (onHide)="updatePassengers()"> 

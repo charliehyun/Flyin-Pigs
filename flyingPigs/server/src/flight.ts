@@ -53,6 +53,27 @@ export class flightSegment {
     }
 }
 
+// export class TravelSegmentSchema {
+//     travelDuration: number;
+//     travelType: string; // airline code, car, or transit
+//     waitTime: number;   // buffer time or layover time
+//     depTime: string;
+//     arrTime: string;
+//     depLocation: string;
+//     arrLocation: string;
+
+//     constructor(travelDuration: number, travelType: string, waitTime: number, depTime: string, arrTime: string, depLocation: string, arrLocation: string) {
+//         this.travelDuration = travelDuration;
+//         this.travelType = travelType;
+//         this.waitTime = waitTime;
+//         this.depTime = depTime;
+//         this.arrTime = arrTime;
+//         this.depTime = depTime;
+//         this.depLocation = depLocation;
+//         this.arrLocation = arrLocation;
+//     }
+// }
+
 export class Trip {
     departingFlight: Flight;
     returningFlight?: Flight;

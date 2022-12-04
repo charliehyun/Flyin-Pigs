@@ -194,6 +194,7 @@ export class ResultsComponent implements OnInit {
     this.messageService.clear();
     this.messageService.add({severity: severity, summary: summary, detail: detail});
   }
+  
   validateFilter() {
     //price
     if (!(this.totalPrice[0] < this.minPrice) || !(this.totalPrice[1] > this.maxPrice))

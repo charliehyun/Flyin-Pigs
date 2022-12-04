@@ -253,22 +253,22 @@ export class SearchBoxComponent implements OnInit {
         // else, alert
         if(route) {
             this.search = {
-            selectedClass: this.selectedClass,
-            isRoundTrip: this.isRoundTrip,
-            adultPass: this.adultPass,
-            childPass: this.childPass,
-            infantPass: this.infantPass,
-            totalPass: this.totalPass,
-            departDate: this.departDate.toISOString().split("T")[0],
-            returnDate: this.isRoundTrip ? this.returnDate.toISOString().split("T")[0] : "",
-            departAdd: this.departAdd,
-            departCoord: departureCoord,
-            arriveAdd: this.arriveAdd,
-            arriveCoord: arrivalCoord,
-            selectedDTransport: this.selectedDTransport,
-            selectedATransport: this.selectedATransport,
-            maxTimeStart: this.maxTimeStart,
-            maxTimeEnd: this.maxTimeEnd
+                selectedClass: this.selectedClass,
+                isRoundTrip: this.isRoundTrip,
+                adultPass: this.adultPass,
+                childPass: this.childPass,
+                infantPass: this.infantPass,
+                totalPass: this.totalPass,
+                departDate: this.departDate.toISOString().split("T")[0],
+                returnDate: this.isRoundTrip ? this.returnDate.toISOString().split("T")[0] : "",
+                departAdd: this.departAdd,
+                departCoord: departureCoord,
+                arriveAdd: this.arriveAdd,
+                arriveCoord: arrivalCoord,
+                selectedDTransport: this.selectedDTransport,
+                selectedATransport: this.selectedATransport,
+                maxTimeStart: this.maxTimeStart,
+                maxTimeEnd: this.maxTimeEnd
             }
             sessionStorage.setItem('searchParams', JSON.stringify(this.search));
             this.router.navigate(['results'])
