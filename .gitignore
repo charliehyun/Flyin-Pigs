@@ -2,3 +2,4 @@
 /flyingPigs/logs/server.log
 *.log
 /flyingPigs/server/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node
+/flyingPigs/server/.env
