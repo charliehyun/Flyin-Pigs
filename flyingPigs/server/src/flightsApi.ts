@@ -129,7 +129,7 @@ export class flightsApi {
 
     parseItinerary(itinerary: any) {
         let segments = itinerary.segments;
-        let newFlight = new Flight(this.departureAirport, this.arrivalAirport,
+        let newFlight = new Flight(segments[0].departure.iataCode, segments[segments.length - 1].arrival.iataCode,
             segments[0].departure.at, segments[segments.length - 1].arrival.at,
             this.parseApiTimeToSeconds(itinerary.duration), segments.length - 1);
         // loop through segments to add layovers. Skip the last segment
