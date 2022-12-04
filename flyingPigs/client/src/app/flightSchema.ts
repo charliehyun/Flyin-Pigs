@@ -7,18 +7,28 @@ export interface FlightSchema {
     flightTime:number;
     numberOfStops:number;
     // price:number;
-    segments: FlightSegmentSchema[];
+    segments: TravelSegmentSchema[];
     // timeToAirport:number;
     // timeFromAirport:number;
 }
 
-export interface FlightSegmentSchema {
-    airline:string;
-    depAirportCode:string;
-    arrAirportCode:string;
-    segmentDuration:number;
-    departTime:string;
-    arrivalTime:string;
+// export interface FlightSegmentSchema {
+//     airline:string;
+//     depAirportCode:string;
+//     arrAirportCode:string;
+//     segmentDuration:number;
+//     departTime:string;
+//     arrivalTime:string;
+// }
+
+export interface TravelSegmentSchema {
+    travelType: string; // airline code, car, or transit
+    depLocation: string;
+    arrLocation: string;
+    travelDuration: number;
+    depTime: string;
+    arrTime: string;
+    waitTime: number;   // buffer time or layover time
 }
 
 export interface TripSchema {
@@ -31,6 +41,8 @@ export interface TripSchema {
     totalRetTime?: number;
     availSeats: number;
     uniqueCode: number;
+    depTravelSegments: TravelSegmentSchema[];
+    retTravelSegments?: TravelSegmentSchema[];
 }
 
 export interface ResultInfoSchema {
