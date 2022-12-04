@@ -8,10 +8,9 @@ import {Flight, TravelSegmentSchema, Trip} from "./flight";
 export class flightsApi {
 
     amadeus = new Amadeus({
-      clientId: 'Y36ktl5qiSaJ03ViG5RcTViG2OeXx1ml',
-      clientSecret: '30GIvPsJ6joTDJYI'
+      clientId: process.env.AMADEUS_KEY,
+      clientSecret: process.env.AMADEUS_SECRET
     });
-//     apiKey = `633fc180b8f7611a58d22a60`;
     departureAirport:string;
     arrivalAirport:string;
     departureDate:string;
@@ -130,14 +129,14 @@ export class flightsApi {
 
     parseItinerary(itinerary: any) {
         let segments = itinerary.segments;
-        let newFlight = new Flight(this.departureAirport, this.arrivalAirport,
+        let newFlight = new Flight(segments[0].departure.iataCode, segments[segments.length - 1].arrival.iataCode,
             segments[0].departure.at, segments[segments.length - 1].arrival.at,
             this.parseApiTimeToSeconds(itinerary.duration), segments.length - 1);
         // loop through segments to add layovers. Skip the last segment
         for(let  i = 0; i < segments.length - 1; i++) {
             let curr = segments[i];
             let next = segments[i + 1];
-            let stopOver = new TravelSegmentSchema(curr.carrierCode, curr.departure.iataCode, curr.arrival.iataCode, 0, curr.departure.at, next.arrival.at, this.calculateStopover(next.arrival.at, curr.departure.at));
+            let stopOver = new TravelSegmentSchema(this.airlineCodes[curr.carrierCode], curr.departure.iataCode, curr.arrival.iataCode, this.parseApiTimeToSeconds(curr.duration), curr.departure.at, next.arrival.at, this.calculateStopover(next.arrival.at, curr.departure.at));
             newFlight.addSegment(stopOver);
             newFlight.addAirline(this.airlineCodes[curr.carrierCode]);
             // this.airlines.push(curr.carrierCode);
