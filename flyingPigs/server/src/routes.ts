@@ -61,12 +61,12 @@ mongoRouter.post("/search", async (req, res) => {
             let times = await myDepFinder.getDistanceInSec(searchParams.departCoord, searchParams.arriveCoord, searchParams.selectedDTransport.code);
             let tempTrip: Trip;
             if(searchParams.isRoundTrip) {
-                tempTrip = new Trip(0, 0, 0, emptyFlight, emptyFlight, Infinity, 0);
+                tempTrip = new Trip(0, 0, 0, emptyFlight, emptyFlight, Infinity, "0");
                 tempTrip.setTotalDepTime(times.timeTo);
                 tempTrip.setTotalRetTime(times.timeBack);
             }
             else{
-                tempTrip = new Trip(0, 0, 0, emptyFlight, undefined, Infinity, 0);
+                tempTrip = new Trip(0, 0, 0, emptyFlight, undefined, Infinity, "0");
                 tempTrip.setTotalDepTime(times.timeTo);
             }
             trips.push(tempTrip);
@@ -82,19 +82,19 @@ mongoRouter.post("/search", async (req, res) => {
             let tempTrip1: Trip;
             let tempTrip2: Trip;
             if(searchParams.isRoundTrip) {
-                tempTrip1 = new Trip(0, 0, 0, emptyFlight1, emptyFlight1, Infinity, -1);
+                tempTrip1 = new Trip(0, 0, 0, emptyFlight1, emptyFlight1, Infinity, "-1");
                 tempTrip1.setTotalDepTime(times1.timeTo);
                 tempTrip1.setTotalRetTime(times1.timeBack);
 
-                tempTrip2 = new Trip(0, 0, 0, emptyFlight2, emptyFlight2, Infinity, 0);
+                tempTrip2 = new Trip(0, 0, 0, emptyFlight2, emptyFlight2, Infinity, "0");
                 tempTrip2.setTotalDepTime(times2.timeTo);
                 tempTrip2.setTotalRetTime(times2.timeBack);
             }
             else{
-                tempTrip1 = new Trip(0, 0, 0, emptyFlight1, undefined, Infinity, -1);
+                tempTrip1 = new Trip(0, 0, 0, emptyFlight1, undefined, Infinity, "-1");
                 tempTrip1.setTotalDepTime(times1.timeTo);
 
-                tempTrip2 = new Trip(0, 0, 0, emptyFlight2, undefined, Infinity, 0);
+                tempTrip2 = new Trip(0, 0, 0, emptyFlight2, undefined, Infinity, "0");
                 tempTrip2.setTotalDepTime(times2.timeTo);
             }
             trips.push(tempTrip1);    
