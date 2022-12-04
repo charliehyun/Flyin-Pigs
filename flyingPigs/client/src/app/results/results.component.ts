@@ -36,12 +36,22 @@ export class ResultsComponent implements OnInit {
   selectedDepartAirports: any[];
   filterArrivalAirports: string[];
   selectedArrivalAirports: any[];
+  isRoundTrip = false;
+
   maxDepartTravelTime: number = 24;
   maxDepartFlightTime: number = 12;
-  departTimeStart: string;
-  departTimeEnd: string;
-  arrivalTimeStart: string;
-  arrivalTimeEnd: string;
+  maxReturnTravelTime: number = 24;
+  maxReturnFlightTime: number = 12;
+
+  outboundDepartTimeStart: string;
+  outboundDepartTimeEnd: string;
+  outboundArrivalTimeStart: string;
+  outboundArrivalTimeEnd: string;
+  returnDepartTimeStart: string;
+  returnDepartTimeEnd: string;
+  returnArrivalTimeStart: string;
+  returnArrivalTimeEnd: string;
+
   minPrice: number;
   maxPrice: number;
 
@@ -73,11 +83,14 @@ export class ResultsComponent implements OnInit {
 
     this.selectedStop = this.stops[0];
 
-    this.departTimeStart = "00:00";
-    this.departTimeEnd = "23:59";
-
-    this.arrivalTimeStart = "00:00";
-    this.arrivalTimeEnd = "23:59";
+    this.outboundDepartTimeStart = "00:00";
+    this.outboundDepartTimeEnd = "23:59";
+    this.outboundArrivalTimeStart = "00:00";
+    this.outboundArrivalTimeEnd = "23:59";
+    this.returnDepartTimeStart = "00:00";
+    this.returnDepartTimeEnd = "23:59";
+    this.returnArrivalTimeStart = "00:00";
+    this.returnArrivalTimeEnd = "23:59";
 
     this.events1 = [
       {
@@ -169,13 +182,22 @@ export class ResultsComponent implements OnInit {
       this.totalPrice = [this.minPrice, this.maxPrice];
       this.selectedAirlines = this.filterAirlines;
 
-      //currently only sets default values for existing filters (i.e. departing flights only)
+      //grab the maximum times
       let maxDepartTravelTime = Math.max(...this.trips.map(trip => trip.totalDepTime));
       if (maxDepartTravelTime / 3600 > this.maxDepartTravelTime) {this.maxDepartTravelTime = Math.ceil(maxDepartTravelTime / 3600);}
       let maxDepartFlightTime = Math.max(...this.trips.map(trip => trip.departingFlight.flightTime));
       if (maxDepartFlightTime / 3600 > this.maxDepartFlightTime) {this.maxDepartFlightTime = Math.ceil(maxDepartFlightTime / 3600);}
 
-
+      //set max return times if there exists a return flight
+      if (this.trips[0].returningFlight) {
+        this.isRoundTrip = true;
+        // @ts-ignore
+        let maxReturnTravelTime = Math.max(...this.trips.map(trip => trip.totalRetTime));
+        if (maxReturnTravelTime / 3600 > this.maxReturnTravelTime) {this.maxReturnTravelTime = Math.ceil(maxReturnTravelTime / 3600);}
+        // @ts-ignore
+        let maxReturnFlightTime = Math.max(...this.trips.map(trip => trip.returningFlight.flightTime));
+        if (maxReturnFlightTime / 3600 > this.maxReturnFlightTime) {this.maxReturnFlightTime = Math.ceil(maxReturnFlightTime / 3600);}
+      }
     });
 
   }
@@ -208,6 +230,14 @@ export class ResultsComponent implements OnInit {
       this.showMessage('error', 'Error', 'The max durations are invalid.');
       return false;
     }
+
+    //for returnFlight only.
+    if (this.isRoundTrip) {
+      if (!(this.maxReturnTravelTime > 0) || !(this.maxReturnFlightTime > 0)) {
+        this.showMessage('error', 'Error', 'The max durations are invalid.');
+        return false;
+      }
+    }
     return true;
   }
 
@@ -231,17 +261,18 @@ export class ResultsComponent implements OnInit {
       break;
     }
 
+
     this.trips.forEach(trip => {
-      //get total trip time
-      let totalDepartTravelTime:number = trip.totalDepTime
+      //get outbound trip time
+      let departTravelTime:number = trip.totalDepTime
       //get total flight time
-      let totalDepartFlightTime:number = trip.departingFlight.flightTime;
+      let departFlightTime:number = trip.departingFlight.flightTime;
 
       //convert string to Time to object
-      let departTimeStrings = trip.departingFlight.departureTime.split("T").slice(-1)[0].split(":");
-      let departTimeString = departTimeStrings[0] + ":" +  departTimeStrings[1];
-      let arriveTimeStrings = trip.departingFlight.arrivalTime.split("T").slice(-1)[0].split(":");
-      let arriveTimeString = arriveTimeStrings[0] + ":" + arriveTimeStrings[1];
+      let outboundDepartTimeStrings = trip.departingFlight.departureTime.split("T").slice(-1)[0].split(":");
+      let outboundDepartTimeString = outboundDepartTimeStrings[0] + ":" +  outboundDepartTimeStrings[1];
+      let outboundArriveTimeStrings = trip.departingFlight.arrivalTime.split("T").slice(-1)[0].split(":");
+      let outboundArriveTimeString = outboundArriveTimeStrings[0] + ":" + outboundArriveTimeStrings[1];
 
 
       //determine what airlines are available.
@@ -252,20 +283,49 @@ export class ResultsComponent implements OnInit {
       if (trip.departingFlight.numberOfStops <= chosenStops &&
           trip.flightPrice <= this.totalPrice[1] &&
           trip.flightPrice >= this.totalPrice[0] &&
-          totalDepartTravelTime <= (this.maxDepartTravelTime * 3600) &&
-          totalDepartFlightTime <= (this.maxDepartFlightTime * 3600) &&
-          departTimeString >= this.departTimeStart &&
-          departTimeString <= this.departTimeEnd &&
-          arriveTimeString >= this.arrivalTimeStart &&
-          arriveTimeString <= this.arrivalTimeEnd &&
+          departTravelTime <= (this.maxDepartTravelTime * 3600) &&
+          departFlightTime <= (this.maxDepartFlightTime * 3600) &&
+          outboundDepartTimeString >= this.outboundDepartTimeStart &&
+          outboundDepartTimeString <= this.outboundDepartTimeEnd &&
+          outboundArriveTimeString >= this.outboundArrivalTimeStart &&
+          outboundArriveTimeString <= this.outboundArrivalTimeEnd &&
           this.selectedDepartAirports.includes(trip.departingFlight.departureAirport) &&
           this.selectedArrivalAirports.includes(trip.departingFlight.arrivalAirport) &&
           includedAirlines
           )
       {
-        newTripArr.push(trip);
+        //filter for round trip takes more parameters.
+        if (trip.returningFlight) {
+          let returnTravelTime = trip.totalRetTime;
+          let returnFlightTime:number = trip.returningFlight.flightTime;
+
+          let returnDepartTimeStrings = trip.returningFlight.departureTime.split("T").slice(-1)[0].split(":");
+          let returnDepartTimeString = returnDepartTimeStrings[0] + ":" +  returnDepartTimeStrings[1];
+          let returnArriveTimeStrings = trip.returningFlight.arrivalTime.split("T").slice(-1)[0].split(":");
+          let returnArriveTimeString = returnArriveTimeStrings[0] + ":" + returnArriveTimeStrings[1];
+
+          //extra filter.
+          if (typeof(returnTravelTime) == "number")
+          {
+            if (returnTravelTime <= (this.maxReturnTravelTime * 3600) &&
+                returnFlightTime <= (this.maxReturnFlightTime * 3600) &&
+                returnDepartTimeString >= this.returnDepartTimeStart &&
+                returnDepartTimeString <= this.returnDepartTimeEnd &&
+                returnArriveTimeString >= this.returnArrivalTimeStart &&
+                returnArriveTimeString <= this.returnArrivalTimeEnd
+                ) {
+              newTripArr.push(trip);
+            }
+          }
+        }
+        else {
+          newTripArr.push(trip);
+        }
+
       }
     });
+
+
     this.filteredTrips = newTripArr;
     this.loaded = 10;
     this.displayTrips = this.filteredTrips.slice(0,this.loaded);
