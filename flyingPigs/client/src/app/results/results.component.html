@@ -226,13 +226,12 @@
           <div class="p-grid p-nogutter">
             <div class="p-col">
               <!-- Departure trip timeline -->
-              <b>Departure</b>
-              <small class="p-text-secondary">{{(trip.totalDepTime / 3600) - (trip.totalDepTime / 3600)%1}} hr {{((trip.totalDepTime % 3600) / 60) - (trip.totalDepTime % 3600 / 60)%1}} min</small>
+              <p><b>Departure</b></p>
+              <p><small class="p-text-secondary">{{(trip.totalDepTime / 3600) - (trip.totalDepTime / 3600)%1}} hr {{((trip.totalDepTime % 3600) / 60) - (trip.totalDepTime % 3600 / 60)%1}} min</small></p>
               <p-timeline [value]="trip.depTravelSegments">
                 <ng-template pTemplate="content" let-segment>
-                  <p>{{segment.depTime}} | {{segment.depLocation}}</p>
-                  <p>{{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</p>
-                  <!-- <p>{{segment.arrTime}} | {{segment.arrLocation}}</p> -->
+                  <b>{{segment.depTime}} | {{segment.depLocation}}</b>
+                  <p *ngIf="segment.depLocation != arriveAdd">{{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</p>
                 </ng-template>
                 <ng-template pTemplate="opposite" let-segment>
                   <p>{{segment.travelType}}</p>
@@ -240,13 +239,14 @@
                 </ng-template>
               </p-timeline>
             </div>
-            <!-- Return trip timeline -->
             <div class="p-col" *ngIf="trip.returningFlight">
-              <b>Return</b>
-              <small class="p-text-secondary">{{(trip.totalRetTime / 3600) - (trip.totalRetTime / 3600)%1}} hr {{((trip.totalRetTime % 3600) / 60) - (trip.totalRetTime % 3600 / 60)%1}} min</small>
+              <!-- Return trip timeline -->
+              <p><b>Return</b></p>
+              <p><small class="p-text-secondary">{{(trip.totalRetTime / 3600) - (trip.totalRetTime / 3600)%1}} hr {{((trip.totalRetTime % 3600) / 60) - (trip.totalRetTime % 3600 / 60)%1}} min</small></p>
               <p-timeline [value]="trip.retTravelSegments">
                 <ng-template pTemplate="content" let-segment>
-                  <p>{{segment.travelType}}</p>
+                  <b>{{segment.depTime}} | {{segment.depLocation}}</b>
+                  <p *ngIf="segment.depLocation != arriveAdd">{{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</p>
                 </ng-template>
                 <ng-template pTemplate="opposite" let-segment>
                   <p>{{segment.travelType}}</p>

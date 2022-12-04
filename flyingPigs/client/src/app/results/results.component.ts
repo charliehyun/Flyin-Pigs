@@ -25,6 +25,8 @@ export class ResultsComponent implements OnInit {
   search: SearchSchema;
   selectedDTransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
   selectedATransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
+  departAdd: string = "";
+  arriveAdd: string = "";
 
   // FILTER VARS
   totalPrice: number[] = [];
@@ -147,11 +149,14 @@ export class ResultsComponent implements OnInit {
     this.search = JSON.parse(sessionStorage.getItem('searchParams') || this.setDefaults());
     this.selectedDTransport = this.search.selectedDTransport;
     this.selectedATransport = this.search.selectedATransport;
+    this.departAdd = this.search.departAdd;
+    this.arriveAdd = this.search.arriveAdd;
 
     // get trip results
     this.results$ = this.resultsService.searchAirports(this.search);
     this.results$.subscribe(value => {
       // value = this.convertTimes(value);
+      value = this.updateSegments(value);
       this.trips = value.trips;
       this.filteredTrips = value.trips;
       this.displayTrips = value.trips.slice(0,this.loaded);
@@ -174,10 +179,22 @@ export class ResultsComponent implements OnInit {
       if (maxDepartTravelTime / 3600 > this.maxDepartTravelTime) {this.maxDepartTravelTime = Math.ceil(maxDepartTravelTime / 3600);}
       let maxDepartFlightTime = Math.max(...this.trips.map(trip => trip.departingFlight.flightTime));
       if (maxDepartFlightTime / 3600 > this.maxDepartFlightTime) {this.maxDepartFlightTime = Math.ceil(maxDepartFlightTime / 3600);}
-
-
     });
+  }
 
+  updateSegments(value: ResultInfoSchema): ResultInfoSchema {
+    value.trips.forEach(trip => {
+      trip.depTravelSegments[0].depLocation = this.departAdd;
+      trip.depTravelSegments[trip.depTravelSegments.length-2].arrLocation = this.arriveAdd;
+      trip.depTravelSegments[trip.depTravelSegments.length-1].depLocation = this.arriveAdd;
+
+      if(trip.retTravelSegments) {
+        trip.retTravelSegments[0].depLocation = this.arriveAdd;
+        trip.retTravelSegments[trip.retTravelSegments.length-2].arrLocation = this.departAdd;
+        trip.retTravelSegments[trip.retTravelSegments.length-1].depLocation = this.departAdd;
+      }
+    });
+    return value;
   }
 
   loadMore() {
