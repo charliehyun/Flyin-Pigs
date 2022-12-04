@@ -274,17 +274,14 @@ mongoRouter.post("/submitForgotPassword", (req, res) =>
 
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
-                //     //put credentials into an .env file later and include it in .gitignore
-                // user: `${process.env.EMAIL_ADDRESSS}`,
-                // pass: `${process.env.EMAIL_PASSWORD}`,
                 auth: {
-                    user: 'flyinpigs407@gmail.com',
-                    pass: 'gseexbubldnyjdvu'
+                    user: process.env.EMAIL_ADDRESSS,
+                    pass: process.env.EMAIL_PASSWORD,
                 }
             });
                 
             var mailOptions = {
-                from: 'flyinpigs407@gmail.com',
+                from: process.env.EMAIL_ADDRESSS,
                 to: req.body.email,
                 subject: `Password Reset Link`,
                 text: `click the link below to change your password:\n\nhttp://localhost:4200/reset-password?token=${token}`,
@@ -307,13 +304,13 @@ mongoRouter.post("/submitForgotPassword", (req, res) =>
             //     // user: `${process.env.EMAIL_ADDRESSS}`,
             //     // pass: `${process.env.EMAIL_PASSWORD}`,
             //     auth: {
-            //         user: "flyinpigs407@gmail.com",
-            //         pass: "BrickHouse407",
+            //         user: "",
+            //         pass: "",
             //     }
             // });
 
             // const mailOptions = {
-            //     from: `flyinpigs407@gmail.com`,
+            //     from: ``,
             //     to: req.body.email,
             //     subject: `Password Reset Link`,
             //     text: `click the link below to change your password:\n\nhttp://localhost:3000/reset/${token}`,
@@ -362,13 +359,13 @@ mongoRouter.post("/autoReply", (req, res) =>
         // user: `${process.env.EMAIL_ADDRESSS}`,
         // pass: `${process.env.EMAIL_PASSWORD}`,
         auth: {
-            user: 'flyinpigs407@gmail.com',
-            pass: 'gseexbubldnyjdvu'
+            user: process.env.EMAIL_ADDRESSS,
+            pass: process.env.EMAIL_PASSWORD
         }
     });
         
     var mailOptions = {
-        from: 'flyinpigs407@gmail.com',
+        from: process.env.EMAIL_ADDRESSS,
         to: req.body.email,
         subject: `Flyin' Pigs Response to your Inquiry (Case #${caseId})`,
         text: messages[type],
@@ -397,13 +394,13 @@ mongoRouter.post("/feedback", (req, res) =>
         // user: `${process.env.EMAIL_ADDRESSS}`,
         // pass: `${process.env.EMAIL_PASSWORD}`,
         auth: {
-            user: 'flyinpigs407@gmail.com',
-            pass: 'gseexbubldnyjdvu'
+            user: process.env.EMAIL_ADDRESSS,
+            pass: process.env.EMAIL_PASSWORD
         }
     });
         
     var mailOptions = {
-        from: 'flyinpigs407@gmail.com',
+        from: process.env.EMAIL_ADDRESSS,
         to: 'flyinpigs407+' + type + '@gmail.com',
         subject: `Inquiry (Case #${caseId})`,
         text: req.body.email + '\n' + req.body.text,
