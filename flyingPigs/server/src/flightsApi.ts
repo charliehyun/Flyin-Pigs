@@ -26,6 +26,7 @@ export class flightsApi {
     timeToAirportB:number = -1;
     logger:log4js.Logger;
     stackedAirlines: string[];
+    airlineCodes = {};
 
     constructor(departure:string, arrival:string, departureDate:string, arrivalDate:string,
     adults:number, children:number, infants:number, cabin:string, oneway:boolean, timeToAirportA:number, timeToAirportB:number)
@@ -63,7 +64,8 @@ export class flightsApi {
                 travelClass: this.cabinClass,
                 currencyCode: 'USD',
                 max: 30,
-            }).then((response: { data: any; }) => {
+            }).then((response: any) => {
+                this.airlineCodes = response.result.dictionaries.carriers;
                 returnTripObjects = this.parseApi(response.data)
             }).catch((error: any) => logger.warn("api error: ", error.code));
             // .then(function(response: { data: any; }){
@@ -86,7 +88,8 @@ export class flightsApi {
                 travelClass: this.cabinClass,
                 currencyCode: 'USD',
                 max: 30,
-            }).then((response: { data: any; }) => {
+            }).then((response: any) => {
+                this.airlineCodes = response.result.dictionaries.carriers;
                 returnTripObjects = this.parseApi(response.data)
             }).catch((error: any) => logger.warn("api error: ", error.code));
             // .then(function(response: { data: any; }){
@@ -118,7 +121,7 @@ export class flightsApi {
                     returningFlight = this.parseItinerary(flight.itineraries[1]);
                     // this.stackedAirlines.push(returningFlight.airlines);
                 }
-                let newTrip = new Trip(this.timeToAirportA, this.timeToAirportB, parseFloat(flight.price.total), departingFlight, returningFlight, flight.numberOfBookableSeats);
+                let newTrip = new Trip(this.timeToAirportA, this.timeToAirportB, parseFloat(flight.price.total), departingFlight, returningFlight, flight.numberOfBookableSeats, flight.id);
                 returnTripObjects.push(newTrip);
             }
         }, this);
@@ -134,12 +137,12 @@ export class flightsApi {
         for(let  i = 0; i < segments.length - 1; i++) {
             let curr = segments[i];
             let next = segments[i + 1];
-            let stopOver = new flightSegment(curr.carrierCode, curr.departure.iataCode, curr.arrival.iataCode, this.calculateStopover(next.arrival.at, curr.departure.at), curr.departure.at, next.arrival.at);
+            let stopOver = new flightSegment(this.airlineCodes[curr.carrierCode], curr.departure.iataCode, curr.arrival.iataCode, this.calculateStopover(next.arrival.at, curr.departure.at), curr.departure.at, next.arrival.at);
             newFlight.addSegment(stopOver);
-            newFlight.addAirline(curr.carrierCode);
+            newFlight.addAirline(this.airlineCodes[curr.carrierCode]);
             // this.airlines.push(curr.carrierCode);
             if(i == segments.length - 2) {
-                newFlight.addAirline(next.carrierCode);
+                newFlight.addAirline(this.airlineCodes[next.carrierCode]);
                 // this.airlines.push(next.carrierCode);
             }
         }
