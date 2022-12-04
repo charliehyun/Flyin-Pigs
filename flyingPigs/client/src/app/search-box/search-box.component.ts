@@ -31,7 +31,7 @@ export class SearchBoxComponent implements OnInit {
     maxTimeEnd: DropdownOption = {name: '1 hr', sec: 3600}; //default end driving hours
 
     totalPass: number = this.adultPass + this.childPass + this.infantPass;  // total number of passengers
-    isRoundTrip: boolean = false; // Round Trip toggle
+    isRoundTrip: boolean = true; // Round Trip toggle
     oneWayRoundTrip: any[];
 
     bufferTime: DropdownOption = {name: '2 hr', sec: 7200};
@@ -133,7 +133,7 @@ export class SearchBoxComponent implements OnInit {
     setDefaults() {
         this.search = {
             selectedClass: {name: 'Economy', code: 'ECONOMY'},
-            isRoundTrip: false,
+            isRoundTrip: true,
             adultPass: 1,
             childPass: 0,
             infantPass: 0,
@@ -160,7 +160,7 @@ export class SearchBoxComponent implements OnInit {
         this.selectedClass = {name: 'Economy', code: 'ECONOMY'};
         this.selectedDTransport = {name: 'Car', code: 'driving', icon: 'car'};
         this.selectedATransport = {name: 'Car', code: 'driving', icon: 'car'};
-        this.isRoundTrip = false;
+        this.isRoundTrip = true;
         this.adultPass = 1;
         this.childPass = 0;
         this.infantPass = 0;
@@ -253,22 +253,22 @@ export class SearchBoxComponent implements OnInit {
         // else, alert
         if(route) {
             this.search = {
-            selectedClass: this.selectedClass,
-            isRoundTrip: this.isRoundTrip,
-            adultPass: this.adultPass,
-            childPass: this.childPass,
-            infantPass: this.infantPass,
-            totalPass: this.totalPass,
-            departDate: this.departDate.toISOString().split("T")[0],
-            returnDate: this.isRoundTrip ? this.returnDate.toISOString().split("T")[0] : "",
-            departAdd: this.departAdd,
-            departCoord: departureCoord,
-            arriveAdd: this.arriveAdd,
-            arriveCoord: arrivalCoord,
-            selectedDTransport: this.selectedDTransport,
-            selectedATransport: this.selectedATransport,
-            maxTimeStart: this.maxTimeStart,
-            maxTimeEnd: this.maxTimeEnd
+                selectedClass: this.selectedClass,
+                isRoundTrip: this.isRoundTrip,
+                adultPass: this.adultPass,
+                childPass: this.childPass,
+                infantPass: this.infantPass,
+                totalPass: this.totalPass,
+                departDate: this.departDate.toISOString().split("T")[0],
+                returnDate: this.isRoundTrip ? this.returnDate.toISOString().split("T")[0] : "",
+                departAdd: this.departAdd,
+                departCoord: departureCoord,
+                arriveAdd: this.arriveAdd,
+                arriveCoord: arrivalCoord,
+                selectedDTransport: this.selectedDTransport,
+                selectedATransport: this.selectedATransport,
+                maxTimeStart: this.maxTimeStart,
+                maxTimeEnd: this.maxTimeEnd
             }
             sessionStorage.setItem('searchParams', JSON.stringify(this.search));
             this.router.navigate(['results'])
@@ -327,7 +327,7 @@ export class SearchBoxComponent implements OnInit {
         this.totalPass = this.search.totalPass;
         // this.departDate = new Date(this.search.departDate);
         this.departDate = (new Date(this.search.departDate) > this.date) ? new Date(this.search.departDate) : new Date();
-        this.returnDate = this.isRoundTrip ? new Date(this.search.returnDate) : new Date();
+        this.returnDate = (this.search.returnDate != "") ? new Date(this.search.returnDate) : new Date();
         this.departAdd = this.search.departAdd;
         this.arriveAdd = this.search.arriveAdd;
         this.selectedDTransport = this.search.selectedDTransport;

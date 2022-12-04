@@ -114,19 +114,17 @@
   <ng-template pTemplate="header">
     <tr>
       <th>Airline</th>
-      <!-- <th>Departure Airport</th> -->
       <th pSortableColumn="departingFlight.departureTime">Departure Time <p-sortIcon field="departingFlight.departureTime"></p-sortIcon></th>
-      <!-- <th>Arrival Airport</th> -->
       <th pSortableColumn="departingFlight.arrivalTime">Arrival Time <p-sortIcon field="departingFlight.arrivalTime"></p-sortIcon></th>
       <th pSortableColumn="totalDepTime">Total Travel Time <p-sortIcon field="totalDepTime"></p-sortIcon></th>
-      <th pSortableColumn="departingFlight.numberOfStops">Number of Stops <p-sortIcon field="departingFlight.numberOfStops"></p-sortIcon></th>
-      <th pSortableColumn="flightPrice">Price <p-sortIcon field="flightPrice"></p-sortIcon></th>
+      <th pSortableColumn="departingFlight.numberOfStops">Stops <p-sortIcon field="departingFlight.numberOfStops"></p-sortIcon></th>
+      <th pSortableColumn="flightPrice">Total Flight Price <p-sortIcon field="flightPrice"></p-sortIcon></th>
       <th>More Details</th>
     </tr>
   </ng-template>
   <!-- Row content -->
   <ng-template pTemplate="body" let-trip let-expanded="expanded">
-    <tr>
+    <tr style="text-align:center">
       <!-- Airline -->
       <td style="text-align:center">
         <span *ngIf="trip.departingFlight.airlines.length > 1">
@@ -146,25 +144,19 @@
         </span>
         <p style="color:grey;">{{trip.departingFlight.airlines}}</p>
       </td>
-      <!-- <td>{{trip.timeToAirportA}}</td> -->
-      <!-- <td>{{(trip.timeToAirportA / 3600).toFixed(0)}} hr {{((trip.timeToAirportA % 3600) / 60).toFixed(0)}} min</td> -->
-      <!-- <td>{{trip.departingFlight.departureAirport}}</td> -->
+      <!-- <td>{{(trip.timeToAirportA / 3600) - (trip.timeToAirportA / 3600)%1}} hr {{((trip.timeToAirportA % 3600) / 60) - (trip.timeToAirportA % 3600 / 60)%1}} min</td>  -->
       <td>
         <p>{{trip.departingFlight.departureTime}}</p>
         <p style="color:grey;">{{trip.departingFlight.departureAirport}}</p>
       </td>
-      <!-- <td>{{trip.departingFlight.flightTime}}</td> -->
-      <!-- <td>{{(trip.departingFlight.flightTime / 3600).toFixed(0)}} hr {{((trip.departingFlight.flightTime % 3600) / 60).toFixed(0)}} min</td> -->
-      <!-- <td>{{trip.departingFlight.arrivalAirport}}</td> -->
+      <!-- <td>{{(trip.departingFlight.flightTime / 3600) - (trip.departingFlight.flightTime / 3600)%1}} hr {{((trip.departingFlight.flightTime % 3600) / 60) - (trip.departingFlight.flightTime % 3600 / 60)%1}} min</td> -->
       <td>
         <p>{{trip.departingFlight.arrivalTime}}</p>
         <p style="color:grey;">{{trip.departingFlight.arrivalAirport}}</p>
       </td>
-      <!-- <td>{{trip.timeToAirportB}}</td> -->
       <!-- THIS ONE HAS THE CORRECT IMPLEMENTATION BUT ITS UGLY -->
-      <!-- <td>{{(trip.timeToAirportB / 3600) - (trip.timeToAirportB / 3600)%1}} hr {{((trip.timeToAirportB % 3600) / 60).toFixed(0)}} min</td> -->
-      <!-- <td>{{trip.totalDepTime}}</td> -->
-      <td>{{(trip.totalDepTime / 3600).toFixed(0)}} hr {{((trip.totalDepTime % 3600) / 60).toFixed(0)}} min</td>
+      <!-- <td>{{(trip.timeToAirportB / 3600) - (trip.timeToAirportB / 3600)%1}} hr {{((trip.timeToAirportB % 3600) / 60) - (trip.timeToAirportB % 3600 / 60)%1}} min</td>  -->
+      <td>{{(trip.totalDepTime / 3600) - (trip.totalDepTime / 3600)%1}} hr {{((trip.totalDepTime % 3600) / 60) - (trip.totalDepTime % 3600 / 60)%1}} min</td>
       <td>{{trip.departingFlight.numberOfStops}}</td>
       <td>${{trip.flightPrice}}</td>
       <td>
@@ -174,65 +166,95 @@
   </ng-template>
   <!-- More details -->
   <ng-template pTemplate="rowexpansion" let-trip>
-    <tr>
-      <td colspan="12">
-        <div class="p-3">
-          <!-- <p-card header="Stop Overs"> -->
-            <tr *ngFor="let stops of trip.departingFlight.segments">
-              <td>Number of Seats:{{trip.availSeats}}</td>
-              <td>Airline:{{stops.airline}}, </td>
-              <td>Departure Airport:{{stops.depAirportCode}}, </td>
-              <td>Arrival Airport:{{stops.arrAirportCode}}, </td>
-              <td>Stop Over Duration:{{stops.segmentDuration}}, </td>
-              <td>Departure Time:{{stops.departTime}}, </td>
-              <td>Arrival Time:{{stops.arrivalTime}}</td>
-            </tr>
-            <div class="p-grid p-nogutter">
-              <div class="p-col">
-                <p-timeline [value]="events1" styleClass="customized-timeline" style="align-items: left;">
-                  <!-- <ng-template pTemplate="marker" let-event>
-                    <span class="custom-marker p-shadow-2" [style.backgroundColor]="event.color">
-                              <i [ngClass]="event.icon"></i>
-                          </span>
-                  </ng-template> -->
-                  <ng-template pTemplate="content" let-event>
-                    <small class="p-text-secondary">&#123;&#123;event.date&#125;&#125;</small><br>
-                    <b>{{event.status}}</b>
-                    <!-- <p-card [header]="event.status" [subheader]="event.date"> -->
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error
-                        repudiandae numquam deserunt
-                        quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
-                        neque quas!</p>
-                    <!-- </p-card> -->
-                  </ng-template>
-                  <ng-template pTemplate="opposite" let-event>
-                    <br><br><br>
-                    <i [ngClass]="event.icon"></i>
-                    <!-- <br><br> -->
-                  </ng-template>
-                </p-timeline>
-              </div>
-              <div class="p-col">
-                hello
-              </div>
+    <tr style="background: whitesmoke">
+      <td colspan="10">
+        <div>
+          <!-- Returing trip details -->
+          <div *ngIf="trip.returningFlight">
+            <h5>Returning Trip</h5>
+            <table>
+              <tr style="font-weight:450;">
+                <td>Airline</td>
+                <td>Departure Time</td>
+                <td>Arrival Time</td>
+                <td>Total Travel Time</td>
+                <td>Stops</td>
+                <td style="width: 24rem"></td>
+              </tr>
+              <tr>
+                <!-- Airline -->
+                <td style="text-align:center">
+                  <span *ngIf="trip.returningFlight.airlines.length > 1">
+                    <img src="assets/images/generic-logo.png" width="50" height="40">
+                  </span>
+                  <span *ngIf="trip.returningFlight.airlines.length < 2">
+                    <img *ngIf="trip.returningFlight.airlines == 'AS'" src="assets/images/alaska-logo.png" width="40" height="40">
+                    <img *ngIf="trip.returningFlight.airlines == 'B6'" src="assets/images/jetblue-logo.png" width="40">
+                    <img *ngIf="trip.returningFlight.airlines == 'DL'" src="assets/images/delta-logo.png" width="40" height="40">
+                    <img *ngIf="trip.returningFlight.airlines == 'F9'" src="assets/images/frontier-logo.png" width="40" height="40"> 
+                    <img *ngIf="trip.returningFlight.airlines == 'HA'" src="assets/images/hawaiian-logo.png" width="40" height="40"> 
+                    <img *ngIf="trip.returningFlight.airlines == 'NK'" src="assets/images/spirit-logo.png" width="40" height="40"> 
+                    <img *ngIf="trip.airlines == 'UA'" src="assets/images/united-logo.png" width="45" height="45"> 
+                    <img *ngIf="!airlineTags.includes(trip.returningFlight.airlines[0])" src="assets/images/generic-logo.png" width="50" height="40">
+                  </span>
+                  <p style="color:grey;">{{trip.returningFlight.airlines}}</p>
+                </td>
+                <td>
+                  <p>{{trip.returningFlight.departureTime}}</p>
+                  <p style="color:grey;">{{trip.returningFlight.departureAirport}}</p>
+                </td>
+                <td>
+                  <p>{{trip.returningFlight.arrivalTime}}</p>
+                  <p style="color:grey;">{{trip.returningFlight.arrivalAirport}}</p>
+                </td>
+                <td>{{(trip.totalRetTime / 3600) - (trip.totalRetTime / 3600)%1}} hr {{((trip.totalRetTime % 3600) / 60) - (trip.totalRetTime % 3600 / 60)%1}} min</td>
+                <td>{{trip.returningFlight.numberOfStops}}</td>
+                <td style="width: 24rem"></td>
+              </tr>
+            </table>
+            <hr>
+          </div>
+          <span style="color:grey;" *ngIf="trip.availSeats">
+            Seats Available: {{trip.availSeats}}
+            <!-- Airline:{{stops.airline}},  -->
+            <!-- Departure Airport:{{stops.depAirportCode}},  -->
+            <!-- Arrival Airport:{{stops.arrAirportCode}},  -->
+            <!-- Stop Over Duration:{{stops.segmentDuration}},  -->
+            <!-- Departure Time:{{stops.departTime}},  -->
+            <!-- Arrival Time:{{stops.arrivalTime}} -->
+          </span>
+          <div class="p-grid p-nogutter">
+            <div class="p-col">
+              <!-- Departure trip timeline -->
+              <b>Departure</b>
+              <small class="p-text-secondary">{{(trip.totalDepTime / 3600) - (trip.totalDepTime / 3600)%1}} hr {{((trip.totalDepTime % 3600) / 60) - (trip.totalDepTime % 3600 / 60)%1}} min</small>
+              <p-timeline [value]="trip.depTravelSegments">
+                <ng-template pTemplate="content" let-segment>
+                  <p>{{segment.depTime}} | {{segment.depLocation}}</p>
+                  <p>{{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</p>
+                  <!-- <p>{{segment.arrTime}} | {{segment.arrLocation}}</p> -->
+                </ng-template>
+                <ng-template pTemplate="opposite" let-segment>
+                  <p>{{segment.travelType}}</p>
+                  <!-- <i [ngClass]="event.icon"></i> -->
+                </ng-template>
+              </p-timeline>
             </div>
-
-            <!-- <p-timeline [value]="trip.departingFlight.segments" align="alternate" styleClass="customized-timeline">
-              <ng-template pTemplate="marker" let-stops>
-                <span class="custom-marker p-shadow-2">
-                  <i class="pi pi-car"></i>
-                </span>
-              </ng-template>
-              <ng-template pTemplate="content" let-stops>
-                <p-card [header]="stops.depAirportCode" [subheader]="stops.segmentDuration">
-                    hello
-                </p-card>
-              </ng-template>
-              <ng-template pTemplate="opposite" let-stops>
-                <small class="p-text-secondary">{{stops.departTime}}</small>
-              </ng-template>
-            </p-timeline> -->
-          <!-- </p-card> -->
+            <!-- Return trip timeline -->
+            <div class="p-col" *ngIf="trip.returningFlight">
+              <b>Return</b>
+              <small class="p-text-secondary">{{(trip.totalRetTime / 3600) - (trip.totalRetTime / 3600)%1}} hr {{((trip.totalRetTime % 3600) / 60) - (trip.totalRetTime % 3600 / 60)%1}} min</small>
+              <p-timeline [value]="trip.retTravelSegments">
+                <ng-template pTemplate="content" let-segment>
+                  <p>{{segment.travelType}}</p>
+                </ng-template>
+                <ng-template pTemplate="opposite" let-segment>
+                  <p>{{segment.travelType}}</p>
+                  <!-- <i [ngClass]="event.icon"></i> -->
+                </ng-template>
+              </p-timeline>
+            </div>
+          </div>
         </div>
       </td>
     </tr>
