@@ -136,11 +136,13 @@ export class flightsApi {
         for(let  i = 0; i < segments.length - 1; i++) {
             let curr = segments[i];
             let next = segments[i + 1];
-            let stopOver = new TravelSegmentSchema(this.airlineCodes[curr.carrierCode], curr.departure.iataCode, curr.arrival.iataCode, this.parseApiTimeToSeconds(curr.duration), curr.departure.at, next.arrival.at, this.calculateStopover(next.arrival.at, curr.departure.at));
+            let stopOver = new TravelSegmentSchema(this.airlineCodes[curr.carrierCode], curr.departure.iataCode, curr.arrival.iataCode, this.parseApiTimeToSeconds(curr.duration), curr.departure.at, curr.arrival.at, this.calculateStopover(curr.arrival.at, next.departure.at));
             newFlight.addSegment(stopOver);
             newFlight.addAirline(this.airlineCodes[curr.carrierCode]);
             // this.airlines.push(curr.carrierCode);
             if(i == segments.length - 2) {
+                let stopOver = new TravelSegmentSchema(this.airlineCodes[next.carrierCode], next.departure.iataCode, next.arrival.iataCode, this.parseApiTimeToSeconds(next.duration), next.departure.at, next.arrival.at, 0);
+                newFlight.addSegment(stopOver);
                 newFlight.addAirline(this.airlineCodes[next.carrierCode]);
                 // this.airlines.push(next.carrierCode);
             }

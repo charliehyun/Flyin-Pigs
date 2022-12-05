@@ -25,6 +25,9 @@ export class ResultsComponent implements OnInit {
   search: SearchSchema;
   selectedDTransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
   selectedATransport: DropdownOption = {name: 'Car', code: 'driving', icon: 'car'}; // Transportation option
+  departAdd: string = "";
+  arriveAdd: string = "";
+  bufferTime: DropdownOption = {name: '2 hr', sec: 7200}
 
   // FILTER VARS
   totalPrice: number[] = [];
@@ -149,7 +152,8 @@ export class ResultsComponent implements OnInit {
         selectedDTransport: {name: 'Car', code: 'driving', icon: 'car'},
         selectedATransport: {name: 'Car', code: 'driving', icon: 'car'},
         maxTimeStart: {name: '3 hr', sec: 10800},
-        maxTimeEnd: {name: '1 hr', sec: 3600}
+        maxTimeEnd: {name: '1 hr', sec: 3600},
+        bufferTime: {name: '2 hr', sec: 7200}
     }
     return JSON.stringify(this.search);
   }
@@ -160,11 +164,15 @@ export class ResultsComponent implements OnInit {
     this.search = JSON.parse(sessionStorage.getItem('searchParams') || this.setDefaults());
     this.selectedDTransport = this.search.selectedDTransport;
     this.selectedATransport = this.search.selectedATransport;
+    this.departAdd = this.search.departAdd;
+    this.arriveAdd = this.search.arriveAdd;
+    this.bufferTime = this.search.bufferTime;
 
     // get trip results
     this.results$ = this.resultsService.searchAirports(this.search);
     this.results$.subscribe(value => {
       // value = this.convertTimes(value);
+      value = this.updateSegments(value);
       this.trips = value.trips;
       this.filteredTrips = value.trips;
       this.displayTrips = value.trips.slice(0,this.loaded);
@@ -187,7 +195,7 @@ export class ResultsComponent implements OnInit {
       if (maxDepartTravelTime / 3600 > this.maxDepartTravelTime) {this.maxDepartTravelTime = Math.ceil(maxDepartTravelTime / 3600);}
       let maxDepartFlightTime = Math.max(...this.trips.map(trip => trip.departingFlight.flightTime));
       if (maxDepartFlightTime / 3600 > this.maxDepartFlightTime) {this.maxDepartFlightTime = Math.ceil(maxDepartFlightTime / 3600);}
-
+    
       //set max return times if there exists a return flight
       if (this.trips[0].returningFlight) {
         this.isRoundTrip = true;
@@ -199,7 +207,62 @@ export class ResultsComponent implements OnInit {
         if (maxReturnFlightTime / 3600 > this.maxReturnFlightTime) {this.maxReturnFlightTime = Math.ceil(maxReturnFlightTime / 3600);}
       }
     });
+  }
 
+  updateSegments(value: ResultInfoSchema): ResultInfoSchema {
+    value.trips.forEach(trip => {
+      trip.depTravelSegments[0].depLocation = this.departAdd;
+      if(this.bufferTime.sec) { // dumb but needed since DropdownOption.sec is optional and might be undefined
+        trip.depTravelSegments[0].waitDur = this.bufferTime.sec;
+        if(trip.depTravelSegments[1].depTime) { // WHY???
+          trip.depTravelSegments[0].arrTime = new Date(new Date(trip.depTravelSegments[1].depTime + ".000Z").getTime() - (this.bufferTime.sec * 1000)).toISOString();
+          trip.depTravelSegments[0].depTime = new Date(new Date(trip.depTravelSegments[0].arrTime).getTime() - (trip.timeToAirportA * 1000)).toISOString();
+          trip.depTravelSegments[0].arrTime = trip.depTravelSegments[0].arrTime.substring(0, trip.depTravelSegments[0].arrTime.indexOf('.'));
+          trip.depTravelSegments[0].depTime = trip.depTravelSegments[0].depTime.substring(0, trip.depTravelSegments[0].depTime.indexOf('.'));
+        }
+
+        if(trip.departingFlight.airlines[0] != "Car" && trip.departingFlight.airlines[0] != "Transit") {
+          trip.totalDepTime += this.bufferTime.sec;
+        } else if (trip.departingFlight.airlines[0] == "Car" || trip.departingFlight.airlines[0] == "Transit"){
+          trip.depTravelSegments[0].waitDur = 0;
+          trip.depTravelSegments[0].travelDuration = trip.totalDepTime;
+        }
+      }
+      trip.depTravelSegments[trip.depTravelSegments.length-2].arrLocation = this.arriveAdd;
+      trip.depTravelSegments[trip.depTravelSegments.length-1].depLocation = this.arriveAdd;
+      if(trip.departingFlight.arrivalTime) {
+        trip.depTravelSegments[trip.depTravelSegments.length-1].depTime =  new Date(new Date(trip.departingFlight.arrivalTime + ".000Z").getTime() + (trip.timeToAirportB * 1000)).toISOString();
+        trip.depTravelSegments[trip.depTravelSegments.length-1].depTime = trip.depTravelSegments[trip.depTravelSegments.length-1].depTime.substring(0, trip.depTravelSegments[trip.depTravelSegments.length-1].depTime.indexOf('.'));
+      }
+
+      // Return trip updates
+      if(trip.retTravelSegments && trip.returningFlight) {
+        trip.retTravelSegments[0].depLocation = this.arriveAdd;
+        if(this.bufferTime.sec) {
+          trip.retTravelSegments[0].waitDur = this.bufferTime.sec;
+          if(trip.retTravelSegments[1].depTime) { // WHY???
+            trip.retTravelSegments[0].arrTime = new Date(new Date(trip.retTravelSegments[1].depTime + ".000Z").getTime() - (this.bufferTime.sec * 1000)).toISOString();
+            trip.retTravelSegments[0].depTime = new Date(new Date(trip.retTravelSegments[0].arrTime).getTime() - (trip.timeToAirportB * 1000)).toISOString();
+            trip.retTravelSegments[0].arrTime = trip.retTravelSegments[0].arrTime.substring(0, trip.retTravelSegments[0].arrTime.indexOf('.'));
+            trip.retTravelSegments[0].depTime = trip.retTravelSegments[0].depTime.substring(0, trip.retTravelSegments[0].depTime.indexOf('.'));
+          }
+          
+          if(trip.totalRetTime && trip.returningFlight.airlines[0] != "Car" && trip.returningFlight.airlines[0] != "Transit") {
+            trip.totalRetTime += this.bufferTime.sec;
+          } else if(trip.totalRetTime && (trip.returningFlight.airlines[0] == "Car" || trip.returningFlight.airlines[0] == "Transit")) {
+            trip.retTravelSegments[0].waitDur = 0;
+            trip.retTravelSegments[0].travelDuration = trip.totalRetTime;
+          }
+        }
+        trip.retTravelSegments[trip.retTravelSegments.length-2].arrLocation = this.departAdd;
+        trip.retTravelSegments[trip.retTravelSegments.length-1].depLocation = this.departAdd;
+        if(trip.returningFlight.arrivalTime) {
+          trip.retTravelSegments[trip.retTravelSegments.length-1].depTime =  new Date(new Date(trip.returningFlight.arrivalTime + ".000Z").getTime() + (trip.timeToAirportA * 1000)).toISOString();
+          trip.retTravelSegments[trip.retTravelSegments.length-1].depTime = trip.retTravelSegments[trip.retTravelSegments.length-1].depTime.substring(0, trip.retTravelSegments[trip.retTravelSegments.length-1].depTime.indexOf('.'));
+        }
+      }
+    });
+    return value;
   }
 
   loadMore() {

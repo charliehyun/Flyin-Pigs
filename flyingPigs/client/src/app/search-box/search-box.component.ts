@@ -147,7 +147,8 @@ export class SearchBoxComponent implements OnInit {
             selectedDTransport: {name: 'Car', code: 'driving', icon: 'car'},
             selectedATransport: {name: 'Car', code: 'driving', icon: 'car'},
             maxTimeStart: {name: '3 hr', sec: 10800},
-            maxTimeEnd: {name: '1 hr', sec: 3600}
+            maxTimeEnd: {name: '1 hr', sec: 3600},
+            bufferTime: {name: '2 hr', sec: 7200}
         }
         return JSON.stringify(this.search);
     }
@@ -268,7 +269,8 @@ export class SearchBoxComponent implements OnInit {
                 selectedDTransport: this.selectedDTransport,
                 selectedATransport: this.selectedATransport,
                 maxTimeStart: this.maxTimeStart,
-                maxTimeEnd: this.maxTimeEnd
+                maxTimeEnd: this.maxTimeEnd,
+                bufferTime: this.bufferTime
             }
             sessionStorage.setItem('searchParams', JSON.stringify(this.search));
             this.router.navigate(['results'])
@@ -334,6 +336,7 @@ export class SearchBoxComponent implements OnInit {
         this.selectedATransport = this.search.selectedATransport;
         this.maxTimeStart = this.search.maxTimeStart;
         this.maxTimeEnd = this.search.maxTimeEnd;
+        this.bufferTime = this.search.bufferTime;
     }
 
 }

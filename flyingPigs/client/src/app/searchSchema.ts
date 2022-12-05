@@ -16,6 +16,7 @@ export interface SearchSchema {
     selectedATransport: DropdownOption;
     maxTimeStart: DropdownOption;
     maxTimeEnd: DropdownOption;
+    bufferTime: DropdownOption;
 }
 
 // option format for input dropdowns
