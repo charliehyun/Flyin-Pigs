@@ -212,7 +212,12 @@ export class ResultsComponent implements OnInit {
   updateSegments(value: ResultInfoSchema): ResultInfoSchema {
     value.trips.forEach(trip => {
       trip.depTravelSegments[0].depLocation = this.departAdd;
+      // Update transit type to what was selected
+      trip.depTravelSegments[0].travelType = this.selectedDTransport.name;
+      trip.depTravelSegments[trip.depTravelSegments.length-2].travelType = this.selectedATransport.name;
+
       if(this.bufferTime.sec) { // dumb but needed since DropdownOption.sec is optional and might be undefined
+        // Update buffer time and departing and arrival times
         trip.depTravelSegments[0].waitDur = this.bufferTime.sec;
         if(trip.depTravelSegments[1].depTime) { // WHY???
           trip.depTravelSegments[0].arrTime = new Date(new Date(trip.depTravelSegments[1].depTime + ".000Z").getTime() - (this.bufferTime.sec * 1000)).toISOString();
@@ -221,13 +226,17 @@ export class ResultsComponent implements OnInit {
           trip.depTravelSegments[0].depTime = trip.depTravelSegments[0].depTime.substring(0, trip.depTravelSegments[0].depTime.indexOf('.'));
         }
 
-        if(trip.departingFlight.airlines[0] != "Car" && trip.departingFlight.airlines[0] != "Transit") {
+        // Add buffer time to total time if not driving/transit
+        if(trip.departingFlight.airlines[0] != "Car" && trip.departingFlight.airlines[0] != "Public Transit") {
           trip.totalDepTime += this.bufferTime.sec;
-        } else if (trip.departingFlight.airlines[0] == "Car" || trip.departingFlight.airlines[0] == "Transit"){
+        } else if (trip.departingFlight.airlines[0] == "Car" || trip.departingFlight.airlines[0] == "Public Transit"){
           trip.depTravelSegments[0].waitDur = 0;
           trip.depTravelSegments[0].travelDuration = trip.totalDepTime;
+          trip.depTravelSegments[0].travelType = trip.departingFlight.airlines[0];
+          trip.depTravelSegments[trip.depTravelSegments.length-1].travelType = trip.departingFlight.airlines[0];
         }
       }
+      
       trip.depTravelSegments[trip.depTravelSegments.length-2].arrLocation = this.arriveAdd;
       trip.depTravelSegments[trip.depTravelSegments.length-1].depLocation = this.arriveAdd;
       if(trip.departingFlight.arrivalTime) {
@@ -238,7 +247,12 @@ export class ResultsComponent implements OnInit {
       // Return trip updates
       if(trip.retTravelSegments && trip.returningFlight) {
         trip.retTravelSegments[0].depLocation = this.arriveAdd;
+        // Update transit type to what was selected
+        trip.retTravelSegments[0].travelType = this.selectedATransport.name;
+        trip.retTravelSegments[trip.retTravelSegments.length-2].travelType = this.selectedDTransport.name;
+
         if(this.bufferTime.sec) {
+          // Update buffer time and departing and arrival times
           trip.retTravelSegments[0].waitDur = this.bufferTime.sec;
           if(trip.retTravelSegments[1].depTime) { // WHY???
             trip.retTravelSegments[0].arrTime = new Date(new Date(trip.retTravelSegments[1].depTime + ".000Z").getTime() - (this.bufferTime.sec * 1000)).toISOString();
@@ -247,13 +261,17 @@ export class ResultsComponent implements OnInit {
             trip.retTravelSegments[0].depTime = trip.retTravelSegments[0].depTime.substring(0, trip.retTravelSegments[0].depTime.indexOf('.'));
           }
           
-          if(trip.totalRetTime && trip.returningFlight.airlines[0] != "Car" && trip.returningFlight.airlines[0] != "Transit") {
+          // Add buffer time to total time if not driving/transit
+          if(trip.totalRetTime && trip.returningFlight.airlines[0] != "Car" && trip.returningFlight.airlines[0] != "Public Transit") {
             trip.totalRetTime += this.bufferTime.sec;
-          } else if(trip.totalRetTime && (trip.returningFlight.airlines[0] == "Car" || trip.returningFlight.airlines[0] == "Transit")) {
+          } else if(trip.totalRetTime && (trip.returningFlight.airlines[0] == "Car" || trip.returningFlight.airlines[0] == "Public Transit")) {
             trip.retTravelSegments[0].waitDur = 0;
             trip.retTravelSegments[0].travelDuration = trip.totalRetTime;
+            trip.retTravelSegments[0].travelType = trip.returningFlight.airlines[0];
+            trip.retTravelSegments[trip.retTravelSegments.length-1].travelType = trip.returningFlight.airlines[0];
           }
         }
+
         trip.retTravelSegments[trip.retTravelSegments.length-2].arrLocation = this.departAdd;
         trip.retTravelSegments[trip.retTravelSegments.length-1].depLocation = this.departAdd;
         if(trip.returningFlight.arrivalTime) {
