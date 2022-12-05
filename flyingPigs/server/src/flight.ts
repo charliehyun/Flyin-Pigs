@@ -60,12 +60,12 @@ export class TravelSegmentSchema {
     travelDuration: number;
     depTime: string;
     arrTime: string;
-    waitTime: number;   // buffer time or layover time
+    waitDur: number;   // buffer time or layover time
 
-    constructor(travelType: string, depLocation: string, arrLocation: string, travelDuration: number, depTime: string, arrTime: string, waitTime: number) {
+    constructor(travelType: string, depLocation: string, arrLocation: string, travelDuration: number, depTime: string, arrTime: string, waitDur: number) {
         this.travelDuration = travelDuration;
         this.travelType = travelType;
-        this.waitTime = waitTime;
+        this.waitDur = waitDur;
         this.depTime = depTime;
         this.arrTime = arrTime;
         this.depTime = depTime;
@@ -109,17 +109,20 @@ export class Trip {
 
     setTravelSegment() {
         // TODO: if not car, update to transit in frontend
-        // TODO: fill locations for first and last element of array
-        this.depTravelSegments.push(new TravelSegmentSchema("Car", "", this.departingFlight.departureAirport, this.timeToAirportA, "", "", -1));
+        this.depTravelSegments.push(new TravelSegmentSchema("Car", "", this.departingFlight.departureAirport, this.timeToAirportA, "", "", 0));
         this.depTravelSegments = this.depTravelSegments.concat(this.departingFlight.segments);
-        this.depTravelSegments.push(new TravelSegmentSchema("Car", this.departingFlight.arrivalAirport, "", this.timeToAirportB, "", "", 0));
-        this.depTravelSegments.push(new TravelSegmentSchema("", "", "", -1, "", "", -1));
+        this.depTravelSegments.push(new TravelSegmentSchema("Car", this.departingFlight.arrivalAirport, "", this.timeToAirportB, this.departingFlight.arrivalTime, "", 0));
+        if(this.departingFlight.airlines[0] != "Car" && this.departingFlight.airlines[0] != "Transit") {
+            this.depTravelSegments.push(new TravelSegmentSchema("", "", "", 0, "", "", 0));
+        }
 
         if(this.returningFlight) {
             this.retTravelSegments.push(new TravelSegmentSchema("Car", "", this.returningFlight.departureAirport, this.timeToAirportB, "", "", -1));
             this.retTravelSegments = this.retTravelSegments.concat(this.returningFlight.segments);
-            this.retTravelSegments.push(new TravelSegmentSchema("Car", this.returningFlight.arrivalAirport, "", this.timeToAirportA, "", "", 0));
-            this.retTravelSegments.push(new TravelSegmentSchema("", "", "", -1, "", "", -1));
+            this.retTravelSegments.push(new TravelSegmentSchema("Car", this.returningFlight.arrivalAirport, "", this.timeToAirportA, this.returningFlight.arrivalTime, "", 0));
+            if(this.returningFlight.airlines[0] != "Car" && this.returningFlight.airlines[0] != "Transit") {
+                this.retTravelSegments.push(new TravelSegmentSchema("", "", "", 0, "", "", 0));
+            }
         }
     }
 

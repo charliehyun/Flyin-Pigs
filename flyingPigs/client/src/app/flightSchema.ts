@@ -28,7 +28,7 @@ export interface TravelSegmentSchema {
     travelDuration: number;
     depTime: string;
     arrTime: string;
-    waitTime: number;   // buffer time or layover time
+    waitDur: number;   // buffer time or layover time
 }
 
 export interface TripSchema {
