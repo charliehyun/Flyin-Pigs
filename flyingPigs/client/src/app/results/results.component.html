@@ -164,6 +164,8 @@
         </span>
         <span *ngIf="trip.departingFlight.airlines.length < 2">
           <!-- <img *ngIf="trip.departingFlight.airlines == 'AA'" src="assets/images/aa-logo.png" width="40" height="40"> -->
+          <!-- <fa-icon *ngIf="selectedDTransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+          <fa-icon *ngIf="selectedDTransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon> -->
           <img *ngIf="trip.departingFlight.airlines == 'AS'" src="assets/images/alaska-logo.png" width="40" height="40">
           <img *ngIf="trip.departingFlight.airlines == 'B6'" src="assets/images/jetblue-logo.png" width="40">
           <img *ngIf="trip.departingFlight.airlines == 'DL'" src="assets/images/delta-logo.png" width="40" height="40">
