@@ -72,3 +72,20 @@ footer {
 input[type='number']{
     width: 85px;
 }
+
+table td {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.custom-marker {
+    display: flex;
+    width: 2rem;
+    height: 2rem;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: lightgray;
+    border-radius: 50%;
+    z-index: 1;
+}

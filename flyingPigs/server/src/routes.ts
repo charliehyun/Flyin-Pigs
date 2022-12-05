@@ -61,12 +61,12 @@ mongoRouter.post("/search", async (req, res) => {
             let times = await myDepFinder.getDistanceInSec(searchParams.departCoord, searchParams.arriveCoord, searchParams.selectedDTransport.code);
             let tempTrip: Trip;
             if(searchParams.isRoundTrip) {
-                tempTrip = new Trip(0, 0, 0, emptyFlight, emptyFlight, Infinity);
+                tempTrip = new Trip(0, 0, 0, emptyFlight, emptyFlight, Infinity, "0");
                 tempTrip.setTotalDepTime(times.timeTo);
                 tempTrip.setTotalRetTime(times.timeBack);
             }
             else{
-                tempTrip = new Trip(0, 0, 0, emptyFlight, undefined, Infinity);
+                tempTrip = new Trip(0, 0, 0, emptyFlight, undefined, Infinity, "0");
                 tempTrip.setTotalDepTime(times.timeTo);
             }
             trips.push(tempTrip);
@@ -82,19 +82,19 @@ mongoRouter.post("/search", async (req, res) => {
             let tempTrip1: Trip;
             let tempTrip2: Trip;
             if(searchParams.isRoundTrip) {
-                tempTrip1 = new Trip(0, 0, 0, emptyFlight1, emptyFlight1, Infinity);
+                tempTrip1 = new Trip(0, 0, 0, emptyFlight1, emptyFlight1, Infinity, "-1");
                 tempTrip1.setTotalDepTime(times1.timeTo);
                 tempTrip1.setTotalRetTime(times1.timeBack);
 
-                tempTrip2 = new Trip(0, 0, 0, emptyFlight2, emptyFlight2, Infinity);
+                tempTrip2 = new Trip(0, 0, 0, emptyFlight2, emptyFlight2, Infinity, "0");
                 tempTrip2.setTotalDepTime(times2.timeTo);
                 tempTrip2.setTotalRetTime(times2.timeBack);
             }
             else{
-                tempTrip1 = new Trip(0, 0, 0, emptyFlight1, undefined, Infinity);
+                tempTrip1 = new Trip(0, 0, 0, emptyFlight1, undefined, Infinity, "-1");
                 tempTrip1.setTotalDepTime(times1.timeTo);
 
-                tempTrip2 = new Trip(0, 0, 0, emptyFlight2, undefined, Infinity);
+                tempTrip2 = new Trip(0, 0, 0, emptyFlight2, undefined, Infinity, "0");
                 tempTrip2.setTotalDepTime(times2.timeTo);
             }
             trips.push(tempTrip1);    
@@ -274,17 +274,14 @@ mongoRouter.post("/submitForgotPassword", (req, res) =>
 
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
-                //     //put credentials into an .env file later and include it in .gitignore
-                // user: `${process.env.EMAIL_ADDRESSS}`,
-                // pass: `${process.env.EMAIL_PASSWORD}`,
                 auth: {
-                    user: 'flyinpigs407@gmail.com',
-                    pass: 'gseexbubldnyjdvu'
+                    user: process.env.EMAIL_ADDRESSS,
+                    pass: process.env.EMAIL_PASSWORD,
                 }
             });
                 
             var mailOptions = {
-                from: 'flyinpigs407@gmail.com',
+                from: process.env.EMAIL_ADDRESSS,
                 to: req.body.email,
                 subject: `Password Reset Link`,
                 text: `click the link below to change your password:\n\nhttp://localhost:4200/reset-password?token=${token}`,
@@ -307,13 +304,13 @@ mongoRouter.post("/submitForgotPassword", (req, res) =>
             //     // user: `${process.env.EMAIL_ADDRESSS}`,
             //     // pass: `${process.env.EMAIL_PASSWORD}`,
             //     auth: {
-            //         user: "flyinpigs407@gmail.com",
-            //         pass: "BrickHouse407",
+            //         user: "",
+            //         pass: "",
             //     }
             // });
 
             // const mailOptions = {
-            //     from: `flyinpigs407@gmail.com`,
+            //     from: ``,
             //     to: req.body.email,
             //     subject: `Password Reset Link`,
             //     text: `click the link below to change your password:\n\nhttp://localhost:3000/reset/${token}`,
@@ -362,13 +359,13 @@ mongoRouter.post("/autoReply", (req, res) =>
         // user: `${process.env.EMAIL_ADDRESSS}`,
         // pass: `${process.env.EMAIL_PASSWORD}`,
         auth: {
-            user: 'flyinpigs407@gmail.com',
-            pass: 'gseexbubldnyjdvu'
+            user: process.env.EMAIL_ADDRESSS,
+            pass: process.env.EMAIL_PASSWORD
         }
     });
         
     var mailOptions = {
-        from: 'flyinpigs407@gmail.com',
+        from: process.env.EMAIL_ADDRESSS,
         to: req.body.email,
         subject: `Flyin' Pigs Response to your Inquiry (Case #${caseId})`,
         text: messages[type],
@@ -397,13 +394,13 @@ mongoRouter.post("/feedback", (req, res) =>
         // user: `${process.env.EMAIL_ADDRESSS}`,
         // pass: `${process.env.EMAIL_PASSWORD}`,
         auth: {
-            user: 'flyinpigs407@gmail.com',
-            pass: 'gseexbubldnyjdvu'
+            user: process.env.EMAIL_ADDRESSS,
+            pass: process.env.EMAIL_PASSWORD
         }
     });
         
     var mailOptions = {
-        from: 'flyinpigs407@gmail.com',
+        from: process.env.EMAIL_ADDRESSS,
         to: 'flyinpigs407+' + type + '@gmail.com',
         subject: `Inquiry (Case #${caseId})`,
         text: req.body.email + '\n' + req.body.text,
