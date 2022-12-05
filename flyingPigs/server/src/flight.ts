@@ -112,7 +112,7 @@ export class Trip {
         this.depTravelSegments.push(new TravelSegmentSchema("Car", "", this.departingFlight.departureAirport, this.timeToAirportA, "", "", 0));
         this.depTravelSegments = this.depTravelSegments.concat(this.departingFlight.segments);
         this.depTravelSegments.push(new TravelSegmentSchema("Car", this.departingFlight.arrivalAirport, "", this.timeToAirportB, this.departingFlight.arrivalTime, "", 0));
-        if(this.departingFlight.airlines[0] != "Car" && this.departingFlight.airlines[0] != "Transit") {
+        if(this.departingFlight.airlines[0] != "Car" && this.departingFlight.airlines[0] != "Public Transit") {
             this.depTravelSegments.push(new TravelSegmentSchema("", "", "", 0, "", "", 0));
         }
 
@@ -120,7 +120,7 @@ export class Trip {
             this.retTravelSegments.push(new TravelSegmentSchema("Car", "", this.returningFlight.departureAirport, this.timeToAirportB, "", "", -1));
             this.retTravelSegments = this.retTravelSegments.concat(this.returningFlight.segments);
             this.retTravelSegments.push(new TravelSegmentSchema("Car", this.returningFlight.arrivalAirport, "", this.timeToAirportA, this.returningFlight.arrivalTime, "", 0));
-            if(this.returningFlight.airlines[0] != "Car" && this.returningFlight.airlines[0] != "Transit") {
+            if(this.returningFlight.airlines[0] != "Car" && this.returningFlight.airlines[0] != "Public Transit") {
                 this.retTravelSegments.push(new TravelSegmentSchema("", "", "", 0, "", "", 0));
             }
         }
