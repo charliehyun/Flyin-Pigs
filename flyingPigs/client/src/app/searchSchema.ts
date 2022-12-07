@@ -8,6 +8,7 @@ export interface SearchSchema {
     totalPass: number;
     departDate: string;
     returnDate: string;
+    dateRange?: string[];
     departAdd: string;
     departCoord: google.maps.LatLng;
     arriveAdd: string;
