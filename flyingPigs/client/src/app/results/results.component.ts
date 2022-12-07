@@ -61,6 +61,8 @@ export class ResultsComponent implements OnInit {
   airports: any[];
   airlineTags: string[] = ['AA', 'AS', 'B6', 'DL', 'F9', 'HA', 'NK', 'UA', 'WN'];
 
+  trackPrices: boolean = false;
+
   // RESULTS VARS
   results$: Observable<ResultInfoSchema> = new Observable();  // original results returned from backend
   trips:TripSchema[]; // original results returned from backend but not async:)

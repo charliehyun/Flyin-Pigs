@@ -136,8 +136,14 @@
 </p-card>
 
 <!-- RESULTS -->
-<div>
-  <h4>Results</h4>
+<div class="resultsHeader">
+  <div class="results">
+    <h4>Results</h4>
+  </div>
+  <div class="tracked-trips">
+    Track Prices
+    <p-inputSwitch [(ngModel)]="trackPrices"></p-inputSwitch>
+  </div>
 </div>
 
 <!-- Table -->

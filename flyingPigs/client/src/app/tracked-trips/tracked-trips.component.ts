@@ -10,6 +10,7 @@ import { Router } from "@angular/router";
   export class TrackedTripsComponent {
     email: string;
     comments: string;
+    emailNotifications: boolean = false;
   
     constructor( private router: Router) {
   
