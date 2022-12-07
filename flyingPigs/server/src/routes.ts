@@ -32,7 +32,6 @@ mongoRouter.get("/", async (_req, res) => {
 mongoRouter.post("/search", async (req, res) => {
     try {
         let searchParams = req.body;
-
         let tripList:Trip[] = [];
         let resultInfo: ResultInfo = {
             airlines: [],
@@ -108,10 +107,19 @@ mongoRouter.post("/search", async (req, res) => {
                     resultInfo.arrAirports.push(arrAirportArray[j].IATA);
                 }
                 if(depAirportArray[i].IATA !== arrAirportArray[j].IATA){
-                    let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate, 
-                        searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
-                        depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
-                    trips.push(myFlightApi.queryApi());
+                    if(searchParams.dateRange) {
+                        let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate,
+                            searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
+                            depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"], searchParams.dateRange);
+                        trips.push(myFlightApi.queryApiExplore());
+                    }
+                    else {
+                        let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate,
+                            searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
+                            depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
+                        trips.push(myFlightApi.queryApi());
+                    }
+
                 }
             }
         }

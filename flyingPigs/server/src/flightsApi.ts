@@ -26,9 +26,10 @@ export class flightsApi {
     logger:log4js.Logger;
     stackedAirlines: string[];
     airlineCodes = {};
+    dateRange:string[];
 
     constructor(departure:string, arrival:string, departureDate:string, arrivalDate:string,
-    adults:number, children:number, infants:number, cabin:string, oneway:boolean, timeToAirportA:number, timeToAirportB:number)
+    adults:number, children:number, infants:number, cabin:string, oneway:boolean, timeToAirportA:number, timeToAirportB:number, dateRange?:string[])
     {
         this.departureAirport = departure;
         this.arrivalAirport = arrival;
@@ -44,6 +45,25 @@ export class flightsApi {
             this.oneWayRoundTrip = "roundtrip";
         }
         this.logger = log4js.getLogger();
+        if (dateRange) {
+            this.dateRange = dateRange;
+        }
+    }
+    async queryApiExplore() {
+        let logger = this.logger;
+        let returnTripObjects: Trip[] = [];
+
+        this.logger.info("explore date range.")
+        let dateRangeString = this.dateRange[0] + "," + this.dateRange[1];
+        logger.info("date string: ", dateRangeString);
+        await this.amadeus.shopping.flightDates.get({
+            origin: 'LAS',
+            destination: 'LAX',
+            departureDate: dateRangeString
+        }).then((response:any) => {
+            logger.info("API EXPLORE RESPONSE:", response);
+            //returnTripObjects = this.parseApi(response.data);
+        }).catch((error:any) => logger.warn(error))
     }
     async queryApi() {
         let logger = this.logger;

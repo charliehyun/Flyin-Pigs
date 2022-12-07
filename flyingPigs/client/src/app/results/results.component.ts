@@ -169,6 +169,7 @@ export class ResultsComponent implements OnInit {
     this.bufferTime = this.search.bufferTime;
 
     // get trip results
+    //check to see if its explore
     this.results$ = this.resultsService.searchAirports(this.search);
     this.results$.subscribe(value => {
       // value = this.convertTimes(value);

@@ -252,7 +252,7 @@ export class SearchBoxComponent implements OnInit {
 
         // if valid, create search object and route to results
         // else, alert
-        if(route) {
+        if(route && !this.explore) {
             this.search = {
                 selectedClass: this.selectedClass,
                 isRoundTrip: this.isRoundTrip,
@@ -262,6 +262,29 @@ export class SearchBoxComponent implements OnInit {
                 totalPass: this.totalPass,
                 departDate: this.departDate.toISOString().split("T")[0],
                 returnDate: this.isRoundTrip ? this.returnDate.toISOString().split("T")[0] : "",
+                departAdd: this.departAdd,
+                departCoord: departureCoord,
+                arriveAdd: this.arriveAdd,
+                arriveCoord: arrivalCoord,
+                selectedDTransport: this.selectedDTransport,
+                selectedATransport: this.selectedATransport,
+                maxTimeStart: this.maxTimeStart,
+                maxTimeEnd: this.maxTimeEnd,
+                bufferTime: this.bufferTime
+            }
+            sessionStorage.setItem('searchParams', JSON.stringify(this.search));
+            this.router.navigate(['results'])
+        } else if (route && this.explore) { //this is the explore page, pass it date range.
+            this.search = {
+                selectedClass: this.selectedClass,
+                isRoundTrip: false,
+                adultPass: this.adultPass,
+                childPass: this.childPass,
+                infantPass: this.infantPass,
+                totalPass: this.totalPass,
+                departDate: "",
+                returnDate: "",
+                dateRange: this.dateRange.map(date => date.toISOString().split("T")[0]),
                 departAdd: this.departAdd,
                 departCoord: departureCoord,
                 arriveAdd: this.arriveAdd,
