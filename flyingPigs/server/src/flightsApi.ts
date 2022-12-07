@@ -49,21 +49,33 @@ export class flightsApi {
             this.dateRange = dateRange;
         }
     }
-    async queryApiExplore() {
-        let logger = this.logger;
-        let returnTripObjects: Trip[] = [];
 
-        this.logger.info("explore date range.")
+    //TODO: Make this method NOT hardcoded for LAS and LAX, and support roundtrip.
+    //Also make it loop through X number of cheapest prices and return X dates.
+    async getCheapestDates() {
+        let logger = this.logger;
+        let returnDate: string = ""; //REFACTOR TO ARRAY
+
         let dateRangeString = this.dateRange[0] + "," + this.dateRange[1];
-        logger.info("date string: ", dateRangeString);
         await this.amadeus.shopping.flightDates.get({
-            origin: 'LAS',
-            destination: 'LAX',
-            departureDate: dateRangeString
+            origin: this.departureAirport,
+            destination: this.arrivalAirport,
+            departureDate: dateRangeString,
+            oneWay: true
         }).then((response:any) => {
-            logger.info("API EXPLORE RESPONSE:", response);
-            //returnTripObjects = this.parseApi(response.data);
-        }).catch((error:any) => logger.warn(error))
+            //just grab the date from the first one.
+            let smallestPrice = Number.MAX_SAFE_INTEGER;
+            response.result.data.forEach(date => {
+                if (date.price.total < smallestPrice) {
+                    smallestPrice = date.price.total;
+                    returnDate = date.links.flightOffers;
+                }
+            });
+            //parse out datestring.
+            //string looks like https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=LAS&destinationLocationCode=LAX&departureDate=2022-12-15&adults=1&nonStop=false
+            returnDate = returnDate.split("&")[2].split("=")[1];
+        }).catch((error:any) => logger.warn("not in the test set."))
+        return returnDate;
     }
     async queryApi() {
         let logger = this.logger;
