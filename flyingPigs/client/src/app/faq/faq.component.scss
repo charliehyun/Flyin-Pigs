@@ -6,3 +6,21 @@ footer {
   text-align: center;
   padding: 3px;
 }
+
+.custom-marker {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFB6C1;
+  
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.steps {
+  display: inline-block;
+  vertical-align: middle;
+  
+}

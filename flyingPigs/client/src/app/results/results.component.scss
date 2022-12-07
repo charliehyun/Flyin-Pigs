@@ -89,3 +89,22 @@ table td {
     border-radius: 50%;
     z-index: 1;
 }
+
+.tracked-trips {
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    float: right;
+    display: inline-block;
+}
+
+.resultsHeader {
+    //display: inline;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+.results {
+    display: inline-block;
+}
