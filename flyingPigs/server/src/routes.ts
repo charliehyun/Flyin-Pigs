@@ -18,7 +18,7 @@ const nodemailer = require('nodemailer');
 const { expressjwt: jwt } = require("express-jwt");
 
 let auth = jwt({ 
-    secret: `${ process.env.MY_SECRET }`, 
+    secret: String(process.env.MY_SECRET), 
     algorithms: ["HS256"], 
     userProperty: 'payload'
 });
