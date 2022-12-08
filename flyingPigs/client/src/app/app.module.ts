@@ -47,6 +47,8 @@ import {TabViewModule} from 'primeng/tabview';
 import { CalendarModule } from 'primeng/calendar';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {InputTextareaModule} from 'primeng/inputtextarea';
+import { TrackedTripsComponent } from './tracked-trips/tracked-trips.component';
+import { AccountComponent } from './account/account.component';
 import { TimelineModule } from 'primeng/timeline';
 
 @NgModule({
@@ -60,7 +62,9 @@ import { TimelineModule } from 'primeng/timeline';
     FAQComponent,
     FeedbackComponent,
     PageNotFoundComponent,
-    SearchBoxComponent
+    SearchBoxComponent,
+    TrackedTripsComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,

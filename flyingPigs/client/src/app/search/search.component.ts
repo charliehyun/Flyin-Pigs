@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
+import {PrimeIcons} from 'primeng/api';
 @Component({
   selector: 'search',
   templateUrl: './search.component.html',
@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 
 export class SearchComponent {
-
+  
   constructor() {
 
   }
