@@ -48,6 +48,7 @@ import { CalendarModule } from 'primeng/calendar';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import { TimelineModule } from 'primeng/timeline';
+import { UserMenuComponent } from './user-menu/user-menu.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { TimelineModule } from 'primeng/timeline';
     FAQComponent,
     FeedbackComponent,
     PageNotFoundComponent,
-    SearchBoxComponent
+    SearchBoxComponent,
+    UserMenuComponent
   ],
   imports: [
     BrowserModule,
