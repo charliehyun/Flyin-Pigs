@@ -89,7 +89,7 @@ export class LoginSignupComponent {
     // }
 
     // handle login attempt. account validation
-    async handleLogin() {
+    handleLogin() {
         this.resetValidity();
 
         if(!this.emailL) {
@@ -148,7 +148,7 @@ export class LoginSignupComponent {
         this.resetValidity()
         // check if all fields are populated
         let invalid = false;
-        if(!this.emailS) {
+        if(!this.emailS || !(/^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$/.test(this.emailS))) {
             const x = document.getElementById('emailS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')

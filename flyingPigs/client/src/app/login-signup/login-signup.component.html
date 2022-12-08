@@ -21,7 +21,7 @@
 <button *ngIf="!loggedIn" pButton type="button" class="p-button-sm p-button-secondary" (click)="showSignup()" label="Sign Up"></button>
 <p-dialog header="Sign Up" [(visible)]="displaySignup" [modal]="true" [style]="{width: '450px'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <h6>Email</h6>
-    <input pInputText type="email" id="emailS" [(ngModel)]="emailS">
+    <input pInputText type="email" id="emailS" [(ngModel)]="emailS" email>
 
     <h6><br>Password
         <i class="pi pi-info-circle" style="white-space: pre-line" 
