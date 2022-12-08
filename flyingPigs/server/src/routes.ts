@@ -38,7 +38,6 @@ mongoRouter.get("/", async (_req, res) => {
 mongoRouter.post("/search", async (req, res) => {
     try {
         let searchParams = req.body;
-
         let tripList:Trip[] = [];
         let resultInfo: ResultInfo = {
             airlines: [],
@@ -114,10 +113,28 @@ mongoRouter.post("/search", async (req, res) => {
                     resultInfo.arrAirports.push(arrAirportArray[j].IATA);
                 }
                 if(depAirportArray[i].IATA !== arrAirportArray[j].IATA){
-                    let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate, 
-                        searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
-                        depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
-                    trips.push(myFlightApi.queryApi());
+                    if(searchParams.dateRange) {
+                        logger.info("airports going: ", depAirportArray[i].IATA, " ", arrAirportArray[j].IATA);
+                        //get the date of cheapest flight.
+                        let myCheapestDateApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate,
+                            searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
+                            depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"], searchParams.dateRange);
+                        let departDate = await myCheapestDateApi.getCheapestDates();
+                        //now with new departDate!
+                        if (departDate != "") {
+                            let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, departDate, searchParams.returnDate,
+                                searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, false,
+                                depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
+                            trips.push(myFlightApi.queryApi());
+                        }
+                    }
+                    else {
+                        let myFlightApi = new flightsApi(depAirportArray[i].IATA, arrAirportArray[j].IATA, searchParams.departDate, searchParams.returnDate,
+                            searchParams.adultPass, searchParams.childPass, searchParams.infantPass, searchParams.selectedClass.code, !searchParams.isRoundTrip,
+                            depAirportArray[i]["TravelTime"], arrAirportArray[j]["TravelTime"]);
+                        trips.push(myFlightApi.queryApi());
+                    }
+
                 }
             }
         }

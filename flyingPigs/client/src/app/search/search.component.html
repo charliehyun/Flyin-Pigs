@@ -18,6 +18,26 @@
   </p-tabPanel>
 </p-tabView>
 
+<p-card header="Get Started" subheader="If you are just browsing prices for a future trip, click on the Explore Tab to get started. If you have a specific trip in mind, use the Search Trips tab to search for trips." [style]="{'margin': '0px'}" styleClass="p-shadow-3">
+  <div align="left" class="steps">
+    <span class="custom-marker shadow-2" backgroundColor="#FFB6C1">
+      <i class="pi pi-pencil"></i>
+    </span>
+    Enter your trip information into the fields above.
+    <br>
+    <span class="custom-marker shadow-2" backgroundColor="#FFB6C1">
+      <i class="pi pi-search"></i>
+    </span>
+    Click the Search button to find your available trips! 
+    <br>
+    <span class="custom-marker shadow-2" backgroundColor="#FFB6C1">
+      <i class="pi pi-filter"></i>
+    </span>
+    If you want to further filter your trips, use the available filters and click Filter to see the trips that match your criteria. <br>
+  </div>
+</p-card>
+
+
 <footer>
   <p-button label="Search" styleClass="p-button-link" icon="pi pi-search" routerLink="/search"></p-button>
   <p-button label="FAQ" styleClass="p-button-link" icon="pi pi-question-circle" routerLink="/faq"></p-button>

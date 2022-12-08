@@ -8,6 +8,30 @@
 
 <!-- FAQ ACCORDION -->
 <p-accordion [multiple]="true" >
+  <p-accordionTab header="Why was Flyin' Pigs created?">
+    Flyin' Pigs was created by Charlie Hyun, Mark, Sarah Mi, and Jessica Yeh for their 2022 Senior Design Project (CS 407) at Purdue University.
+    It was created to help users plan trips more efficiently with the ability to start and end their trips from local addresses to check out more airports.
+  </p-accordionTab>
+  <p-accordionTab header="How do you use the service?">
+    If you are just browsing prices for a future trip, click on the Explore Tab to get started.
+    If you have a specific trip in mind, use the Search Trips tab to search for trips.
+    <div align="left" class="steps">
+      <span class="custom-marker shadow-2" backgroundColor="#FFB6C1">
+        <i class="pi pi-pencil"></i>
+      </span>
+      Enter your trip information into the fields above.
+      <br>
+      <span class="custom-marker shadow-2" backgroundColor="#FFB6C1">
+        <i class="pi pi-search"></i>
+      </span>
+      Click the Search button to find your available trips! 
+      <br>
+      <span class="custom-marker shadow-2" backgroundColor="#FFB6C1">
+        <i class="pi pi-filter"></i>
+      </span>
+      If you want to further filter your trips, use the available filters and click Filter to see the trips that match your criteria. <br>
+    </div>
+  </p-accordionTab>
   <p-accordionTab header="Why are there no flights with American Airlines?">
       The<a target="_blank" rel="noopener noreferrer" href="https://developers.amadeus.com/self-service/category/air/api-doc/flight-offers-search">API</a>we use to get the flight data does not support American Airlines at this time.
   </p-accordionTab>

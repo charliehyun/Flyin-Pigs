@@ -8,6 +8,7 @@ export interface SearchSchema {
     totalPass: number;
     departDate: string;
     returnDate: string;
+    dateRange?: string[];
     departAdd: string;
     departCoord: google.maps.LatLng;
     arriveAdd: string;
@@ -16,6 +17,7 @@ export interface SearchSchema {
     selectedATransport: DropdownOption;
     maxTimeStart: DropdownOption;
     maxTimeEnd: DropdownOption;
+    bufferTime: DropdownOption;
 }
 
 // option format for input dropdowns

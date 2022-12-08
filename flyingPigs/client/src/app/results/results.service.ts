@@ -23,6 +23,9 @@ export class ResultsService {
         return this.trips$;
     }
 
+
+    //make new api call here.
+
     // clearAirports(): Subject<TripSchema[]> {
     //     this.trips$ = new Subject();
     //     return this.trips$;

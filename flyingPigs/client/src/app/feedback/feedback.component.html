@@ -14,9 +14,9 @@
     <!-- Email -->
     <h6><br>Email</h6>
     <p *ngIf="auth.isLoggedIn()">{{auth.getUserDetails()?.email}}</p>
-    <input *ngIf="!auth.isLoggedIn()" pInputText type="text" id="email" name="email" size="51" [(ngModel)]="email">
+    <input *ngIf="!auth.isLoggedIn()" pInputText type="text" id="email" name="email" size="51%" [(ngModel)]="email">
     <h6><br>Comments</h6>
-    <textarea pInputTextarea rows="5" cols="50" [(ngModel)]="comments"></textarea>
+    <textarea pInputTextarea rows="5" cols="50" size="50%" [(ngModel)]="comments"></textarea>
     <br>
     <button pButton pRipple type="button" (click)="handleFeedback()" label="Contact Us"></button>
     <br>

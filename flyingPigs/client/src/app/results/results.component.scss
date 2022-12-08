@@ -77,3 +77,34 @@ table td {
     padding-left: 15px;
     padding-right: 15px;
 }
+
+.custom-marker {
+    display: flex;
+    width: 2rem;
+    height: 2rem;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: lightgray;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.tracked-trips {
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    float: right;
+    display: inline-block;
+}
+
+.resultsHeader {
+    //display: inline;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+.results {
+    display: inline-block;
+}

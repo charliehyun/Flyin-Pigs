@@ -47,6 +47,8 @@ import {TabViewModule} from 'primeng/tabview';
 import { CalendarModule } from 'primeng/calendar';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {InputTextareaModule} from 'primeng/inputtextarea';
+import { TrackedTripsComponent } from './tracked-trips/tracked-trips.component';
+import { AccountComponent } from './account/account.component';
 import { TimelineModule } from 'primeng/timeline';
 import { UserMenuComponent } from './user-menu/user-menu.component';
 
@@ -62,7 +64,9 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
     FeedbackComponent,
     PageNotFoundComponent,
     SearchBoxComponent,
-    UserMenuComponent
+    UserMenuComponent,
+    TrackedTripsComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
