@@ -50,6 +50,7 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import { TrackedTripsComponent } from './tracked-trips/tracked-trips.component';
 import { AccountComponent } from './account/account.component';
 import { TimelineModule } from 'primeng/timeline';
+import { UserMenuComponent } from './user-menu/user-menu.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { TimelineModule } from 'primeng/timeline';
     FeedbackComponent,
     PageNotFoundComponent,
     SearchBoxComponent,
+    UserMenuComponent,
     TrackedTripsComponent,
     AccountComponent
   ],
