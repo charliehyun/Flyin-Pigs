@@ -4,7 +4,7 @@
 <button *ngIf="!loggedIn" pButton type="button" class="p-button-sm" (click)="showLogin()" label="Log In"></button>
 <p-dialog header="Log In" [(visible)]="displayLogin" [modal]="true" [style]="{width: '450px'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <h6>Email</h6>
-    <input pInputText type="email" id="emailL" [(ngModel)]="emailL">
+    <input pInputText type="email" id="emailL" [(ngModel)]="emailL" email>
 
     <h6><br>Password</h6>
     <p-password [(ngModel)]="passL" [toggleMask]="true" [feedback]="false" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-password>
