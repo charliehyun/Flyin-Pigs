@@ -81,12 +81,12 @@ export class LoginSignupComponent {
     }
 
     // handle log out
-    async handleLogOut() {
-        this.resetValidity();
-        this.currentUser = "";
-        this.loggedIn = false;
-        sessionStorage.removeItem("flyinPigsCurrentUser");
-    }
+    // async handleLogOut() {
+    //     this.resetValidity();
+    //     this.currentUser = "";
+    //     this.loggedIn = false;
+    //     sessionStorage.removeItem("flyinPigsCurrentUser");
+    // }
 
     // handle login attempt. account validation
     async handleLogin() {
