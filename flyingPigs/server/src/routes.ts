@@ -15,8 +15,14 @@ var logger = log4js.getLogger();
 var Credentials = require("./credentials");
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const { expressjwt: jwt } = require("express-jwt");
 
+// var auth = jwt({
+//   secret: process.env.MY_SECRET,
+//   userProperty: 'payload'
+// });
 
+// let auth = jwt({ secret: process.env.MY_SECRET, userProperty: 'payload' });
 mongoRouter.get("/", async (_req, res) => {
     try {
         //let airportsCollection = mongoose.model('Airport');
@@ -169,43 +175,82 @@ mongoRouter.post("/log", async (req, res) => {
     logger.info("clientside file " + filename + " " + msg + " line " + lineNumber + " col " + columnNumber);
 });
 
+// mongoRouter.get("/profile", jwt({ secret: process.env.MY_SECRET, userProperty: 'payload' }), async(req, res) => {
+//   // If no user ID exists in the JWT return a 401
+//   if (!req['payload']._id) {
+//     res.status(401).json({
+//       "message" : "UnauthorizedError: private profile"
+//     });
+//   } else {
+//     // Otherwise continue
+//     Credentials
+//       .findById(req['payload']._id)
+//       .exec(function(err, user) {
+//         res.status(200).json(user);
+//       });
+//   }
+// });
+
 mongoRouter.post("/login", async (req, res) => {
     let cred = await Credentials.findOne({email: req.body.email});
     // if email exists in DB, check if passwords match
     if(cred) {
-        bcrypt.compare(req.body.password, cred["password"]).then(
-            passwordMatch => passwordMatch ? res.status(200).send(true): res.status(200).send(false)
-        );
+        // bcrypt.compare(req.body.password, cred["password"]).then(
+        //     passwordMatch => passwordMatch ? res.status(200).send(true): res.status(200).send(false)
+        // );
+        bcrypt.compare(req.body.password, cred["password"]).then(function(result) {
+            if(result == true) {
+                let tok;
+                tok = cred.generateJwt();
+                res.status(200).send({success: true, token: tok, message: "Log in successful"});
+            }
+            else {
+                res.status(200).send({success: false, message: 'Log in failure: passwords do not match'});
+            }
+        });
     } else {
         logger.info("Log in failure: user does not exist");
-        res.status(200).send(false);
+        res.status(200).send({success: false, message: 'Log in failure: user does not exist'});
     }
 });
-
+mongoRouter.post("/signout", async (req, res) => {
+    try {
+        req.body.session = null;
+        return res.status(200).send({ message: "You've been signed out!" });
+      } catch (err) {
+      }
+});
 mongoRouter.post("/signup", async (req, res) => {
     const saltRounds = 10;
     let cred = await Credentials.findOne({email: req.body.email});
     // if email doesnt already exist, hash pass and add to DB
     if(!cred) {
-        const newUser = new Credentials({
-            _id: new ObjectId(),
-            email: req.body.email,
-            password: req.body.password
-        });
         bcrypt.genSalt(saltRounds, function(err, salt) {
             bcrypt.hash(req.body.password, salt, function(err, hash) {
-                newUser.password = hash;
+                const newUser = new Credentials({
+                    _id: new ObjectId(),
+                    email: req.body.email,
+                    password: hash,
+                });
                 newUser.save()
                 if(!err) {
-                    res.status(200).send(true)
+                    let tok;
+                    tok = newUser.generateJwt();
+                    res.status(200).send({success: true, token: tok, message: "Signup successful"});
+                    // res.status(200).send(true)
                 } else {
-                    res.status(200).send(false)
+                    // TODO: change status and delete user if register fails
+                    res.status(200).send({success: false, message: "sign up error during bcrypt"})
                 }
             });
+            if(err) {
+                // TODO: change status
+                res.status(200).send({success: false, message: "sign up error during bcrypt"})
+            }
         });
     } else {
         logger.info("Sign up failure: user already exists");
-        res.status(200).send(false);
+        res.status(200).send({success:false, message: "Sign up failure: user already exists"});
     }
 
 });

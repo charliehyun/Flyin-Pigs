@@ -12,6 +12,7 @@ import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import { Time } from '@angular/common';
 import { PrimeIcons } from "primeng/api";
 import { MessageService } from 'primeng/api';
+import { AuthenticationService } from '../login-signup/authentication.service';
 
 @Component({
   selector: 'results',
@@ -73,7 +74,7 @@ export class ResultsComponent implements OnInit {
 
   events1: any[];
    
-  constructor(private messageService:MessageService, private resultsService: ResultsService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
+  constructor( public auth: AuthenticationService, private messageService:MessageService, private resultsService: ResultsService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
     this.stops = [
       {name: 'Any number of stops', key: 'all'},
       {name: 'Nonstop only', key: 'none'},

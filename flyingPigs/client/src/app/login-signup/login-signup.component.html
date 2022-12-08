@@ -44,8 +44,3 @@
         <button pButton type="button" (click)="handleSignup()" class="p-button-sm" label="Sign Up" icon="pi pi-sign-in"></button>
     </ng-template>
 </p-dialog>
-
-<!-- Show if logged in -->
-<!-- <p-menu #menu [popup]="true" [model]="userOptionsMenu"></p-menu> -->
-<button *ngIf="loggedIn" pButton type="button" icon="pi pi-user" class="p-button-rounded p-button-secondary"></button>
-<button *ngIf="loggedIn" pButton type="button" (click)="handleLogOut()" class="p-button-sm" label="Log Out"></button>

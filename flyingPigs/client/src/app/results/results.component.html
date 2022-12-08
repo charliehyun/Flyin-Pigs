@@ -1,4 +1,5 @@
-<login-signup style="position: absolute; right: 0px;"></login-signup>
+<login-signup *ngIf="!auth.isLoggedIn()" style="position: absolute; right: 0px;"></login-signup>
+<user-menu *ngIf="auth.isLoggedIn()" style="position: absolute; right: 0px;"></user-menu>
 <img src="assets/images/BOTTOM_CROPPED_LOGO.png" alt="Flyin' Pigs" routerLink="/search" width="8%" [style]="{cursor:'pointer'}">
 <h2>Flights</h2>
 <!-- SEARCH -->

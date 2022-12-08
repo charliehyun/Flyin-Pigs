@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import {Message, MessageService} from 'primeng/api';
 import { ForgotPasswordService } from './forgot-password.service';
 import {NGXLogger} from "ngx-logger";
+import { AuthenticationService } from '../login-signup/authentication.service';
 
 @Component({
   selector: 'forgot-password',
@@ -15,7 +16,7 @@ export class ForgotPasswordComponent {
   email: string;
   service: any;
 
-  constructor(private messageService: MessageService, private forgotPasswordService: ForgotPasswordService, private logger: NGXLogger) {
+  constructor( public auth: AuthenticationService, private messageService: MessageService, private forgotPasswordService: ForgotPasswordService, private logger: NGXLogger) {
 
   }
 

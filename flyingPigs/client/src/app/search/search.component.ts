@@ -1,3 +1,4 @@
+import { AuthenticationService } from '../login-signup/authentication.service';
 import { Component, OnInit } from '@angular/core';
 import {PrimeIcons} from 'primeng/api';
 @Component({
@@ -7,8 +8,8 @@ import {PrimeIcons} from 'primeng/api';
 })
 
 export class SearchComponent {
-  
-  constructor() {
+
+  constructor( public auth: AuthenticationService ) {
 
   }
 
