@@ -328,8 +328,8 @@ export class SearchBoxComponent implements OnInit {
         this.infantPass = this.search.infantPass;
         this.totalPass = this.search.totalPass;
         // this.departDate = new Date(this.search.departDate);
-        this.departDate = (new Date(this.search.departDate) > this.date) ? new Date(this.search.departDate) : new Date();
-        this.returnDate = (this.search.returnDate != "") ? new Date(this.search.returnDate) : new Date();
+        this.departDate = (new Date(this.search.departDate.replace(/-/g, '/')) > this.date) ? new Date(this.search.departDate.replace(/-/g, '/')) : new Date();
+        this.returnDate = (this.search.returnDate != "" && new Date(this.search.returnDate.replace(/-/g, '/')) > this.date) ? new Date(this.search.returnDate.replace(/-/g, '/')) : new Date();
         this.departAdd = this.search.departAdd;
         this.arriveAdd = this.search.arriveAdd;
         this.selectedDTransport = this.search.selectedDTransport;

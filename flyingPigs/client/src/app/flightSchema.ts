@@ -10,6 +10,8 @@ export interface FlightSchema {
     segments: TravelSegmentSchema[];
     // timeToAirport:number;
     // timeFromAirport:number;
+    displayDepartureTime: [string, string];
+    displayArrivalTime: [string, string];
 }
 
 // export interface FlightSegmentSchema {
@@ -29,6 +31,9 @@ export interface TravelSegmentSchema {
     depTime: string;
     arrTime: string;
     waitDur: number;   // buffer time or layover time
+
+    displayDepartureTime: [string, string];
+    displayArrivalTime: [string, string];
 }
 
 export interface TripSchema {

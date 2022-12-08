@@ -173,6 +173,7 @@ export class ResultsComponent implements OnInit {
     this.results$.subscribe(value => {
       // value = this.convertTimes(value);
       value = this.updateSegments(value);
+      // value = this.formatDisplayDates(value);
       this.trips = value.trips;
       this.filteredTrips = value.trips;
       this.displayTrips = value.trips.slice(0,this.loaded);
@@ -236,7 +237,7 @@ export class ResultsComponent implements OnInit {
           trip.depTravelSegments[trip.depTravelSegments.length-1].travelType = trip.departingFlight.airlines[0];
         }
       }
-      
+
       trip.depTravelSegments[trip.depTravelSegments.length-2].arrLocation = this.arriveAdd;
       trip.depTravelSegments[trip.depTravelSegments.length-1].depLocation = this.arriveAdd;
       if(trip.departingFlight.arrivalTime) {
@@ -279,8 +280,74 @@ export class ResultsComponent implements OnInit {
           trip.retTravelSegments[trip.retTravelSegments.length-1].depTime = trip.retTravelSegments[trip.retTravelSegments.length-1].depTime.substring(0, trip.retTravelSegments[trip.retTravelSegments.length-1].depTime.indexOf('.'));
         }
       }
+      trip = this.formatDisplayDate(trip);
     });
     return value;
+  }
+
+  formatDisplayDate(trip: TripSchema): TripSchema {
+    let date = this.formatDate(trip.departingFlight.departureTime.substring(0, trip.departingFlight.departureTime.indexOf('T')))
+    let time = this.formatTime(trip.departingFlight.departureTime.substring(trip.departingFlight.departureTime.indexOf('T')+1))
+    trip.departingFlight.displayDepartureTime = [time, date]
+
+    date = this.formatDate(trip.departingFlight.arrivalTime.substring(0, trip.departingFlight.arrivalTime.indexOf('T')))
+    time = this.formatTime(trip.departingFlight.arrivalTime.substring(trip.departingFlight.arrivalTime.indexOf('T')+1))
+    trip.departingFlight.displayArrivalTime = [time, date]
+
+    trip.depTravelSegments.forEach(segment => {
+      date = this.formatDate(segment.depTime.substring(0, segment.depTime.indexOf('T')))
+      time = this.formatTime(segment.depTime.substring(segment.depTime.indexOf('T')+1))
+      segment.displayDepartureTime = [time, date]
+
+      date = this.formatDate(segment.arrTime.substring(0, segment.arrTime.indexOf('T')))
+      time = this.formatTime(segment.arrTime.substring(segment.arrTime.indexOf('T')+1))
+      segment.displayArrivalTime = [time, date]
+    });
+
+    if(trip.returningFlight && trip.retTravelSegments) {
+      date = this.formatDate(trip.returningFlight.departureTime.substring(0, trip.returningFlight.departureTime.indexOf('T')))
+      time = this.formatTime(trip.returningFlight.departureTime.substring(trip.returningFlight.departureTime.indexOf('T')+1))
+      trip.returningFlight.displayDepartureTime = [time, date]
+
+      date = this.formatDate(trip.returningFlight.arrivalTime.substring(0, trip.returningFlight.arrivalTime.indexOf('T')))
+      time = this.formatTime(trip.returningFlight.arrivalTime.substring(trip.returningFlight.arrivalTime.indexOf('T')+1))
+      trip.returningFlight.displayArrivalTime = [time, date]
+
+      trip.retTravelSegments.forEach(segment => {
+        date = this.formatDate(segment.depTime.substring(0, segment.depTime.indexOf('T')))
+        time = this.formatTime(segment.depTime.substring(segment.depTime.indexOf('T')+1))
+        segment.displayDepartureTime = [time, date]
+
+        date = this.formatDate(segment.arrTime.substring(0, segment.arrTime.indexOf('T')))
+        time = this.formatTime(segment.arrTime.substring(segment.arrTime.indexOf('T')+1))
+        segment.displayArrivalTime = [time, date]
+      });
+    }
+    return trip;
+  }
+
+  formatTime(time) {
+    if(time) {
+      let timeList = time.split(":", 3); 
+      let hours:any = Number(timeList[0]);
+      let minutes:any = timeList[1];    
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+
+      hours %= 12;
+      hours = hours || 12;
+      const strTime = `${hours}:${minutes}${ampm}`;
+
+      return strTime;
+    }
+    return "";
+  }
+
+  formatDate(date) {
+    if(date) {
+      let dateList = date.split("-", 3);
+      return dateList[1] + "/" + dateList[2];
+    }
+    return ""
   }
 
   loadMore() {

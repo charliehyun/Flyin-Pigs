@@ -176,17 +176,23 @@
         </span>
         <p style="color:grey;">{{trip.departingFlight.airlines}}</p>
       </td>
-      <td>
-        <p>{{trip.departingFlight.departureTime}}</p>
-        <p style="color:grey;">{{trip.departingFlight.departureAirport}}</p>
+      <td style="text-align: center;">
+        <p style="font-size: 1.2em;">{{trip.departingFlight.displayDepartureTime[0]}}</p>
+        <p>
+          <small class="p-text-secondary">{{trip.departingFlight.displayDepartureTime[1]}}</small>
+          <span style="color:grey;">{{trip.departingFlight.departureAirport}}</span>
+        </p>
       </td>
-      <td>
-        <p>{{trip.departingFlight.arrivalTime}}</p>
-        <p style="color:grey;">{{trip.departingFlight.arrivalAirport}}</p>
+      <td style="text-align: center;">
+        <p style="font-size: 1.2em;">{{trip.departingFlight.displayArrivalTime[0]}}</p>
+        <p>
+          <small class="p-text-secondary">{{trip.departingFlight.displayArrivalTime[1]}}</small>
+          <span style="color:grey;">{{trip.departingFlight.arrivalAirport}}</span>
+        </p>
       </td>
       <td>{{(trip.totalDepTime / 3600) - (trip.totalDepTime / 3600)%1}} hr {{((trip.totalDepTime % 3600) / 60) - (trip.totalDepTime % 3600 / 60)%1}} min</td>
       <td>{{trip.departingFlight.numberOfStops}}</td>
-      <td>${{trip.flightPrice}}</td>
+      <td style="font-size: 1.2em;">${{trip.flightPrice}}</td>
       <td>
         <button type="button" pButton pRipple [pRowToggler]="trip" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></button>
       </td>
@@ -227,13 +233,19 @@
                   </span>
                   <p style="color:grey;">{{trip.returningFlight.airlines}}</p>
                 </td>
-                <td>
-                  <p>{{trip.returningFlight.departureTime}}</p>
-                  <p style="color:grey;">{{trip.returningFlight.departureAirport}}</p>
+                <td style="text-align: center;">
+                  <p style="font-size: 1.2em;">{{trip.returningFlight.displayDepartureTime[0]}}</p>
+                  <p>
+                    <small class="p-text-secondary">{{trip.returningFlight.displayDepartureTime[1]}}</small>
+                    <span style="color:grey;">{{trip.returningFlight.departureAirport}}</span>
+                  </p>
                 </td>
-                <td>
-                  <p>{{trip.returningFlight.arrivalTime}}</p>
-                  <p style="color:grey;">{{trip.returningFlight.arrivalAirport}}</p>
+                <td style="text-align: center;">
+                  <p style="font-size: 1.2em;">{{trip.returningFlight.displayArrivalTime[0]}}</p>
+                  <p>
+                    <small class="p-text-secondary">{{trip.returningFlight.displayArrivalTime[1]}}</small>
+                    <span style="color:grey;">{{trip.returningFlight.arrivalAirport}}</span>
+                  </p>
                 </td>
                 <td>{{(trip.totalRetTime / 3600) - (trip.totalRetTime / 3600)%1}} hr {{((trip.totalRetTime % 3600) / 60) - (trip.totalRetTime % 3600 / 60)%1}} min</td>
                 <td>{{trip.returningFlight.numberOfStops}}</td>
@@ -261,7 +273,7 @@
                 <!-- Content right of the timeline -->
                 <ng-template pTemplate="content" let-segment>
                   <p style="margin-top:0px">
-                    <b *ngIf="segment.depTime" style="margin-right:0px">{{segment.depTime}} |</b>
+                    <b *ngIf="segment.depTime" style="margin-right:0px">{{segment.displayDepartureTime[0]}} {{segment.displayDepartureTime[1]}} |</b>
                     <b>{{segment.depLocation}}</b>
                   </p>
                   <p *ngIf="segment.depLocation != arriveAdd && 
@@ -271,7 +283,7 @@
                     <span>Travel Time: {{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</span>
                   </small></p>
                   <p *ngIf="segment.waitDur != 0">
-                    <span *ngIf="segment.arrTime" style="margin-right:0px">{{segment.arrTime}} |</span>
+                    <span *ngIf="segment.arrTime" style="margin-right:0px">{{segment.displayArrivalTime[0]}} {{segment.displayArrivalTime[1]}} |</span>
                     {{segment.arrLocation}}
                   </p>
                   <p *ngIf="segment.depLocation != arriveAdd && 
@@ -310,7 +322,7 @@
                 <!-- Content right of the timeline -->
                 <ng-template pTemplate="content" let-segment>
                   <p style="margin-top:0px">
-                    <b *ngIf="segment.depTime" style="margin-right:0px">{{segment.depTime}} |</b>
+                    <b *ngIf="segment.depTime" style="margin-right:0px">{{segment.displayDepartureTime[0]}} {{segment.displayDepartureTime[1]}} |</b>
                     <b>{{segment.depLocation}}</b>
                   </p>
                   <p *ngIf="segment.depLocation != departAdd && 
@@ -320,7 +332,7 @@
                     <span>Travel Time: {{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</span>
                   </small></p>
                   <p *ngIf="segment.waitDur != 0">
-                    <span *ngIf="segment.arrTime" style="margin-right:0px">{{segment.arrTime}} |</span>
+                    <span *ngIf="segment.arrTime" style="margin-right:0px">{{segment.displayArrivalTime[0]}} {{segment.displayArrivalTime[1]}} |</span>
                     {{segment.arrLocation}}
                   </p>
                   <p *ngIf="segment.depLocation != departAdd && 
