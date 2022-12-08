@@ -16,8 +16,8 @@ export class UserMenuComponent implements OnInit {
   ngOnInit(): void {
 
   }
-  
-  handleLogout() {
+
+  handleLogOut() {
     this.messageService.add({severity: "success", summary: "Logged Out", detail: "Successfully logged out!"});
     console.log("hi")
   }
