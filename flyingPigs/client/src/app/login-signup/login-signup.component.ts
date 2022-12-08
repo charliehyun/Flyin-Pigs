@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { LoginSignupService } from './login-signup.service';
+import { AuthenticationService } from './authentication.service';
 import { LoginSchema } from '../loginSchema';
 import {MessageService, MenuItem} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
@@ -29,11 +29,11 @@ export class LoginSignupComponent {
 
     userOptionsMenu: MenuItem[];
 
-    loginResults$: Observable<boolean> = new Observable();
-    signupResults$: Observable<boolean> = new Observable();
+    loginResults$: Observable<{success: boolean, token?: string, message: string}> = new Observable();
+    signupResults$: Observable<{success: boolean, token?: string, message: string}> = new Observable();
 
 
-    constructor(private messageService: MessageService, private primengConfig: PrimeNGConfig, private loginSignupService: LoginSignupService, private router: Router) {
+    constructor(private messageService: MessageService, private primengConfig: PrimeNGConfig, private auth: AuthenticationService, private router: Router) {
         this.displayLogin = false;
         this.displaySignup = false;
         this.userOptionsMenu = [{
@@ -109,20 +109,38 @@ export class LoginSignupComponent {
             password: this.passL
         }
 
-        this.loginResults$ = this.loginSignupService.loginUser(credentialsInput);
+        // this.loginResults$ = this.loginSignupService.loginUser(credentialsInput);
 
+        // this.loginResults$.subscribe(value => {
+        //     if(value) {
+        //         this.displayLogin = false;
+        //         this.currentUser = this.emailL;
+        //         this.loggedIn = true;
+        //         sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
+        //         this.showMessage('success', 'Success', 'Successfully logged in.');
+        //         this.clearFields();
+        //     } else {
+        //         this.showMessage('error', 'Error', 'Unable to log in. Invalid email or password.');
+        //     }
+        // });
+        this.loginResults$ = this.auth.login(credentialsInput);
         this.loginResults$.subscribe(value => {
-            if(value) {
+            if(value.success) {
                 this.displayLogin = false;
-                this.currentUser = this.emailL;
-                this.loggedIn = true;
-                sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
+                // this.currentUser = this.emailL;
+                // this.loggedIn = true;
+                // sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
                 this.showMessage('success', 'Success', 'Successfully logged in.');
                 this.clearFields();
             } else {
                 this.showMessage('error', 'Error', 'Unable to log in. Invalid email or password.');
             }
         });
+        // .subscribe(() => {
+        //     this.router.navigateByUrl('/profile');
+        //   }, (err) => {
+        //     console.error(err);
+        // });
     }
 
     // handle signup attempt. input validation
@@ -173,14 +191,34 @@ export class LoginSignupComponent {
                 password: this.passS
             }
 
-            this.signupResults$ = this.loginSignupService.signupUser(credentialsInput);
+            // this.signupResults$ = this.loginSignupService.signupUser(credentialsInput);
 
+            // this.signupResults$.subscribe(value => {
+            //     if(value) {
+            //         this.displaySignup = false;
+            //         this.currentUser = this.emailS;
+            //         this.loggedIn = true;
+            //         sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
+            //         this.showMessage('success', 'Success', 'Successfully signed up and logged in!');
+            //         this.clearFields();
+            //     } else {
+            //         this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');
+            //     }
+            // });
+            // this.auth.register(credentialsInput).subscribe(() => {
+            //     // this.router.navigateByUrl('/profile');
+            // }, (err) => {
+            //     console.error(err);
+            // });
+
+            this.signupResults$ = this.auth.signup(credentialsInput);
             this.signupResults$.subscribe(value => {
-                if(value) {
+                console.log("value:", value);
+                if(value.success) {
                     this.displaySignup = false;
-                    this.currentUser = this.emailS;
-                    this.loggedIn = true;
-                    sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
+                    // this.currentUser = this.emailL;
+                    // this.loggedIn = true;
+                    // sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
                     this.showMessage('success', 'Success', 'Successfully signed up and logged in!');
                     this.clearFields();
                 } else {

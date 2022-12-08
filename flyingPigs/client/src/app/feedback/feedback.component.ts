@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 // import {Message, MessageService} from 'primeng/api';
 import { FeedbackService } from './feedback.service';
 import {NGXLogger} from "ngx-logger";
+import { AuthenticationService } from '../login-signup/authentication.service';
 
 @Component({
   selector: 'feedback',
@@ -16,7 +17,7 @@ export class FeedbackComponent {
   // TODO: make a type drop down with options: Feedback and Complaint and then .toLowerCase
   type = "complaint";
 
-  constructor( private feedbackService: FeedbackService, private logger: NGXLogger ) {
+  constructor( public auth: AuthenticationService, private feedbackService: FeedbackService, private logger: NGXLogger ) {
 
       }
   // show toast based on success/error
@@ -30,10 +31,15 @@ export class FeedbackComponent {
   async handleFeedback() {
     // this.logger.info("forgot password component email:", this.email);
 
-    if(!this.email) {
-      const x = document.getElementById('email');
-      x?.classList.add('ng-invalid')
-      x?.classList.add('ng-dirty')
+    if(this.auth.isLoggedIn()) {
+      this.email = this.auth.getUserDetails()?.email || '';
+    }
+    else {
+      if(!this.email) {
+        const x = document.getElementById('email');
+        x?.classList.add('ng-invalid')
+        x?.classList.add('ng-dirty')
+      }
     }
 
     this.resetValidity();
