@@ -181,21 +181,16 @@ mongoRouter.post("/login", async (req, res) => {
         // bcrypt.compare(req.body.password, cred["password"]).then(
         //     passwordMatch => passwordMatch ? res.status(200).send(true): res.status(200).send(false)
         // );
-        bcrypt.compare(req.body.password, cred["password"], function(err, res) {
-            if (err){
-              // handle error
-              res.status(200).send({success: false, message: 'Log in failure: bcrypt error'});
-            }
-            if (res) {
-              // Send JWT
+        bcrypt.compare(req.body.password, cred["password"]).then(function(result) {
+            if(result == true) {
                 let tok;
                 tok = cred.generateJwt();
                 res.status(200).send({success: true, token: tok, message: "Log in successful"});
-            } else {
-              // response is OutgoingMessage object that server response http request
-              res.status(200).send({success: false, message: 'Log in failure: passwords do not match'});
             }
-          });
+            else {
+                res.status(200).send({success: false, message: 'Log in failure: passwords do not match'});
+            }
+        });
     } else {
         logger.info("Log in failure: user does not exist");
         res.status(200).send({success: false, message: 'Log in failure: user does not exist'});

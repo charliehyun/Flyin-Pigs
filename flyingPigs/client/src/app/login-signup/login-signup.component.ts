@@ -130,7 +130,7 @@ export class LoginSignupComponent {
                 // this.currentUser = this.emailL;
                 // this.loggedIn = true;
                 // sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
-                this.showMessage('success', 'Success', 'Successfully logged in.');
+                // this.showMessage('success', 'Success', 'Successfully logged in.');
                 this.clearFields();
             } else {
                 this.showMessage('error', 'Error', 'Unable to log in. Invalid email or password.');
@@ -219,7 +219,7 @@ export class LoginSignupComponent {
                     // this.currentUser = this.emailL;
                     // this.loggedIn = true;
                     // sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
-                    this.showMessage('success', 'Success', 'Successfully signed up and logged in!');
+                    // this.showMessage('success', 'Success', 'Successfully signed up and logged in!');
                     this.clearFields();
                 } else {
                     this.showMessage('error', 'Error', 'Unable to sign up. Invalid email or password.');

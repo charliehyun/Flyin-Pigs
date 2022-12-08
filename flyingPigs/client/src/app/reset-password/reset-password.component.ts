@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import {MessageService} from 'primeng/api';
 import { ResetPasswordService } from './reset-password.service';
+import { AuthenticationService } from '../login-signup/authentication.service';
 
 @Component({
   selector: 'reset-password',
@@ -14,7 +15,7 @@ export class ResetPasswordComponent {
   newPass: string;
   confNewPass: string;
 
-  constructor(private messageService: MessageService, private forgotPasswordService: ResetPasswordService) {
+  constructor( public auth: AuthenticationService, private messageService: MessageService, private forgotPasswordService: ResetPasswordService) {
   }
 
   //backend calls

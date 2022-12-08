@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../login-signup/authentication.service';
 
 @Component({
     selector: 'faq',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
   export class FAQComponent {
     
   
-    constructor( private router: Router) {
+    constructor( public auth: AuthenticationService, private router: Router) {
   
     }
   }

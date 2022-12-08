@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from '../login-signup/authentication.service';
 
 @Component({
   selector: 'search',
@@ -8,7 +9,7 @@ import { Component } from '@angular/core';
 
 export class SearchComponent {
 
-  constructor() {
+  constructor( public auth: AuthenticationService ) {
 
   }
 
