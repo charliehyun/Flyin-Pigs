@@ -192,7 +192,7 @@ export class ResultsComponent implements OnInit {
       this.airlineNames();
       this.maxPrice = value.maxPrice || 0;
       this.minPrice = value.minPrice || 0;
-      this.totalPrice = [this.minPrice, this.maxPrice];
+      this.totalPrice = [Math.floor(this.minPrice), Math.ceil(this.maxPrice)];
       this.selectedAirlines = this.filterAirlines;
 
       //grab the maximum times
@@ -309,7 +309,7 @@ export class ResultsComponent implements OnInit {
   validateFilter() {
     //price
     //this.logger.info(this.totalPrice[0], " ", this.minPrice, " ", this.totalPrice[1], " ", this.maxPrice);
-    if (this.totalPrice[0] < this.minPrice || this.totalPrice[1] > this.maxPrice)
+    if (this.totalPrice[0] < Math.floor(this.minPrice) || this.totalPrice[1] > Math.ceil(this.maxPrice))
     {
       this.showMessage('error', 'Error', 'The price range is invalid.');
       return false;
@@ -365,11 +365,14 @@ export class ResultsComponent implements OnInit {
 
 
       //determine what airlines are available.
+
       let includedAirlines = trip.departingFlight.airlines.every(airline => this.selectedAirlines.includes(airline));
 
-      //set airline name from code(?)
-
-      if (trip.departingFlight.numberOfStops <= chosenStops &&
+      //special case for car
+      if (trip.departingFlight.airlines[0] == 'Car' && this.selectedAirlines.includes('Car')) {
+        newTripArr.push(trip);
+      }
+      else if (trip.departingFlight.numberOfStops <= chosenStops &&
           trip.flightPrice <= this.totalPrice[1] &&
           trip.flightPrice >= this.totalPrice[0] &&
           departTravelTime <= (this.maxDepartTravelTime * 3600) &&
