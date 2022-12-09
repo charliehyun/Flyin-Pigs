@@ -1,8 +1,8 @@
-* {
-    margin: 5px;
-  }
+*:not(p-toast){
+  margin: 5px;
+}
   
-  footer {
-    text-align: center;
-    padding: 3px;
-  }
+footer {
+  text-align: center;
+  padding: 3px;
+}

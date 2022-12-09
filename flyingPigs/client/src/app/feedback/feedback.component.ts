@@ -4,11 +4,13 @@ import { Observable } from 'rxjs';
 import { FeedbackService } from './feedback.service';
 import {NGXLogger} from "ngx-logger";
 import { AuthenticationService } from '../login-signup/authentication.service';
+import { MessageService } from "primeng/api";
 
 @Component({
   selector: 'feedback',
   templateUrl: './feedback.component.html',
-  styleUrls: ['./feedback.component.scss']
+  styleUrls: ['./feedback.component.scss'],
+  providers: [MessageService]
 })
 
 export class FeedbackComponent {
@@ -17,38 +19,40 @@ export class FeedbackComponent {
   // TODO: make a type drop down with options: Feedback and Complaint and then .toLowerCase
   type = "complaint";
 
-  constructor( public auth: AuthenticationService, private feedbackService: FeedbackService, private logger: NGXLogger ) {
+  constructor( public auth: AuthenticationService, private feedbackService: FeedbackService, private logger: NGXLogger, private messageService: MessageService) {
 
-      }
+  }
+
   // show toast based on success/error
-  // showMessage(severity, summary, detail) {
-  //   this.messageService.clear();
-  //   this.messageService.add({severity: severity, summary: summary, detail: detail});
-  // }
+  showMessage(severity, summary, detail) {
+    this.messageService.clear();
+    this.messageService.add({severity: severity, summary: summary, detail: detail});
+  }
 
   //backend calls
   results$: Observable<boolean> = new Observable();
   async handleFeedback() {
     // this.logger.info("forgot password component email:", this.email);
+    this.resetValidity();
 
     if(this.auth.isLoggedIn()) {
       this.email = this.auth.getUserDetails()?.email || '';
-    }
-    else {
+    } else {
       if(!this.email) {
         const x = document.getElementById('email');
         x?.classList.add('ng-invalid')
         x?.classList.add('ng-dirty')
+        this.showMessage('error', 'Error', 'Email field is empty');
+        return;
       }
     }
 
-    this.resetValidity();
     this.feedbackService.sendFeedback(this.email, this.type, this.comments).subscribe(value => {
-      // if(value) {
-      //   this.showMessage('success', 'Success', 'Successfully sent email');
-      // } else {
-      //   this.showMessage('error', 'Error', 'Unable to send email. Invalid email or no account linked to provided email.');
-      // }
+      if(value) {
+        this.showMessage('success', 'Success', 'Successfully sent email');
+      } else {
+        this.showMessage('error', 'Error', 'Unable to send email. Invalid email or no account linked to provided email.');
+      }
     });
   }
 

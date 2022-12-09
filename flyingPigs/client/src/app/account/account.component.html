@@ -1,3 +1,5 @@
+<p-toast position="top-left"></p-toast>
+
 <!-- Header -->
 <login-signup *ngIf="!auth.isLoggedIn()" style="position: absolute; right: 0px;"></login-signup>
 <user-menu *ngIf="auth.isLoggedIn()" style="position: absolute; right: 0px;"></user-menu>
@@ -11,7 +13,7 @@
   <div>
     Change Password:
     <!-- Password -->
-    <h6><br>Password
+    <h6><br>New Password
       <i class="pi pi-info-circle" style="white-space: pre-line" 
         pTooltip="Minimum 8 characters
         Requires at least one of each: 
@@ -24,7 +26,7 @@
     </h6>
     <p-password [(ngModel)]="password" id="password" [toggleMask]="true"></p-password>
 
-    <h6><br>Confirm Password</h6>
+    <h6><br>Confirm New Password</h6>
     <p-password [(ngModel)]="confPassword" [toggleMask]="true" [feedback]="false"></p-password>
     <br><br>
     <button pButton pRipple class="resetButton" type="button" label="Reset Password" (click)="handleResetPassword()"></button>
