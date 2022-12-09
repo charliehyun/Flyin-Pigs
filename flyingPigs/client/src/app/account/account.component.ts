@@ -4,6 +4,7 @@ import { AuthenticationService, UserDetails } from '../login-signup/authenticati
 import { Observable } from 'rxjs';
 import { AccountService } from "./account.service";
 import { UserService } from '../user.service';
+import {Options} from "ngx-google-places-autocomplete/objects/options/options";
 
 @Component({
     selector: 'account',
@@ -97,4 +98,13 @@ import { UserService } from '../user.service';
         el.classList.add('ng-pristine')
       })
     }
+
+  // Google autocomplete stuff
+  options:Options = new Options({
+    componentRestrictions:{
+      country:"US"}
+  });
+  AddressChange1(address: any) {
+    this.address = address.formatted_address;
+  }
   }
