@@ -45,7 +45,7 @@ mongoRouter.post("/setAddress", async (req, res) => {
             // console.error('password reset link is invalid or has expired');
             // res.status(403).send({message: 'password reset link is invalid or has expired'});
         } else {
-            logger.info("setting address: ", req.body.address);
+            logger.info("setting address");
             user.address = req.body.address;
             user.save();
             res.status(200).send(true);
