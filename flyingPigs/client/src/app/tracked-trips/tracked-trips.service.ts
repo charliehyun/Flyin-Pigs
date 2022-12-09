@@ -26,4 +26,20 @@ export class TrackedTripsService {
         this.searchUsers(userEmail);
         return this.users$;
     }
+
+
+
+    updateSearchRoute(userEmail:string, oTracked:any, nTracked:any) {
+        this.httpClient.post(`${this.url}/airports/updateSearch`, {email:userEmail, tracked: oTracked, newTracked: nTracked})
+        .subscribe(user => {
+           this.users$.next(user);
+        });
+    }
+    updateSearch(email:string, searchToUpdate:any) {
+        delete searchToUpdate.lastLowestPrice;
+        let updatedSearch = Object.assign({}, searchToUpdate);
+        updatedSearch.lastLowestPrice = 12345;
+
+        this.updateSearchRoute(email, searchToUpdate, updatedSearch);
+    }
 }

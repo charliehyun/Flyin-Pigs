@@ -548,6 +548,25 @@ mongoRouter.post("/addSearch", (req, res) => {
                 res.json(result);
             }
         });
+});
+mongoRouter.post("/updateSearch", (req, res) => {
+    let searchSchema = req.body.inputObject;
+
+    logger.info("UPDATING SEARCH TO ", req.body.email);
+    //find user to update
+    Credentials.updateOne(
+        { email: req.body.email, trackedSearches: req.body.tracked },
+        { $set: { "trackedSearches.$" : req.body.newTracked } },
+        function(err, result) {
+            if (err) {
+                logger.info("ERROR", err)
+                res.json(err);
+            } else {
+                logger.info("RESULT:", result)
+                res.json(result);
+            }
+        });
+        
 })
 
 
