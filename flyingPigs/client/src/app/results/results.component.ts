@@ -515,6 +515,7 @@ export class ResultsComponent implements OnInit {
       this.logger.info("Saving Search");
       //todo: get rid of my default email
       this.resultsService.saveTrips(mySearchPlusPrice, this.auth.getUserDetails()?.email||"marklim4@gmail.com");
+      this.showMessage('success', 'Success', 'Search saved to your tracked trips!');
     }
 
   }
