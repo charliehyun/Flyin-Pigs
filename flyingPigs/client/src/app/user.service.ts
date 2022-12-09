@@ -4,22 +4,22 @@ import { Observable, Subject, tap } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
-export class SearchBoxService {
+export class UserService {
     private url = 'http://localhost:5200';
-    private getUserSuccess$: Subject<string> = new Subject();
+    private getUserSuccess$: Subject<any> = new Subject();
 
     constructor(private httpClient: HttpClient) { }
     
-    userPath(em: string) {
+    userRoute(em: string) {
         console.log("in set address route");
-        this.httpClient.post<any>(`${this.url}/airports/setAddress`, {email: em})
+        this.httpClient.post<any>(`${this.url}/airports/getUser`, {email: em})
         .subscribe(success => {
             this.getUserSuccess$.next(success);
         });
     }
     
     getUser(email: string): Observable<any> {
-        this.getUser(email);
+        this.userRoute(email);
         return this.getUserSuccess$;
     }
 }
