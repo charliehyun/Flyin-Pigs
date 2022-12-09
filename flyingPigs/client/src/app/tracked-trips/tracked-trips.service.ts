@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 import { SearchSchema } from '../searchSchema';
-import { ResultInfoSchema} from '../flightSchema';
 @Injectable({
     providedIn: 'root'
 })
@@ -25,5 +24,10 @@ export class TrackedTripsService {
     getUsersSearches(userEmail:string) {
         this.searchUsers(userEmail);
         return this.users$;
+    }
+
+    deleteSavedTrip(userInput:SearchSchema, userEmail:string) {
+        let postObj = {'inputObject':userInput, 'email': userEmail};
+        this.httpClient.post(`${this.url}/airports/deleteSavedTrip`, postObj).subscribe();
     }
 }
