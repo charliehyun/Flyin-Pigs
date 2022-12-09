@@ -49,9 +49,7 @@ mongoRouter.post("/setAddress", async (req, res) => {
             if(req.body.address) {
                 user.address = req.body.address;
             } else {
-                if(user.address) {
-                    Credentials.updateOne({email: req.body.email},{$unset: {address: ""}});
-                }
+                user.address = "";
             }
             user.save();
             res.status(200).send(true);
