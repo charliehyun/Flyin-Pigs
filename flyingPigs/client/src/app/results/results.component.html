@@ -171,15 +171,15 @@
         </span>
         <span *ngIf="trip.departingFlight.airlines.length < 2">
           <!-- <img *ngIf="trip.departingFlight.airlines == 'AA'" src="assets/images/aa-logo.png" width="40" height="40"> -->
-          <!-- <fa-icon *ngIf="selectedDTransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
-          <fa-icon *ngIf="selectedDTransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon> -->
-          <img *ngIf="trip.departingFlight.airlines == 'AS'" src="assets/images/alaska-logo.png" width="40" height="40">
-          <img *ngIf="trip.departingFlight.airlines == 'B6'" src="assets/images/jetblue-logo.png" width="40">
-          <img *ngIf="trip.departingFlight.airlines == 'DL'" src="assets/images/delta-logo.png" width="40" height="40">
-          <img *ngIf="trip.departingFlight.airlines == 'F9'" src="assets/images/frontier-logo.png" width="40" height="40"> 
-          <img *ngIf="trip.departingFlight.airlines == 'HA'" src="assets/images/hawaiian-logo.png" width="40" height="40"> 
-          <img *ngIf="trip.departingFlight.airlines == 'NK'" src="assets/images/spirit-logo.png" width="40" height="40"> 
-          <img *ngIf="trip.departingFlight.airlines == 'UA'" src="assets/images/united-logo.png" width="45" height="45"> 
+          <fa-icon *ngIf="trip.departingFlight.airlines == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+          <fa-icon *ngIf="trip.departingFlight.airlines == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+          <img *ngIf="trip.departingFlight.airlines == 'ALASKA AIRLINES'" src="assets/images/alaska-logo.png" width="40" height="40">
+          <img *ngIf="trip.departingFlight.airlines == 'JETBLUE AIRWAYS'" src="assets/images/jetblue-logo.png" width="40">
+          <img *ngIf="trip.departingFlight.airlines == 'DELTA AIR LINES'" src="assets/images/delta-logo.png" width="40" height="40">
+          <img *ngIf="trip.departingFlight.airlines == 'FRONTIER AIRLINES'" src="assets/images/frontier-logo.png" width="40" height="40"> 
+          <img *ngIf="trip.departingFlight.airlines == 'HAWAIIAN AIRLINES'" src="assets/images/hawaiian-logo.png" width="40" height="40"> 
+          <img *ngIf="trip.departingFlight.airlines == 'SPIRIT AIRLINES'" src="assets/images/spirit-logo.png" width="40" height="40"> 
+          <img *ngIf="trip.departingFlight.airlines == 'UNITED AIRLINES'" src="assets/images/united-logo.png" width="45" height="45"> 
           <!-- <img *ngIf="trip.departingFlight.airlines == 'WN'" src="assets/images/southwest-logo.png" width="40">  -->
           <img *ngIf="!airlineTags.includes(trip.departingFlight.airlines[0])" src="assets/images/generic-logo.png" width="50" height="40">
         </span>
