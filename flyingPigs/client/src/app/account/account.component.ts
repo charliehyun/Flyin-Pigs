@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { AuthenticationService } from '../login-signup/authentication.service';
 import { Observable } from 'rxjs';
 import { AccountService } from "./account.service";
+import { UserService } from '../user.service';
 
 @Component({
     selector: 'account',
@@ -17,11 +18,22 @@ import { AccountService } from "./account.service";
 
     loginResults$: Observable<{success: boolean, token?: string, message: string}> = new Observable();
     signupResults$: Observable<boolean> = new Observable();
+    addressResult$: Observable<any> = new Observable();
 
-    constructor( public auth: AuthenticationService, private accountService: AccountService, private router: Router) {
+    constructor( public auth: AuthenticationService, private userService: UserService, private accountService: AccountService, private router: Router) {
     }
     ngOnInit(): void {
       // this.address = this.auth.getUserDetails()?.address || "";
+
+      this.addressResult$ = this.userService.getUser(this.auth.getUserDetails()?.email || "");
+      this.addressResult$.subscribe(value => {
+          
+          if(value.address) {
+            this.address = value.address;
+          } else {
+          }
+      });
+    
     }
     handleResetPassword() {
       if(!this.password) {

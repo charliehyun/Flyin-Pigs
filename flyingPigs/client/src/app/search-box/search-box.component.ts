@@ -7,7 +7,7 @@ import { faCar, faBus, faPlane, faPersonBiking, faPersonWalking, faDollarSign, f
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import { MessageService } from 'primeng/api';
 import { AuthenticationService } from '../login-signup/authentication.service';
-import { SearchBoxService } from './search-box.service';
+import { UserService } from '../user.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -58,7 +58,7 @@ export class SearchBoxComponent implements OnInit {
     driving = faCar;
     transit = faBus;
 
-    constructor( public auth: AuthenticationService, private searchBoxService: SearchBoxService, private messageService: MessageService, private router: Router, private logger: NGXLogger, library: FaIconLibrary) {
+    constructor( public auth: AuthenticationService, private userService: UserService, private messageService: MessageService, private router: Router, private logger: NGXLogger, library: FaIconLibrary) {
         this.router.routeReuseStrategy.shouldReuseRoute = () => {
             return false;
         };
@@ -361,16 +361,18 @@ export class SearchBoxComponent implements OnInit {
             this.departAdd = this.search.departAdd;
         }
         else {
-            // if(this.auth.isLoggedIn()) 
-            // {
-            //     this.addressResult$ = this.searchBoxService.getUser(this.auth.getUserDetails()?.email || "");
-            //     this.addressResult$.subscribe(value => {
-            //         if(value.address) {
-            //             this.departAdd = value.address;
-            //         } else {
-            //         }
-            //     });
-            // }
+            if(!this.departAdd && this.auth.isLoggedIn()) {
+                console.log("checking if logged in");
+                this.addressResult$ = this.userService.getUser(this.auth.getUserDetails()?.email || "");
+                this.addressResult$.subscribe(value => {
+                    console.log(value);
+                    if(value.address) {
+                        this.departAdd = value.address;
+                    } else {
+                        console.log("no add");
+                    }
+                });
+            }
         }
         this.arriveAdd = this.search.arriveAdd;
         this.selectedDTransport = this.search.selectedDTransport;
