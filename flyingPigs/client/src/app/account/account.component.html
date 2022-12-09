@@ -1,5 +1,6 @@
 <!-- Header -->
-<login-signup style="position: absolute; right: 0px;"></login-signup>
+<login-signup *ngIf="!auth.isLoggedIn()" style="position: absolute; right: 0px;"></login-signup>
+<user-menu *ngIf="auth.isLoggedIn()" style="position: absolute; right: 0px;"></user-menu>
 <div>
   <img src="assets/images/BOTTOM_CROPPED_LOGO.png" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto; cursor:pointer; width:20%" routerLink="/search">
   <h2>My Account Info</h2>  
@@ -19,12 +20,12 @@
             - Special character" 
         tooltipPosition="top"></i>
       </h6>
-      <p-password  [toggleMask]="true"></p-password>
+      <p-password  [(ngModel)]="password" id="password" [toggleMask]="true"></p-password>
   
       <h6><br>Confirm Password</h6>
-      <p-password  [toggleMask]="true" [feedback]="false"></p-password>
+      <p-password  [(ngModel)]="confPassword" [toggleMask]="true" [feedback]="false"></p-password>
       <br><br>
-      <button pButton pRipple class="resetButton" type="button" label="Reset Password"></button>
+      <button pButton pRipple class="resetButton" type="button" label="Reset Password" (click)="handleResetPassword()"></button>
       <br>
     </div>
     <div>
@@ -32,8 +33,8 @@
         <!-- Password -->
         <h6><br> Address
         </h6>
-        <input pInputText type="text" id="email" name="email" size="51">
-        <button pButton pRipple class="resetButton" type="button" label="Save Address"></button>
+        <input [(ngModel)]="address"  pInputText type="text" id="address" name="address" size="51">
+        <button pButton pRipple class="resetButton" type="button" label="Save Address" (click)="handleSetAddress()"></button>
         <br>
       </div>
 </p-card>
