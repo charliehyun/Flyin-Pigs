@@ -20,7 +20,6 @@ import {ResultInfoSchema} from "../flightSchema";
     cols: any[];
     users$: Observable<any> = new Observable();
     savedSearches: SearchSchema[];
-    searchIds: any[]
   
     constructor( private router: Router, public auth: AuthenticationService, public trackedService: TrackedTripsService, private logger: NGXLogger) {
   
@@ -43,8 +42,20 @@ import {ResultInfoSchema} from "../flightSchema";
           this.users$ = this.trackedService.getUsersSearches(this.auth.getUserDetails()?.email||"marklim4@gmail.com");
           this.users$.subscribe(user => {
               this.savedSearches = user.trackedSearches;
-              this.searchIds = [Array(this.savedSearches.length).keys()];
           });
       }
   }
+
+  deleteSavedTrip(savedTrip:SearchSchema) {
+        if (this.auth.isLoggedIn()) {
+            this.logger.info("deleting trip");
+            //delete from database
+            this.trackedService.deleteSavedTrip(savedTrip, this.auth.getUserDetails()?.email||"marklim4@gmail.com");
+
+            //delete locally
+            let indexOfSearch = this.savedSearches.findIndex(trip => trip == savedTrip);
+            this.savedSearches.splice(indexOfSearch, 1);
+        }
+
+    }
   }
