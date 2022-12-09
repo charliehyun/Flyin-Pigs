@@ -1,5 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { AuthenticationService, UserDetails } from '../login-signup/authentication.service';
 
 @Component({
     selector: 'account',
@@ -7,11 +8,21 @@ import { Router } from "@angular/router";
     styleUrls: ['./account.component.scss']
   })
   
-  export class AccountComponent {
+  export class AccountComponent implements OnInit {
+    details: UserDetails;
     email: string;
-    comments: string;
   
-    constructor( private router: Router) {
+    constructor(private auth: AuthenticationService) {
   
+    }
+
+    ngOnInit() {    
+      this.auth.account().subscribe(user => {
+        this.details = user;
+      }, (err) => {
+        console.error(err);
+      });
+
+      console.log("DETAILS", this.details)
     }
   }

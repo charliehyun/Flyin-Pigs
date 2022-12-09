@@ -17,10 +17,10 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const { expressjwt: jwt } = require("express-jwt");
 
-// var auth = jwt({
-//   secret: process.env.MY_SECRET,
-//   userProperty: 'payload'
-// });
+var auth = jwt({
+  secret: String(process.env.MY_SECRET),
+  userProperty: 'payload'
+});
 
 // let auth = jwt({ secret: process.env.MY_SECRET, userProperty: 'payload' });
 mongoRouter.get("/", async (_req, res) => {
@@ -32,8 +32,6 @@ mongoRouter.get("/", async (_req, res) => {
         res.status(500).send(error.message);
     }
 });
-
-
 
 mongoRouter.post("/search", async (req, res) => {
     try {
@@ -175,21 +173,21 @@ mongoRouter.post("/log", async (req, res) => {
     logger.info("clientside file " + filename + " " + msg + " line " + lineNumber + " col " + columnNumber);
 });
 
-// mongoRouter.get("/profile", jwt({ secret: process.env.MY_SECRET, userProperty: 'payload' }), async(req, res) => {
-//   // If no user ID exists in the JWT return a 401
-//   if (!req['payload']._id) {
-//     res.status(401).json({
-//       "message" : "UnauthorizedError: private profile"
-//     });
-//   } else {
-//     // Otherwise continue
-//     Credentials
-//       .findById(req['payload']._id)
-//       .exec(function(err, user) {
-//         res.status(200).json(user);
-//       });
-//   }
-// });
+mongoRouter.get("/account", auth, async(req, res) => {
+  // If no user ID exists in the JWT return a 401
+  if (!req['payload']._id) {
+    res.status(401).json({
+      "message" : "UnauthorizedError: private profile"
+    });
+  } else {
+    // Otherwise continue
+    Credentials
+      .findById(req['payload']._id)
+      .exec(function(err, user) {
+        res.status(200).json(user);
+      });
+  }
+});
 
 mongoRouter.post("/login", async (req, res) => {
     let cred = await Credentials.findOne({email: req.body.email});
@@ -213,6 +211,7 @@ mongoRouter.post("/login", async (req, res) => {
         res.status(200).send({success: false, message: 'Log in failure: user does not exist'});
     }
 });
+
 mongoRouter.post("/signout", async (req, res) => {
     try {
         req.body.session = null;
@@ -220,6 +219,7 @@ mongoRouter.post("/signout", async (req, res) => {
       } catch (err) {
       }
 });
+
 mongoRouter.post("/signup", async (req, res) => {
     const saltRounds = 10;
     let cred = await Credentials.findOne({email: req.body.email});
@@ -252,7 +252,6 @@ mongoRouter.post("/signup", async (req, res) => {
         logger.info("Sign up failure: user already exists");
         res.status(200).send({success:false, message: "Sign up failure: user already exists"});
     }
-
 });
 
 mongoRouter.post('/resetPassword', (req, res) => {

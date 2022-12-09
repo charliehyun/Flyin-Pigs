@@ -74,11 +74,11 @@ export class AuthenticationService {
     return this.request('post', 'login', user);
   }
   
-  public profile(): Observable<any> {
-    return this.request('get', 'profile');
+  public account(): Observable<any> {
+    return this.request('get', 'account');
   }
 
-  private request(method: 'post'|'get', type: 'login'|'signup'|'profile', user?: LoginSchema): Observable<any> {
+  private request(method: 'post'|'get', type: 'login'|'signup'|'account', user?: LoginSchema): Observable<any> {
     let base;
   
     if (method === 'post') {

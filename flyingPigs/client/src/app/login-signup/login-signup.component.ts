@@ -92,7 +92,7 @@ export class LoginSignupComponent {
     handleLogin() {
         this.resetValidity();
 
-        if(!this.emailL || !(/^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$/.test(this.emailL))) {
+        if(!this.emailL || !(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(this.emailL))) {
             const x = document.getElementById('emailL');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
@@ -148,7 +148,7 @@ export class LoginSignupComponent {
         this.resetValidity()
         // check if all fields are populated
         let invalid = false;
-        if(!this.emailS || !(/^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$/.test(this.emailS))) {
+        if(!this.emailS || !(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(this.emailS))) {
             const x = document.getElementById('emailS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
