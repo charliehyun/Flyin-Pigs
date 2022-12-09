@@ -4,7 +4,17 @@
 <h2>Trips</h2>
 <!-- SEARCH -->
 <p-panel styleClass="p-shadow-3" header="Search Parameters" toggler="header" [toggleable]="true" expandIcon="pi pi-plus-circle" collapseIcon="pi pi-minus-circle" [collapsed]="true">
-  <search-box [style]="{'margin': '0px'}"></search-box>
+  <p-tabView [style]="{'width': '100%'}">
+    <!-- SEARCH TRIPS -->
+    <p-tabPanel header="Search Trips" leftIcon="pi pi-search">
+      <search-box [style]="{'margin': '0px'}"></search-box>
+    </p-tabPanel>
+    
+    <!-- EXPLORE -->
+    <p-tabPanel header="Explore" leftIcon="pi pi-globe">
+      <search-box [explore]="true" [style]="{'margin': '0px'}"></search-box>
+    </p-tabPanel>
+  </p-tabView>
 </p-panel>
 
 <p-toast position="top-left"></p-toast>
