@@ -178,6 +178,9 @@ mongoRouter.post("/search", async (req, res) => {
         tripList = await Promise.all(trips)
         tripList = tripList.flat();
 
+        //remove trips without airlines:
+        tripList = tripList.filter(trip => trip.departingFlight.airlines.length != 0);
+
         resultInfo.trips = sortTrips(tripList, "flightPrice");
         resultInfo.minPrice = resultInfo.trips[0].flightPrice;
         resultInfo.maxPrice = resultInfo.trips[tripList.length - 1].flightPrice;
