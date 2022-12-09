@@ -76,9 +76,6 @@ export class ResultsComponent implements OnInit {
   events1: any[];
    
   constructor( public auth: AuthenticationService, private messageService:MessageService, private resultsService: ResultsService, private logger: NGXLogger, library: FaIconLibrary, private router: Router) {
-    sessionStorage.setItem('mean-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzkxOGUwNzczNDc5OWI3OWFjYWRlYzEiLCJlbWFpbCI6Imh5dW4uY2hhbmdzb283QGdtYWlsLmNvbSIsImV4cCI6MTY3MTE2MzExMS41NjcsImlhdCI6MTY3MDU1ODMxMX0.HciSEslBT9o5rDP6PDdblfci9ZtdCb-D-eySsHhx5EY");
-
-    
     this.stops = [
       {name: 'Any number of stops', key: 'all'},
       {name: 'Nonstop only', key: 'none'},
