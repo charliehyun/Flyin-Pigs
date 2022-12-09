@@ -32,20 +32,18 @@ import { UserService } from '../user.service';
 
     ngOnInit(): void {
       this.results$ = this.auth.account()
-      
-      // this.results$.subscribe(user => {
-      //   this.details = user;
-      // }, (err) => {
-      //   console.error(err);
-      // });
-
-      // console.log("DETAILS", this.details)
+    
+      this.results$.subscribe(user => {
+        this.details = user;
+      }, (err) => {
+        console.error(err);
+        this.router.navigate(['page-not-found'])
+      });
 
       // this.address = this.auth.getUserDetails()?.address || "";
 
       this.addressResult$ = this.userService.getUser(this.auth.getUserDetails()?.email || "");
       this.addressResult$.subscribe(value => {
-          
           if(value.address) {
             this.address = value.address;
           } else {

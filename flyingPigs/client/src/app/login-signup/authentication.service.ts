@@ -85,10 +85,8 @@ export class AuthenticationService {
     if (method === 'post') {
       base = this.http.post(`${this.url}/airports/${type}`, user);
     } else {
-      console.log("HMMM")
       base = this.http.get(`${this.url}/airports/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
       // base = this.http.get(`${this.url}/airports/acct`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
-
     }
   
     const request = base.pipe(
@@ -98,8 +96,7 @@ export class AuthenticationService {
         }
         return data;
       })
-    ).subscribe();
-    console.log("HI")
+    );
   
     return request;
   }
