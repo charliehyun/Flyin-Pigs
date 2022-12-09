@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AccountService } from "./account.service";
 import { UserService } from '../user.service';
 import { MessageService } from "primeng/api";
+import {Options} from "ngx-google-places-autocomplete/objects/options/options";
 
 @Component({
     selector: 'account',
@@ -107,4 +108,13 @@ import { MessageService } from "primeng/api";
         el.classList.add('ng-pristine')
       })
     }
+
+  // Google autocomplete stuff
+  options:Options = new Options({
+    componentRestrictions:{
+      country:"US"}
+  });
+  AddressChange1(address: any) {
+    this.address = address.formatted_address;
+  }
   }

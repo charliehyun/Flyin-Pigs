@@ -37,7 +37,8 @@
       <!-- Password -->
       <h6><br> Address
       </h6>
-      <input [(ngModel)]="address"  pInputText type="text" id="address" name="address" size="51">
+      <input [(ngModel)]="address"  pInputText type="text" id="address" name="address" ngx-google-places-autocomplete [options]="options"
+             (onAddressChange)="AddressChange1($event)"  size="51">
       <button pButton pRipple class="resetButton" type="button" label="Save Address" (click)="handleSetAddress()"></button>
       <br>
     </div>
