@@ -33,6 +33,44 @@ mongoRouter.get("/", async (_req, res) => {
     }
 });
 
+mongoRouter.post("/setAddress", async (req, res) => {
+    Credentials.findOne({email: req.body.email}).then((user) => {
+        if (!user) {
+            // res.status(200).send({
+            //     message: 'invalid-link',
+            // });
+            logger.info("NO USER WITH SPECIFIED EMAIL");
+            res.status(200).send(false);
+
+            // console.error('password reset link is invalid or has expired');
+            // res.status(403).send({message: 'password reset link is invalid or has expired'});
+        } else {
+            logger.info("setting address");
+            user.address = req.body.address;
+            user.save();
+            res.status(200).send(true);
+        }
+    });
+});
+
+mongoRouter.post("/getUser", async (req, res) => {
+    logger.info("GET USER ROUTE");
+    Credentials.findOne({email: req.body.email}).then((user) => {
+        if (!user) {
+            // res.status(200).send({
+            //     message: 'invalid-link',
+            // });
+            logger.info("NO USER WITH SPECIFIED EMAIL");
+            res.status(200).send(false);
+
+            // console.error('password reset link is invalid or has expired');
+            // res.status(403).send({message: 'password reset link is invalid or has expired'});
+        } else {
+            logger.info("returning user");
+            res.status(200).send(user);
+        }
+    });
+});
 mongoRouter.post("/search", async (req, res) => {
     try {
         let searchParams = req.body;
@@ -240,8 +278,8 @@ mongoRouter.post("/signout", async (req, res) => {
     try {
         req.body.session = null;
         return res.status(200).send({ message: "You've been signed out!" });
-      } catch (err) {
-      }
+    } catch (err) {
+    }
 });
 
 mongoRouter.post("/signup", async (req, res) => {
@@ -292,10 +330,6 @@ mongoRouter.post('/resetPassword', (req, res) => {
             // console.error('password reset link is invalid or has expired');
             // res.status(403).send({message: 'password reset link is invalid or has expired'});
         } else {
-            console.log("USER", user);
-            console.log("FOUND RESET PASSWORD USER");
-            console.log("type of resetPasswordExpires", typeof user.resetPasswordExpires);
-            console.log("resetPasswordExpires", user.resetPasswordExpires);
             if(user.resetPasswordExpires > Date.now()) {
                 console.log("Valid reset link, time token is valid");
                 const saltRounds = 10;
@@ -313,20 +347,8 @@ mongoRouter.post('/resetPassword', (req, res) => {
                         }
                     });
                 });
-                // user.save()
-                //     .then(user => res.json(user))
-                //     .catch(err => console.log(err));
-
-                // res.status(200).send({
-                //     username: user.email,
-                //     message: 'valid-link',
-                // });
             }
             else {
-                console.log("RESET PASSWORD LINK EXPIRED");
-                // res.status(200).send({
-                //     message: 'invalid-link',
-                // });
                 logger.info("RESET PASSWORD LINK EXPIRED")
 
                 res.status(200).send(false);
@@ -334,6 +356,35 @@ mongoRouter.post('/resetPassword', (req, res) => {
                 // res.status(403).send({message: 'password reset link is invalid or has expired'});
             }
 
+        }
+    });
+});
+
+mongoRouter.post('/loggedInResetPassword', (req, res) => {
+    Credentials.findOne({email: req.body.email}).then((user) => {
+        if (!user) {
+            // res.status(200).send({
+            //     message: 'invalid-link',
+            // });
+            logger.info("NO USER WITH SPECIFIED EMAIL! ", req.body.email);
+            res.status(200).send(false);
+
+            // console.error('password reset link is invalid or has expired');
+            // res.status(403).send({message: 'password reset link is invalid or has expired'});
+        } else {
+
+            const saltRounds = 10;
+            bcrypt.genSalt(saltRounds, function(err, salt) {
+                bcrypt.hash(req.body.password, salt, function(err, hash) {
+                    user.password = hash;
+                    user.save();
+                    if(!err) {
+                        res.status(200).send(true);
+                    } else {
+                        res.status(200).send(false);
+                    }
+                });
+            });
         }
     });
 });

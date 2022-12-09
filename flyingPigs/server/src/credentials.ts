@@ -8,6 +8,7 @@ const credentialsSchema = mongoose.Schema({
     password:{type: String, required:true},
     resetPasswordToken:{type: String, required:false},
     resetPasswordExpires:{type: Number, required:false},
+    address:{type: String, required:false},
     _id: {type: mongoose.Schema.Types.ObjectId, required:false}
 }, {
     collection: 'credentials'
@@ -20,6 +21,7 @@ credentialsSchema.methods.generateJwt = function() {
   return jwt.sign({
     _id: this._id,
     email: this.email,
+    // address: this.address,
     exp: expiry.getTime() / 1000,
   }, String(process.env.MY_SECRET)); // DO NOT KEEP YOUR SECRET IN THE CODE!
 };
