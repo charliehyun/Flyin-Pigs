@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthenticationService, UserDetails } from '../login-signup/authentication.service';
+import {NGXLogger} from "ngx-logger";
 import { SearchSchema } from '../searchSchema';
 import { TrackedTripsService} from "./tracked-trips.service";
 import {Observable} from "rxjs";
@@ -20,7 +21,7 @@ import {ResultInfoSchema} from "../flightSchema";
     users$: Observable<any> = new Observable();
     savedSearches: SearchSchema[];
   
-    constructor( private router: Router, public auth: AuthenticationService, public trackedService: TrackedTripsService) {
+    constructor( private router: Router, public auth: AuthenticationService, public trackedService: TrackedTripsService, private logger: NGXLogger) {
   
     }
 
@@ -38,8 +39,10 @@ import {ResultInfoSchema} from "../flightSchema";
 
       //if logged in, load this user's saved searches.
       if (this.auth.isLoggedIn()) {
-        this.users$.subscribe(user => this.savedSearches = user.trackedSearches);
-        
+          this.users$ = this.trackedService.getUsersSearches(this.auth.getUserDetails()?.email||"marklim4@gmail.com");
+          this.users$.subscribe(user => {
+              this.savedSearches = user.trackedSearches
+          });
       }
   }
   }

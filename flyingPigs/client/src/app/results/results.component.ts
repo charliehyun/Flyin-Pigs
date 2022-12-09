@@ -434,8 +434,10 @@ export class ResultsComponent implements OnInit {
   }
 
   saveSearch() {
+
     if(this.auth.isLoggedIn())
     {
+      this.logger.info("Saving Search");
       //todo: get rid of my default email
       this.resultsService.saveTrips(this.search, this.auth.getUserDetails()?.email||"marklim4@gmail.com");
     }

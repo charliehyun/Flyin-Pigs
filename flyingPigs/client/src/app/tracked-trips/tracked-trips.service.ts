@@ -15,10 +15,15 @@ export class TrackedTripsService {
 
     }
 
-    getUsersSearches(email:string) {
-        this.httpClient.get(`${this.url}/airports/user`)
+    searchUsers(userEmail:string) {
+        this.httpClient.post(`${this.url}/airports/getUser`, {email:userEmail})
             .subscribe(user => {
                this.users$.next(user);
             });
+    }
+
+    getUsersSearches(userEmail:string) {
+        this.searchUsers(userEmail);
+        return this.users$;
     }
 }

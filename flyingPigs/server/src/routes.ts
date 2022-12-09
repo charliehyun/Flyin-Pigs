@@ -534,20 +534,18 @@ mongoRouter.post("/feedback", (req, res) =>
 mongoRouter.post("/addSearch", (req, res) => {
     let searchSchema = req.body.inputObject;
 
+    logger.info("ADDING SEARCH TO ", req.body.email);
     //find user to update
-    Credentials.findOne({email: req.body.email}).then((user) => {
-        if(user) {
-            //if user has not made any trackedSearches
-            if (!user.trackedSearches) {
-                user.trackedSearches = [searchSchema];
+        Credentials.updateOne(
+        { email: req.body.email },
+        { $push: { trackedSearches: searchSchema } },
+        function(err, result) {
+            if (err) {
+                logger.info("ERROR", err)
+                res.json(err);
             } else {
-                //else append it to existing saved searches.
-                user.trackedSearches = user.trackedSearches.append(searchSchema);
-                logger.info(user.trackedSearches);
-                user.save()
-                    .then(user => res.json(user))
-                    .catch(err => console.log(err));
+                logger.info("RESULT:", result)
+                res.json(result);
             }
-        }
-    });
+        });
 })

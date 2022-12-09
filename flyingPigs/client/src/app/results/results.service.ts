@@ -27,7 +27,7 @@ export class ResultsService {
     //API call for saving trips.
     saveTrips(inputObject:SearchSchema, email:string) {
         var postObj = {'inputObject':inputObject, 'email': email};
-        this.httpClient.post(`${this.url}/airports/addSearch`, postObj);
+        this.httpClient.post(`${this.url}/airports/addSearch`, postObj).subscribe();
     }
 
     // clearAirports(): Subject<TripSchema[]> {
