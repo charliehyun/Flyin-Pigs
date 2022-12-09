@@ -213,7 +213,6 @@ export class LoginSignupComponent {
 
             this.signupResults$ = this.auth.signup(credentialsInput);
             this.signupResults$.subscribe(value => {
-                console.log("value:", value);
                 if(value.success) {
                     this.displaySignup = false;
                     // this.currentUser = this.emailL;

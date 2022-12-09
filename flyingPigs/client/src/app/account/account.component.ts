@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { Observable } from "rxjs";
 import { AuthenticationService, UserDetails } from '../login-signup/authentication.service';
 
 @Component({
@@ -11,17 +12,21 @@ import { AuthenticationService, UserDetails } from '../login-signup/authenticati
   export class AccountComponent implements OnInit {
     details: UserDetails;
     email: string;
+
+    results$: Observable<any> = new Observable();  // original results returned from backend
   
-    constructor(private auth: AuthenticationService) {
+    constructor(public auth: AuthenticationService) {
   
     }
 
     ngOnInit() {    
-      this.auth.account().subscribe(user => {
-        this.details = user;
-      }, (err) => {
-        console.error(err);
-      });
+      this.results$ = this.auth.account()
+      
+      // this.results$.subscribe(user => {
+      //   this.details = user;
+      // }, (err) => {
+      //   console.error(err);
+      // });
 
       console.log("DETAILS", this.details)
     }

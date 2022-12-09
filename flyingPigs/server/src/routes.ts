@@ -174,20 +174,43 @@ mongoRouter.post("/log", async (req, res) => {
 });
 
 // mongoRouter.get("/profile", jwt({ secret: process.env.MY_SECRET, userProperty: 'payload' }), async(req, res) => {
-mongoRouter.get("/profile", auth, async(req, res) => {
+mongoRouter.get("/account", auth, async(req, res) => {
     // If no user ID exists in the JWT return a 401
-  if (!req['payload']._id) {
-    res.status(401).json({
-      "message" : "UnauthorizedError: private profile"
-    });
-  } else {
-    // Otherwise continue
-    Credentials
-      .findById(req['payload']._id)
-      .exec(function(err, user) {
-        res.status(200).json(user);
-      });
-  }
+    logger.info("PLEASE")
+//   if (!req['payload']._id) {
+//     res.status(401).json({
+//       "message" : "UnauthorizedError: private profile"
+//     });
+//   } else {
+//     // Otherwise continue
+//     Credentials
+//       .findById(req['payload']._id)
+//       .exec(function(err, user) {
+//         res.status(200).json(user);
+//       });
+//   }
+});
+mongoRouter.get("/acct", async(req, res) => {
+    // If no user ID exists in the JWT return a 401
+    logger.info("acct")
+    if(String(process.env.MY_SECRET) === "65cd069d0b053945b2bafefac4436c4256b67b49dd0ebda12bc455a975cdbe34") {
+        logger.info("EQUAL");
+    }
+    else {
+        logger.info("NOT EQUAL");
+    }
+//   if (!req['payload']._id) {
+//     res.status(401).json({
+//       "message" : "UnauthorizedError: private profile"
+//     });
+//   } else {
+//     // Otherwise continue
+//     Credentials
+//       .findById(req['payload']._id)
+//       .exec(function(err, user) {
+//         res.status(200).json(user);
+//       });
+//   }
 });
 
 mongoRouter.post("/login", async (req, res) => {
