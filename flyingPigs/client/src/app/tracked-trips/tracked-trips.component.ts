@@ -1,5 +1,10 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { AuthenticationService, UserDetails } from '../login-signup/authentication.service';
+import { SearchSchema } from '../searchSchema';
+import { TrackedTripsService} from "./tracked-trips.service";
+import {Observable} from "rxjs";
+import {ResultInfoSchema} from "../flightSchema";
 
 @Component({
     selector: 'tracked-trips',
@@ -11,11 +16,11 @@ import { Router } from "@angular/router";
     email: string;
     comments: string;
     emailNotifications: boolean = false;
-    savedTrips: any[];
     cols: any[];
-    savedTrip: any;
+    users$: Observable<any> = new Observable();
+    savedSearches: SearchSchema[];
   
-    constructor( private router: Router) {
+    constructor( private router: Router, public auth: AuthenticationService, public trackedService: TrackedTripsService) {
   
     }
 
@@ -30,5 +35,11 @@ import { Router } from "@angular/router";
           { field: 'cheapPrice', header: 'Cheapest Price' },
           { field: 'removeSearch', header: 'Remove Search' },
       ];
+
+      //if logged in, load this user's saved searches.
+      if (this.auth.isLoggedIn()) {
+        this.users$.subscribe(user => this.savedSearches = user.trackedSearches);
+        
+      }
   }
   }
