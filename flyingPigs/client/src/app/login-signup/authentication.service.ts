@@ -10,7 +10,6 @@ export interface UserDetails {
   email: string;
   // name: string;
   exp: number;
-  address: string;
   // iat: number;
 }
 

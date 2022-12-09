@@ -60,7 +60,7 @@ export class ResultsComponent implements OnInit {
   maxPrice: number;
 
   airports: any[];
-  airlineTags: string[] = ['ALASKA AIRLINES', 'JETBLUE AIRWAYS', 'DELTA AIR LINES', 'FRONTIER AIRLINES', 'HAWAIIAN AIRLINES', 'SPIRIT AIRLINES', 'UNITED AIRLINES', 'Car', 'Public Transit'];
+  airlineTags: string[] = ['AA', 'AS', 'B6', 'DL', 'F9', 'HA', 'NK', 'UA', 'WN'];
 
   trackPrices: boolean = false;
 
