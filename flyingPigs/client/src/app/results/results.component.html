@@ -1,7 +1,7 @@
 <login-signup *ngIf="!auth.isLoggedIn()" style="position: absolute; right: 0px;"></login-signup>
 <user-menu *ngIf="auth.isLoggedIn()" style="position: absolute; right: 0px;"></user-menu>
 <img src="assets/images/BOTTOM_CROPPED_LOGO.png" alt="Flyin' Pigs" routerLink="/search" width="8%" [style]="{cursor:'pointer'}">
-<h2>Flights</h2>
+<h2>Trips</h2>
 <!-- SEARCH -->
 <p-panel styleClass="p-shadow-3" header="Search Parameters" toggler="header" [toggleable]="true" expandIcon="pi pi-plus-circle" collapseIcon="pi pi-minus-circle" [collapsed]="true">
   <search-box [style]="{'margin': '0px'}"></search-box>
@@ -142,8 +142,7 @@
     <h4>Results</h4>
   </div>
   <div class="tracked-trips">
-    Track Prices
-    <p-button (click)="saveSearch()"></p-button>
+    <p-button *ngIf="auth.isLoggedIn()" (click)="saveSearch()">Track Prices</p-button>
   </div>
 </div>
 
@@ -171,31 +170,37 @@
         </span>
         <span *ngIf="trip.departingFlight.airlines.length < 2">
           <!-- <img *ngIf="trip.departingFlight.airlines == 'AA'" src="assets/images/aa-logo.png" width="40" height="40"> -->
-          <!-- <fa-icon *ngIf="selectedDTransport.name == 'Car'" [icon]="['fas', 'car']"></fa-icon>
-          <fa-icon *ngIf="selectedDTransport.name == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon> -->
-          <img *ngIf="trip.departingFlight.airlines == 'AS'" src="assets/images/alaska-logo.png" width="40" height="40">
-          <img *ngIf="trip.departingFlight.airlines == 'B6'" src="assets/images/jetblue-logo.png" width="40">
-          <img *ngIf="trip.departingFlight.airlines == 'DL'" src="assets/images/delta-logo.png" width="40" height="40">
-          <img *ngIf="trip.departingFlight.airlines == 'F9'" src="assets/images/frontier-logo.png" width="40" height="40"> 
-          <img *ngIf="trip.departingFlight.airlines == 'HA'" src="assets/images/hawaiian-logo.png" width="40" height="40"> 
-          <img *ngIf="trip.departingFlight.airlines == 'NK'" src="assets/images/spirit-logo.png" width="40" height="40"> 
-          <img *ngIf="trip.departingFlight.airlines == 'UA'" src="assets/images/united-logo.png" width="45" height="45"> 
+          <fa-icon *ngIf="trip.departingFlight.airlines == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+          <fa-icon *ngIf="trip.departingFlight.airlines == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+          <img *ngIf="trip.departingFlight.airlines == 'ALASKA AIRLINES'" src="assets/images/alaska-logo.png" width="40" height="40">
+          <img *ngIf="trip.departingFlight.airlines == 'JETBLUE AIRWAYS'" src="assets/images/jetblue-logo.png" width="40">
+          <img *ngIf="trip.departingFlight.airlines == 'DELTA AIR LINES'" src="assets/images/delta-logo.png" width="40" height="40">
+          <img *ngIf="trip.departingFlight.airlines == 'FRONTIER AIRLINES'" src="assets/images/frontier-logo.png" width="40" height="40">
+          <img *ngIf="trip.departingFlight.airlines == 'HAWAIIAN AIRLINES'" src="assets/images/hawaiian-logo.png" width="40" height="40">
+          <img *ngIf="trip.departingFlight.airlines == 'SPIRIT AIRLINES'" src="assets/images/spirit-logo.png" width="40" height="40">
+          <img *ngIf="trip.departingFlight.airlines == 'UNITED AIRLINES'" src="assets/images/united-logo.png" width="45" height="45">
           <!-- <img *ngIf="trip.departingFlight.airlines == 'WN'" src="assets/images/southwest-logo.png" width="40">  -->
           <img *ngIf="!airlineTags.includes(trip.departingFlight.airlines[0])" src="assets/images/generic-logo.png" width="50" height="40">
         </span>
         <p style="color:grey;">{{trip.departingFlight.airlines}}</p>
       </td>
-      <td>
-        <p>{{trip.departingFlight.departureTime}}</p>
-        <p style="color:grey;">{{trip.departingFlight.departureAirport}}</p>
+      <td style="text-align: center;">
+        <p style="font-size: 1.2em;">{{trip.departingFlight.displayDepartureTime[0]}}</p>
+        <p>
+          <small class="p-text-secondary">{{trip.departingFlight.displayDepartureTime[1]}}</small>
+          <span style="color:grey;">{{trip.departingFlight.departureAirport}}</span>
+        </p>
       </td>
-      <td>
-        <p>{{trip.departingFlight.arrivalTime}}</p>
-        <p style="color:grey;">{{trip.departingFlight.arrivalAirport}}</p>
+      <td style="text-align: center;">
+        <p style="font-size: 1.2em;">{{trip.departingFlight.displayArrivalTime[0]}}</p>
+        <p>
+          <small class="p-text-secondary">{{trip.departingFlight.displayArrivalTime[1]}}</small>
+          <span style="color:grey;">{{trip.departingFlight.arrivalAirport}}</span>
+        </p>
       </td>
       <td>{{(trip.totalDepTime / 3600) - (trip.totalDepTime / 3600)%1}} hr {{((trip.totalDepTime % 3600) / 60) - (trip.totalDepTime % 3600 / 60)%1}} min</td>
       <td>{{trip.departingFlight.numberOfStops}}</td>
-      <td>${{trip.flightPrice}}</td>
+      <td style="font-size: 1.2em;">${{trip.flightPrice}}</td>
       <td>
         <button type="button" pButton pRipple [pRowToggler]="trip" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></button>
       </td>
@@ -225,24 +230,34 @@
                     <img src="assets/images/generic-logo.png" width="50" height="40">
                   </span>
                   <span *ngIf="trip.returningFlight.airlines.length < 2">
-                    <img *ngIf="trip.returningFlight.airlines == 'AS'" src="assets/images/alaska-logo.png" width="40" height="40">
-                    <img *ngIf="trip.returningFlight.airlines == 'B6'" src="assets/images/jetblue-logo.png" width="40">
-                    <img *ngIf="trip.returningFlight.airlines == 'DL'" src="assets/images/delta-logo.png" width="40" height="40">
-                    <img *ngIf="trip.returningFlight.airlines == 'F9'" src="assets/images/frontier-logo.png" width="40" height="40"> 
-                    <img *ngIf="trip.returningFlight.airlines == 'HA'" src="assets/images/hawaiian-logo.png" width="40" height="40"> 
-                    <img *ngIf="trip.returningFlight.airlines == 'NK'" src="assets/images/spirit-logo.png" width="40" height="40"> 
-                    <img *ngIf="trip.airlines == 'UA'" src="assets/images/united-logo.png" width="45" height="45"> 
-                    <img *ngIf="!airlineTags.includes(trip.returningFlight.airlines[0])" src="assets/images/generic-logo.png" width="50" height="40">
+                    <!-- <img *ngIf="trip.departingFlight.airlines == 'AA'" src="assets/images/aa-logo.png" width="40" height="40"> -->
+                    <fa-icon *ngIf="trip.departingFlight.airlines == 'Car'" [icon]="['fas', 'car']"></fa-icon>
+                    <fa-icon *ngIf="trip.departingFlight.airlines == 'Public Transit'" [icon]="['fas', 'bus']"></fa-icon>
+                    <img *ngIf="trip.departingFlight.airlines == 'ALASKA AIRLINES'" src="assets/images/alaska-logo.png" width="40" height="40">
+                    <img *ngIf="trip.departingFlight.airlines == 'JETBLUE AIRWAYS'" src="assets/images/jetblue-logo.png" width="40">
+                    <img *ngIf="trip.departingFlight.airlines == 'DELTA AIR LINES'" src="assets/images/delta-logo.png" width="40" height="40">
+                    <img *ngIf="trip.departingFlight.airlines == 'FRONTIER AIRLINES'" src="assets/images/frontier-logo.png" width="40" height="40">
+                    <img *ngIf="trip.departingFlight.airlines == 'HAWAIIAN AIRLINES'" src="assets/images/hawaiian-logo.png" width="40" height="40">
+                    <img *ngIf="trip.departingFlight.airlines == 'SPIRIT AIRLINES'" src="assets/images/spirit-logo.png" width="40" height="40">
+                    <img *ngIf="trip.departingFlight.airlines == 'UNITED AIRLINES'" src="assets/images/united-logo.png" width="45" height="45">
+                    <!-- <img *ngIf="trip.departingFlight.airlines == 'WN'" src="assets/images/southwest-logo.png" width="40">  -->
+                    <img *ngIf="!airlineTags.includes(trip.departingFlight.airlines[0])" src="assets/images/generic-logo.png" width="50" height="40">
                   </span>
                   <p style="color:grey;">{{trip.returningFlight.airlines}}</p>
                 </td>
-                <td>
-                  <p>{{trip.returningFlight.departureTime}}</p>
-                  <p style="color:grey;">{{trip.returningFlight.departureAirport}}</p>
+                <td style="text-align: center;">
+                  <p style="font-size: 1.2em;">{{trip.returningFlight.displayDepartureTime[0]}}</p>
+                  <p>
+                    <small class="p-text-secondary">{{trip.returningFlight.displayDepartureTime[1]}}</small>
+                    <span style="color:grey;">{{trip.returningFlight.departureAirport}}</span>
+                  </p>
                 </td>
-                <td>
-                  <p>{{trip.returningFlight.arrivalTime}}</p>
-                  <p style="color:grey;">{{trip.returningFlight.arrivalAirport}}</p>
+                <td style="text-align: center;">
+                  <p style="font-size: 1.2em;">{{trip.returningFlight.displayArrivalTime[0]}}</p>
+                  <p>
+                    <small class="p-text-secondary">{{trip.returningFlight.displayArrivalTime[1]}}</small>
+                    <span style="color:grey;">{{trip.returningFlight.arrivalAirport}}</span>
+                  </p>
                 </td>
                 <td>{{(trip.totalRetTime / 3600) - (trip.totalRetTime / 3600)%1}} hr {{((trip.totalRetTime % 3600) / 60) - (trip.totalRetTime % 3600 / 60)%1}} min</td>
                 <td>{{trip.returningFlight.numberOfStops}}</td>
@@ -270,7 +285,7 @@
                 <!-- Content right of the timeline -->
                 <ng-template pTemplate="content" let-segment>
                   <p style="margin-top:0px">
-                    <b *ngIf="segment.depTime" style="margin-right:0px">{{segment.depTime}} |</b>
+                    <b *ngIf="segment.depTime" style="margin-right:0px">{{segment.displayDepartureTime[0]}} {{segment.displayDepartureTime[1]}} |</b>
                     <b>{{segment.depLocation}}</b>
                   </p>
                   <p *ngIf="segment.depLocation != arriveAdd && 
@@ -280,7 +295,7 @@
                     <span>Travel Time: {{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</span>
                   </small></p>
                   <p *ngIf="segment.waitDur != 0">
-                    <span *ngIf="segment.arrTime" style="margin-right:0px">{{segment.arrTime}} |</span>
+                    <span *ngIf="segment.arrTime" style="margin-right:0px">{{segment.displayArrivalTime[0]}} {{segment.displayArrivalTime[1]}} |</span>
                     {{segment.arrLocation}}
                   </p>
                   <p *ngIf="segment.depLocation != arriveAdd && 
@@ -319,7 +334,7 @@
                 <!-- Content right of the timeline -->
                 <ng-template pTemplate="content" let-segment>
                   <p style="margin-top:0px">
-                    <b *ngIf="segment.depTime" style="margin-right:0px">{{segment.depTime}} |</b>
+                    <b *ngIf="segment.depTime" style="margin-right:0px">{{segment.displayDepartureTime[0]}} {{segment.displayDepartureTime[1]}} |</b>
                     <b>{{segment.depLocation}}</b>
                   </p>
                   <p *ngIf="segment.depLocation != departAdd && 
@@ -329,7 +344,7 @@
                     <span>Travel Time: {{(segment.travelDuration / 3600) - (segment.travelDuration / 3600)%1}} hr {{((segment.travelDuration % 3600) / 60) - (segment.travelDuration % 3600 / 60)%1}} min</span>
                   </small></p>
                   <p *ngIf="segment.waitDur != 0">
-                    <span *ngIf="segment.arrTime" style="margin-right:0px">{{segment.arrTime}} |</span>
+                    <span *ngIf="segment.arrTime" style="margin-right:0px">{{segment.displayArrivalTime[0]}} {{segment.displayArrivalTime[1]}} |</span>
                     {{segment.arrLocation}}
                   </p>
                   <p *ngIf="segment.depLocation != departAdd && 

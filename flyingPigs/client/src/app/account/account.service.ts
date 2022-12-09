@@ -19,7 +19,6 @@ export class AccountService {
     }
     
     setAddressRoute(em: string, ad: string) {
-        console.log("in set address route");
         this.httpClient.post<boolean>(`${this.url}/airports/setAddress`, {email: em, address:ad})
         .subscribe(success => {
             this.addressSuccess$.next(success);

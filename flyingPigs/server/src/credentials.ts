@@ -24,7 +24,7 @@ credentialsSchema.methods.generateJwt = function() {
     email: this.email,
     // address: this.address,
     exp: expiry.getTime() / 1000,
-  }, process.env.MY_SECRET); // DO NOT KEEP YOUR SECRET IN THE CODE!
+  }, String(process.env.MY_SECRET)); // DO NOT KEEP YOUR SECRET IN THE CODE!
 };
 
 module.exports = mongoose.model('Credentials', credentialsSchema);

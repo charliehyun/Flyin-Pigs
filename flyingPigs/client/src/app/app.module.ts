@@ -13,6 +13,10 @@ import { FAQComponent } from './faq/faq.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
+import { UserMenuComponent } from './user-menu/user-menu.component';
+import { TrackedTripsComponent } from './tracked-trips/tracked-trips.component';
+import { AccountComponent } from './account/account.component';
+
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
@@ -47,10 +51,9 @@ import {TabViewModule} from 'primeng/tabview';
 import { CalendarModule } from 'primeng/calendar';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {InputTextareaModule} from 'primeng/inputtextarea';
-import { TrackedTripsComponent } from './tracked-trips/tracked-trips.component';
-import { AccountComponent } from './account/account.component';
 import { TimelineModule } from 'primeng/timeline';
-import { UserMenuComponent } from './user-menu/user-menu.component';
+import { AuthGuardService } from './auth-guard.service';
+
 
 @NgModule({
   declarations: [
@@ -112,7 +115,7 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
       disableConsoleLogging: false
     })
   ],
-  providers: [],
+  providers: [AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

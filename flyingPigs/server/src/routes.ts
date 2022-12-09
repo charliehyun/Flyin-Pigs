@@ -18,9 +18,9 @@ const nodemailer = require('nodemailer');
 const { expressjwt: jwt } = require("express-jwt");
 
 let auth = jwt({ 
-    secret: String(process.env.MY_SECRET), 
+    secret: "65cd069d0b053945b2bafefac4436c4256b67b49dd0ebda12bc455a975cdbe34", 
     algorithms: ["HS256"], 
-    userProperty: 'payload'
+    requestProperty: 'payload'
 });
 
 mongoRouter.get("/", async (_req, res) => {
@@ -52,6 +52,7 @@ mongoRouter.post("/setAddress", async (req, res) => {
         }
     });
 });
+
 mongoRouter.post("/getUser", async (req, res) => {
     logger.info("GET USER ROUTE");
     Credentials.findOne({email: req.body.email}).then((user) => {
@@ -177,6 +178,9 @@ mongoRouter.post("/search", async (req, res) => {
         tripList = await Promise.all(trips)
         tripList = tripList.flat();
 
+        //remove trips without airlines:
+        tripList = tripList.filter(trip => trip.departingFlight.airlines.length != 0);
+
         resultInfo.trips = sortTrips(tripList, "flightPrice");
         resultInfo.minPrice = resultInfo.trips[0].flightPrice;
         resultInfo.maxPrice = resultInfo.trips[tripList.length - 1].flightPrice;
@@ -211,21 +215,20 @@ mongoRouter.post("/log", async (req, res) => {
 });
 
 // mongoRouter.get("/profile", jwt({ secret: process.env.MY_SECRET, userProperty: 'payload' }), async(req, res) => {
-mongoRouter.get("/profile", auth, async(req, res) => {
-
+mongoRouter.get("/account", auth, async(req: any, res) => {
     // If no user ID exists in the JWT return a 401
-  if (!req['payload']._id) {
-    res.status(401).json({
-      "message" : "UnauthorizedError: private profile"
-    });
-  } else {
+    if (!req.payload._id) {
+        res.status(401).json({
+            "message" : "UnauthorizedError: private profile"
+        });
+    } else {
     // Otherwise continue
-    Credentials
-      .findById(req['payload']._id)
-      .exec(function(err, user) {
-        res.status(200).json(user);
-      });
-  }
+        Credentials
+            .findById(req.payload._id)
+            .exec(function(err, user) {
+                res.status(200).json(user);
+            });
+    }
 });
 
 mongoRouter.post("/login", async (req, res) => {
@@ -250,6 +253,7 @@ mongoRouter.post("/login", async (req, res) => {
         res.status(200).send({success: false, message: 'Log in failure: user does not exist'});
     }
 });
+
 mongoRouter.post("/signout", async (req, res) => {
     try {
         req.body.session = null;
@@ -257,6 +261,7 @@ mongoRouter.post("/signout", async (req, res) => {
     } catch (err) {
     }
 });
+
 mongoRouter.post("/signup", async (req, res) => {
     const saltRounds = 10;
     let cred = await Credentials.findOne({email: req.body.email});
@@ -289,7 +294,6 @@ mongoRouter.post("/signup", async (req, res) => {
         logger.info("Sign up failure: user already exists");
         res.status(200).send({success:false, message: "Sign up failure: user already exists"});
     }
-
 });
 
 mongoRouter.post('/resetPassword', (req, res) => {
@@ -569,4 +573,18 @@ mongoRouter.post("/updateSearch", (req, res) => {
         
 })
 
-
+mongoRouter.post("/deleteSavedTrip", (req, res) => {
+    let searchSchema = req.body.inputObject;
+    Credentials.updateOne(
+        { email: req.body.email },
+        { $pull: { trackedSearches: searchSchema } },
+        function(err, result) {
+            if (err) {
+                logger.info("ERROR", err)
+                res.json(err);
+            } else {
+                logger.info("RESULT:", result)
+                res.json(result);
+            }
+        });
+})
