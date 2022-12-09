@@ -9,6 +9,7 @@ const credentialsSchema = mongoose.Schema({
     resetPasswordToken:{type: String, required:false},
     resetPasswordExpires:{type: Number, required:false},
     address:{type: String, required:false},
+    trackedSearches:{type: [Object], required:false},
     _id: {type: mongoose.Schema.Types.ObjectId, required:false}
 }, {
     collection: 'credentials'
