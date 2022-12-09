@@ -1,53 +1,50 @@
 <!-- Header -->
-<login-signup style="position: absolute; right: 0px;"></login-signup>
+<login-signup *ngIf="!auth.isLoggedIn()" style="position: absolute; right: 0px;"></login-signup>
+<user-menu *ngIf="auth.isLoggedIn()" style="position: absolute; right: 0px;"></user-menu>
 <div>
   <img src="assets/images/BOTTOM_CROPPED_LOGO.png" alt="Flyin' Pigs" style="display: block; margin-left: auto; margin-right: auto; cursor:pointer; width:20%" routerLink="/search">
   <h2>My Tracked Trips</h2>  
 </div>
 
 <p-card styleClass="p-shadow-3">
-    Saved Trips
-    <br>
-    Opt in for Email Notifications for price changes
-    <p-inputSwitch [(ngModel)]="emailNotifications"></p-inputSwitch>
-    <br>
-
-
-    <p-table [columns]="cols" [value]="savedSearches" [tableStyle]="{'min-width': '50rem'}">
-      <ng-template pTemplate="header" let-columns>
-          <tr>
-              <th *ngFor="let col of columns">
-                  {{col.header}}
-              </th>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-rowData let-columns="columns">
-          <tr>
-            <td>
-              <!-- departure date -->
-                {{rowData.departDate}}
-            </td>
-            <td>
-              <!-- departure address -->
-                {{rowData.departAdd}}
-            </td>
-            <td>
-              <!-- arrival date -->
-                {{rowData.returnDate}}
-            </td>
-            <td>
-              <!-- arrival address -->
-                {{rowData.arriveAdd}}
-            </td>
-            <td>
-              <!-- cheapest price -->
-                {{rowData.lastLowestPrice}}
-            </td>
-            <td (click)="deleteSavedTrip(rowData)">
-              <p-button icon="pi pi-times" class="p-button-secondary" styleClass="p-button-sm"></p-button>
-            </td>
-          </tr>
-      </ng-template>
+  Opt in for Email Notifications for price changes
+  <p-inputSwitch [(ngModel)]="emailNotifications"></p-inputSwitch>
+  <br>
+  <p-table [columns]="cols" [value]="savedSearches" [tableStyle]="{'min-width': '50rem'}">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns">
+          {{col.header}}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td>
+          <!-- departure date -->
+          {{rowData.departDate}}
+        </td>
+        <td>
+          <!-- departure address -->
+          {{rowData.departAdd}}
+        </td>
+        <td>
+          <!-- arrival date -->
+          {{rowData.returnDate}}
+        </td>
+        <td>
+          <!-- arrival address -->
+          {{rowData.arriveAdd}}
+        </td>
+        <td>
+          <!-- cheapest price -->
+          ${{rowData.lastLowestPrice}}
+        </td>
+        <td (click)="deleteSavedTrip(rowData)">
+          <p-button icon="pi pi-times" class="p-button-secondary" styleClass="p-button-sm"></p-button>
+        </td>
+      </tr>
+    </ng-template>
   </p-table>
 
 </p-card>
@@ -57,8 +54,8 @@
   <p-button label="FAQ" styleClass="p-button-link" icon="pi pi-question-circle" routerLink="/faq"></p-button>
   <p-button label="Give Feedback" styleClass="p-button-link" icon="pi pi-comment" routerLink="/feedback"></p-button>
   <p-button label="Github" styleClass="p-button-link" icon="pi pi-github" onclick="window.open('https://github.com/jyeh00/Flyin-Pigs','_blank')"></p-button>
-    <p> 2022 Flyin' Pigs </p>
-  </footer>
+  <p> 2022 Flyin' Pigs </p>
+</footer>
 
 <p-scrollTop 
   icon="pi pi-arrow-up" 
