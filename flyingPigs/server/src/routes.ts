@@ -557,6 +557,7 @@ mongoRouter.post("/updateSearch", (req, res) => {
     let searchSchema = req.body.inputObject;
 
     logger.info("UPDATING SEARCH TO ", req.body.email);
+    logger.info("New search ", req.body.newTracked);
     //find user to update
     Credentials.updateOne(
         { email: req.body.email, trackedSearches: req.body.tracked },
