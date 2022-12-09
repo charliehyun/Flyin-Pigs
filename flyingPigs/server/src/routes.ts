@@ -550,4 +550,18 @@ mongoRouter.post("/addSearch", (req, res) => {
         });
 })
 
-
+mongoRouter.post("/deleteSavedTrip", (req, res) => {
+    let searchSchema = req.body.inputObject;
+    Credentials.updateOne(
+        { email: req.body.email },
+        { $pull: { trackedSearches: searchSchema } },
+        function(err, result) {
+            if (err) {
+                logger.info("ERROR", err)
+                res.json(err);
+            } else {
+                logger.info("RESULT:", result)
+                res.json(result);
+            }
+        });
+})
