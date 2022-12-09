@@ -20,6 +20,7 @@ import {ResultInfoSchema} from "../flightSchema";
     cols: any[];
     users$: Observable<any> = new Observable();
     savedSearches: SearchSchema[];
+    searchIds: any[]
   
     constructor( private router: Router, public auth: AuthenticationService, public trackedService: TrackedTripsService, private logger: NGXLogger) {
   
@@ -31,7 +32,7 @@ import {ResultInfoSchema} from "../flightSchema";
       this.cols = [
           { field: 'ddate', header: 'Departure Date' },
           { field: 'daddress', header: 'Departure Address' },
-          { field: 'adate', header: 'Arrival Date' },
+          { field: 'adate', header: 'Return Date' },
           { field: 'aaddress', header: 'Arrival Address' },
           { field: 'cheapPrice', header: 'Cheapest Price' },
           { field: 'removeSearch', header: 'Remove Search' },
@@ -41,7 +42,8 @@ import {ResultInfoSchema} from "../flightSchema";
       if (this.auth.isLoggedIn()) {
           this.users$ = this.trackedService.getUsersSearches(this.auth.getUserDetails()?.email||"marklim4@gmail.com");
           this.users$.subscribe(user => {
-              this.savedSearches = user.trackedSearches
+              this.savedSearches = user.trackedSearches;
+              this.searchIds = [Array(this.savedSearches.length).keys()];
           });
       }
   }
