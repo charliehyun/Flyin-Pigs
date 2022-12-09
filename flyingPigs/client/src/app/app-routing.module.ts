@@ -9,6 +9,7 @@ import { FeedbackComponent } from './feedback/feedback.component';
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import { TrackedTripsComponent } from './tracked-trips/tracked-trips.component';
 import { AccountComponent } from './account/account.component';
+import { AuthGuardService } from './auth-guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full'},
@@ -18,8 +19,8 @@ const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'faq', component: FAQComponent },
   { path: 'feedback', component: FeedbackComponent },
-  {path: 'tracked-trips', component: TrackedTripsComponent},
-  {path: 'account', component: AccountComponent},
+  {path: 'tracked-trips', component: TrackedTripsComponent, canActivate: [AuthGuardService]},
+  {path: 'account', component: AccountComponent, canActivate: [AuthGuardService]},
   {path: '**', component: PageNotFoundComponent},
   
 ];

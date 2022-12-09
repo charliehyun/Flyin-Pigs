@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { AuthenticationService } from '../login-signup/authentication.service';
+import { AuthenticationService, UserDetails } from '../login-signup/authentication.service';
 import { Observable } from 'rxjs';
 import { AccountService } from "./account.service";
 import { UserService } from '../user.service';
@@ -12,6 +12,12 @@ import { UserService } from '../user.service';
   })
   
   export class AccountComponent implements OnInit {
+    details: UserDetails;
+    email: string;
+
+    results$: Observable<any> = new Observable();  // original results returned from backend
+  
+  
     address: string;
     password: string;
     confPassword: string;
@@ -21,13 +27,23 @@ import { UserService } from '../user.service';
     addressResult$: Observable<any> = new Observable();
 
     constructor( public auth: AuthenticationService, private userService: UserService, private accountService: AccountService, private router: Router) {
+    
     }
+
     ngOnInit(): void {
+      this.results$ = this.auth.account()
+    
+      this.results$.subscribe(user => {
+        this.details = user;
+      }, (err) => {
+        console.error(err);
+        this.router.navigate(['page-not-found'])
+      });
+
       // this.address = this.auth.getUserDetails()?.address || "";
 
       this.addressResult$ = this.userService.getUser(this.auth.getUserDetails()?.email || "");
       this.addressResult$.subscribe(value => {
-          
           if(value.address) {
             this.address = value.address;
           } else {

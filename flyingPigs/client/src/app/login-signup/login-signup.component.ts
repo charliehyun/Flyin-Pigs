@@ -89,10 +89,10 @@ export class LoginSignupComponent {
     // }
 
     // handle login attempt. account validation
-    async handleLogin() {
+    handleLogin() {
         this.resetValidity();
 
-        if(!this.emailL) {
+        if(!this.emailL || !(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(this.emailL))) {
             const x = document.getElementById('emailL');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
@@ -148,7 +148,7 @@ export class LoginSignupComponent {
         this.resetValidity()
         // check if all fields are populated
         let invalid = false;
-        if(!this.emailS) {
+        if(!this.emailS || !(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(this.emailS))) {
             const x = document.getElementById('emailS');
             x?.classList.add('ng-invalid')
             x?.classList.add('ng-dirty')
@@ -213,7 +213,6 @@ export class LoginSignupComponent {
 
             this.signupResults$ = this.auth.signup(credentialsInput);
             this.signupResults$.subscribe(value => {
-                console.log("value:", value);
                 if(value.success) {
                     this.displaySignup = false;
                     // this.currentUser = this.emailL;
