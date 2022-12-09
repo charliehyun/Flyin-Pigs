@@ -56,6 +56,7 @@ export class ResultsComponent implements OnInit {
   returnArrivalTimeStart: string;
   returnArrivalTimeEnd: string;
 
+  minPriceNotCar: number;
   minPrice: number;
   maxPrice: number;
 
@@ -199,6 +200,9 @@ export class ResultsComponent implements OnInit {
       if (maxDepartTravelTime / 3600 > this.maxDepartTravelTime) {this.maxDepartTravelTime = Math.ceil(maxDepartTravelTime / 3600);}
       let maxDepartFlightTime = Math.max(...this.trips.map(trip => trip.departingFlight.flightTime));
       if (maxDepartFlightTime / 3600 > this.maxDepartFlightTime) {this.maxDepartFlightTime = Math.ceil(maxDepartFlightTime / 3600);}
+
+      //grab the ACTUAL minprice >:((
+      this.minPriceNotCar = Math.min(...this.trips.filter(trip => trip.flightPrice != 0).map(trip => trip.flightPrice));
     
       //set max return times if there exists a return flight
       if (this.trips[0].returningFlight) {
@@ -431,6 +435,19 @@ export class ResultsComponent implements OnInit {
     } else {
       this.shouldLoad = false;
     }
+  }
+
+  saveSearch() {
+
+    if(this.auth.isLoggedIn())
+    {
+      let mySearchPlusPrice = this.search;
+      mySearchPlusPrice.lastLowestPrice = this.minPriceNotCar;
+      this.logger.info("Saving Search");
+      //todo: get rid of my default email
+      this.resultsService.saveTrips(mySearchPlusPrice, this.auth.getUserDetails()?.email||"marklim4@gmail.com");
+    }
+
   }
 
 

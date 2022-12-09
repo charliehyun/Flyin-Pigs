@@ -530,3 +530,24 @@ mongoRouter.post("/feedback", (req, res) =>
         }
     }); 
 });
+
+mongoRouter.post("/addSearch", (req, res) => {
+    let searchSchema = req.body.inputObject;
+
+    logger.info("ADDING SEARCH TO ", req.body.email);
+    //find user to update
+        Credentials.updateOne(
+        { email: req.body.email },
+        { $push: { trackedSearches: searchSchema } },
+        function(err, result) {
+            if (err) {
+                logger.info("ERROR", err)
+                res.json(err);
+            } else {
+                logger.info("RESULT:", result)
+                res.json(result);
+            }
+        });
+})
+
+

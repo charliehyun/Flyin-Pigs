@@ -1,5 +1,11 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { AuthenticationService, UserDetails } from '../login-signup/authentication.service';
+import {NGXLogger} from "ngx-logger";
+import { SearchSchema } from '../searchSchema';
+import { TrackedTripsService} from "./tracked-trips.service";
+import {Observable} from "rxjs";
+import {ResultInfoSchema} from "../flightSchema";
 
 @Component({
     selector: 'tracked-trips',
@@ -11,11 +17,12 @@ import { Router } from "@angular/router";
     email: string;
     comments: string;
     emailNotifications: boolean = false;
-    savedTrips: any[];
     cols: any[];
-    savedTrip: any;
+    users$: Observable<any> = new Observable();
+    savedSearches: SearchSchema[];
+    searchIds: any[]
   
-    constructor( private router: Router) {
+    constructor( private router: Router, public auth: AuthenticationService, public trackedService: TrackedTripsService, private logger: NGXLogger) {
   
     }
 
@@ -25,10 +32,19 @@ import { Router } from "@angular/router";
       this.cols = [
           { field: 'ddate', header: 'Departure Date' },
           { field: 'daddress', header: 'Departure Address' },
-          { field: 'adate', header: 'Arrival Date' },
+          { field: 'adate', header: 'Return Date' },
           { field: 'aaddress', header: 'Arrival Address' },
           { field: 'cheapPrice', header: 'Cheapest Price' },
           { field: 'removeSearch', header: 'Remove Search' },
       ];
+
+      //if logged in, load this user's saved searches.
+      if (this.auth.isLoggedIn()) {
+          this.users$ = this.trackedService.getUsersSearches(this.auth.getUserDetails()?.email||"marklim4@gmail.com");
+          this.users$.subscribe(user => {
+              this.savedSearches = user.trackedSearches;
+              this.searchIds = [Array(this.savedSearches.length).keys()];
+          });
+      }
   }
   }
