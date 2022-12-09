@@ -2,5 +2,12 @@
 
 <!-- Show if logged in -->
 <!-- <p-menu #menu [popup]="true" [model]="userOptionsMenu"></p-menu> -->
-<button pButton type="button" icon="pi pi-user" class="p-button-rounded p-button-secondary"></button>
-<button pButton type="button" (click)="handleLogOut()" class="p-button-sm" label="Log Out"></button>
+<button pButton type="button" icon="pi pi-user" (click)="op.toggle($event)" class="p-button-rounded p-button-secondary"></button>
+
+<p-overlayPanel #op>
+    <!-- [style]="{width: '450px'}" -->
+    <ng-template pTemplate>
+        <p-menu [model]="options"></p-menu>
+    </ng-template>
+</p-overlayPanel>
+

@@ -18,6 +18,7 @@ export interface SearchSchema {
     maxTimeStart: DropdownOption;
     maxTimeEnd: DropdownOption;
     bufferTime: DropdownOption;
+    lastLowestPrice?:number;
 }
 
 // option format for input dropdowns
