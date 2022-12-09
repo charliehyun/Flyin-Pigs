@@ -4,11 +4,13 @@ import { AuthenticationService, UserDetails } from '../login-signup/authenticati
 import { Observable } from 'rxjs';
 import { AccountService } from "./account.service";
 import { UserService } from '../user.service';
+import { MessageService } from "primeng/api";
 
 @Component({
     selector: 'account',
     templateUrl: './account.component.html',
-    styleUrls: ['./account.component.scss']
+    styleUrls: ['./account.component.scss'],
+    providers: [MessageService]
   })
   
   export class AccountComponent implements OnInit {
@@ -22,12 +24,12 @@ import { UserService } from '../user.service';
     password: string;
     confPassword: string;
 
-    loginResults$: Observable<{success: boolean, token?: string, message: string}> = new Observable();
-    signupResults$: Observable<boolean> = new Observable();
-    addressResult$: Observable<any> = new Observable();
+    passwordResult$: Observable<boolean> = new Observable();
+    addressResult$: Observable<boolean> = new Observable();
+    userResult$: Observable<any> = new Observable();
 
-    constructor( public auth: AuthenticationService, private userService: UserService, private accountService: AccountService, private router: Router) {
-    
+    constructor( public auth: AuthenticationService, private userService: UserService, private accountService: AccountService, private router: Router, private messageService: MessageService) {
+      this.address = "";
     }
 
     ngOnInit(): void {
@@ -42,50 +44,58 @@ import { UserService } from '../user.service';
 
       // this.address = this.auth.getUserDetails()?.address || "";
 
-      this.addressResult$ = this.userService.getUser(this.auth.getUserDetails()?.email || "");
-      this.addressResult$.subscribe(value => {
+      this.userResult$ = this.userService.getUser(this.auth.getUserDetails()?.email || "");
+      this.userResult$.subscribe(value => {
           if(value.address) {
             this.address = value.address;
           } else {
           }
       });
-    
     }
+
+    // show toast based on success/error
+    showMessage(severity, summary, detail) {
+      this.messageService.clear();
+      this.messageService.add({severity: severity, summary: summary, detail: detail});
+    }
+
     handleResetPassword() {
+      this.resetValidity();
       if(!this.password) {
         const x = document.getElementById('password');
         x?.classList.add('ng-invalid')
         x?.classList.add('ng-dirty')
+        this.showMessage('error', 'Error', 'Passwords field is empty');
+        return;
       }
+
       if(this.password != this.confPassword) {
         const x = document.getElementById('confPassword');
         x?.classList.add('ng-invalid')
         x?.classList.add('ng-dirty')
+        this.showMessage('error', 'Error', 'Passwords do not match');
         return;
       }
-      this.loginResults$ = this.accountService.resetPassword(this.auth.getUserDetails()?.email || "", this.password);
-      this.loginResults$.subscribe(value => {
-          if(value) {
-              // this.showMessage('success', 'Success', 'Successfully reset password.');
-          } else {
-              // this.showMessage('error', 'Error', 'Unable to reset password.');
-          }
+
+      this.passwordResult$ = this.accountService.resetPassword(this.auth.getUserDetails()?.email || "", this.password);
+      this.passwordResult$.subscribe(value => {
+        if(value) {
+          this.showMessage('success', 'Success', 'Successfully reset password.');
+        } else {
+          this.showMessage('error', 'Error', 'Unable to reset password.');
+        }
       });
     }
-    handleSetAddress() {
-      if(!this.address) {
-        const x = document.getElementById('address');
-        x?.classList.add('ng-invalid')
-        x?.classList.add('ng-dirty')
-      }
-      this.loginResults$ = this.accountService.setAddress(this.auth.getUserDetails()?.email || "", this.address);
-      this.loginResults$.subscribe(value => {
-          if(value.success) {
 
-              // this.showMessage('success', 'Success', 'Successfully set address.');
-          } else {
-              // this.showMessage('error', 'Error', 'Unable to set address');
-          }
+    handleSetAddress() {
+      this.resetValidity();
+      this.addressResult$ = this.accountService.setAddress(this.auth.getUserDetails()?.email || "", this.address);
+      this.addressResult$.subscribe(value => {
+        if(value) {
+          this.showMessage('success', 'Success', 'Successfully set address.');
+        } else {
+          this.showMessage('error', 'Error', 'Unable to set address');
+        }
       });
     }
     
