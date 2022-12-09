@@ -30,8 +30,6 @@ export class TrackedTripsService {
         return this.users$;
     }
 
-
-
     updateSearchRoute(userEmail:string, oTracked:any, nTracked:any) {
         this.httpClient.post(`${this.url}/airports/updateSearch`, {email:userEmail, tracked: oTracked, newTracked: nTracked})
         .subscribe(user => {

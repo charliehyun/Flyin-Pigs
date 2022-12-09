@@ -25,11 +25,11 @@ export class AccountService {
         });
     }
     
-    resetPassword(email: string, password: string): Observable<any> {
+    resetPassword(email: string, password: string): Subject<boolean> {
         this.resetPasswordRoute(email, password);
         return this.passwordSuccess$;
     }
-    setAddress(email: string, address:string): Observable<any> {
+    setAddress(email: string, address:string): Subject<boolean> {
         this.setAddressRoute(email, address);
         return this.addressSuccess$;
     }
