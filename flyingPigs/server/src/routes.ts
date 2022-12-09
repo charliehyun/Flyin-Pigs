@@ -17,12 +17,12 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const { expressjwt: jwt } = require("express-jwt");
 
-var auth = jwt({
-  secret: String(process.env.MY_SECRET),
-  userProperty: 'payload'
+let auth = jwt({ 
+    secret: String(process.env.MY_SECRET), 
+    algorithms: ["HS256"], 
+    userProperty: 'payload'
 });
 
-// let auth = jwt({ secret: process.env.MY_SECRET, userProperty: 'payload' });
 mongoRouter.get("/", async (_req, res) => {
     try {
         //let airportsCollection = mongoose.model('Airport');
@@ -173,8 +173,9 @@ mongoRouter.post("/log", async (req, res) => {
     logger.info("clientside file " + filename + " " + msg + " line " + lineNumber + " col " + columnNumber);
 });
 
-mongoRouter.get("/account", auth, async(req, res) => {
-  // If no user ID exists in the JWT return a 401
+// mongoRouter.get("/profile", jwt({ secret: process.env.MY_SECRET, userProperty: 'payload' }), async(req, res) => {
+mongoRouter.get("/profile", auth, async(req, res) => {
+    // If no user ID exists in the JWT return a 401
   if (!req['payload']._id) {
     res.status(401).json({
       "message" : "UnauthorizedError: private profile"
