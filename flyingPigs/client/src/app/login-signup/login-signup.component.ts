@@ -5,6 +5,8 @@ import { AuthenticationService } from './authentication.service';
 import { LoginSchema } from '../loginSchema';
 import {MessageService, MenuItem} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
+import { UserService } from '../user.service';
+import { TrackedTripsService } from '../tracked-trips/tracked-trips.service';
 
 @Component({
   selector: 'login-signup',
@@ -31,9 +33,10 @@ export class LoginSignupComponent {
 
     loginResults$: Observable<{success: boolean, token?: string, message: string}> = new Observable();
     signupResults$: Observable<{success: boolean, token?: string, message: string}> = new Observable();
+    userResults$: Observable<any> = new Observable();
 
 
-    constructor(private messageService: MessageService, private primengConfig: PrimeNGConfig, private auth: AuthenticationService, private router: Router) {
+    constructor(private messageService: MessageService, private trackedTripService: TrackedTripsService, private userService: UserService, private primengConfig: PrimeNGConfig, private auth: AuthenticationService, private router: Router) {
         this.displayLogin = false;
         this.displaySignup = false;
         this.userOptionsMenu = [{
@@ -79,7 +82,6 @@ export class LoginSignupComponent {
             this.displaySignup = false
         }
     }
-
     // handle log out
     // async handleLogOut() {
     //     this.resetValidity();
@@ -131,6 +133,7 @@ export class LoginSignupComponent {
                 // this.loggedIn = true;
                 // sessionStorage.setItem("flyinPigsCurrentUser", this.currentUser);
                 // this.showMessage('success', 'Success', 'Successfully logged in.');
+                this.searchTrackedFlights();
                 this.clearFields();
             } else {
                 this.showMessage('error', 'Error', 'Unable to log in. Invalid email or password.');
@@ -230,6 +233,19 @@ export class LoginSignupComponent {
             x?.classList.add('ng-dirty')
             this.showMessage('error', 'Error', 'Password does not satisfy all requirements.');
         }
+    }
+    searchTrackedFlights() {
+        this.userResults$ = this.userService.getUser(this.auth.getUserDetails()?.email || "");
+        this.userResults$.subscribe(value => {
+            console.log(value);
+            if(value.trackedSearches) {
+                value.trackedSearches.forEach(savedSearch => {
+                    this.trackedTripService.updateSearch(this.auth.getUserDetails()?.email || "", savedSearch);
+                });
+            } else {
+
+            }
+        });
     }
 
     handlePassword() {
